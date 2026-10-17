@@ -8,6 +8,13 @@
     --radius: 12px;
 }
 
+body.dark-mode {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-color: #f8fafc;
+    --border-color: #334155;
+}
+
 body {
     font-family: 'Cairo', sans-serif;
     background-color: var(--bg-color);
@@ -15,6 +22,7 @@ body {
     margin: 0;
     padding: 0;
     direction: rtl;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .header {
@@ -40,6 +48,26 @@ body {
     gap: 10px;
 }
 
+.btn-icon {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.btn-icon:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
 .main-container {
     max-width: 1100px;
     margin: 2rem auto;
@@ -59,6 +87,7 @@ select {
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
     background: var(--card-bg);
+    color: var(--text-color);
     font-size: 1rem;
     font-family: inherit;
     outline: none;
@@ -127,21 +156,27 @@ textarea {
 .box-actions {
     display: flex;
     gap: 8px;
+    align-items: center;
 }
 
 .action-btn {
     background: transparent;
     border: none;
-    color: #64748b;
+    color: var(--text-color);
+    opacity: 0.7;
     font-size: 1.1rem;
     padding: 8px;
     cursor: pointer;
     border-radius: 6px;
     transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .action-btn:hover {
-    background: #f1f5f9;
+    background: var(--border-color);
+    opacity: 1;
     color: var(--primary);
 }
 
@@ -179,4 +214,5 @@ textarea {
     border-radius: 30px;
     display: none;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
 }
