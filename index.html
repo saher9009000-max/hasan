@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المترجم الشامل الذكي</title>
+    <!-- روابط التصميم والخطوط والأيقونات -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- الشريط العلوي -->
+    <header class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-language"></i>
+            <span>ترجملي <strong>برو</strong></span>
+        </div>
+        <div class="nav-controls">
+            <button id="themeToggle" class="icon-btn" title="تغيير المظهر">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main-container">
+        <div class="translator-card">
+            
+            <!-- شريط اختيار اللغات -->
+            <div class="language-selector">
+                <select id="sourceLang">
+                    <option value="ar" selected>العربية</option>
+                    <option value="en">الإنجليزية</option>
+                    <option value="fr">الفرنسية</option>
+                    <option value="es">الإسبانية</option>
+                    <option value="de">الألمانية</option>
+                    <option value="tr">التركية</option>
+                </select>
+
+                <button id="swapBtn" class="icon-btn swap-btn" title="تبديل اللغات">
+                    <i class="fa-solid fa-right-left"></i>
+                </button>
+
+                <select id="targetLang">
+                    <option value="ar">العربية</option>
+                    <option value="en" selected>الإنجليزية</option>
+                    <option value="fr">الفرنسية</option>
+                    <option value="es">الإسبانية</option>
+                    <option value="de">الألمانية</option>
+                    <option value="tr">التركية</option>
+                </select>
+            </div>
+
+            <!-- صندوق الترجمة الثنائي -->
+            <div class="translation-boxes">
+                <!-- صندوق النص الأصلي -->
+                <div class="box source-box">
+                    <textarea id="sourceText" placeholder="اكتب أو لصق النص هنا للترجمة..."></textarea>
+                    <div class="box-footer">
+                        <span class="counter"><span id="charCount">0</span> / 5000 حرف</span>
+                        <div class="box-actions">
+                            <button id="clearBtn" class="action-btn" title="مسح"><i class="fa-solid fa-trash-can"></i></button>
+                            <button id="speakSource" class="action-btn" title="استماع"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- صندوق النص المترجم -->
+                <div class="box target-box">
+                    <div id="loading" class="loader-container" style="display: none;">
+                        <div class="spinner"></div>
+                    </div>
+                    <textarea id="targetText" placeholder="الترجمة ستظهر هنا..." readonly></textarea>
+                    <div class="box-footer">
+                        <span class="status-indicator">جاهز للترجمة</span>
+                        <div class="box-actions">
+                            <button id="copyBtn" class="action-btn" title="نسخ الترجمة"><i class="fa-solid fa-copy"></i></button>
+                            <button id="speakTarget" class="action-btn" title="استماع للترجمة"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- زر الترجمة الرئيسي -->
+            <div class="translate-action-container">
+                <button id="translateBtn" class="primary-btn">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> ترجمة الآن
+                </button>
+            </div>
+        </div>
+
+        <!-- سجل الترجمات الأخيرة -->
+        <section class="history-section">
+            <h3><i class="fa-solid fa-clock-rotate-left"></i> الترجمات الأخيرة</h3>
+            <div id="historyList" class="history-list">
+                <p class="no-history">لا توجد ترجمات سابقة حتى الآن.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- إشعار نجاح النسخ (Toast) -->
+    <div id="toast" class="toast">تم النسخ إلى الحافظة بنجاح!</div>
+
+    <!-- ملف الجافاسكريبت -->
+    <script src="script.js"></script>
+</body>
+</html>
