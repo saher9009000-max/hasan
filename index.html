@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -12,98 +13,139 @@
 <body>
 
     <!-- الشريط العلوي -->
-    <header class="navbar">
-        <div class="logo">
-            <i class="fa-solid fa-language"></i>
-            <span>ترجملي <strong>برو</strong></span>
-        </div>
-        <div class="nav-controls">
-            <button id="themeToggle" class="icon-btn" title="تغيير المظهر">
-                <i class="fa-solid fa-moon"></i>
-            </button>
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fa-solid fa-language"></i>
+                <span>ترجملي برو</span>
+            </div>
+            <div class="nav-actions">
+                <button id="themeToggle" class="btn-icon" title="تبديل السمة">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
         </div>
     </header>
 
     <!-- المحتوى الرئيسي -->
     <main class="main-container">
-        <div class="translator-card">
-            
-            <!-- شريط اختيار اللغات -->
-            <div class="language-selector">
-                <select id="sourceLang">
-                    <option value="ar" selected>العربية</option>
-                    <option value="en">الإنجليزية</option>
-                    <option value="fr">الفرنسية</option>
-                    <option value="es">الإسبانية</option>
-                    <option value="de">الألمانية</option>
-                    <option value="tr">التركية</option>
-                </select>
+        
+        <!-- قائمة اختيار اللغات الشاملة -->
+        <div class="language-selector">
+            <select id="sourceLang">
+                <option value="auto">اكتشاف تلقائي</option>
+                <option value="ar">العربية</option>
+                <option value="en">الإنجليزية</option>
+                <option value="fr">الفرنسية</option>
+                <option value="es">الإسبانية</option>
+                <option value="de">الألمانية</option>
+                <option value="tr">التركية</option>
+                <option value="zh">الصينية</option>
+                <option value="ja">اليابانية</option>
+                <option value="ru">الروسية</option>
+                <option value="hi">الهندية</option>
+                <option value="it">الإيطالية</option>
+                <option value="ko">الكورية</option>
+            </select>
 
-                <button id="swapBtn" class="icon-btn swap-btn" title="تبديل اللغات">
-                    <i class="fa-solid fa-right-left"></i>
-                </button>
+            <button id="swapBtn" title="تبديل اللغات"><i class="fa-solid fa-right-left"></i></button>
 
-                <select id="targetLang">
-                    <option value="ar">العربية</option>
-                    <option value="en" selected>الإنجليزية</option>
-                    <option value="fr">الفرنسية</option>
-                    <option value="es">الإسبانية</option>
-                    <option value="de">الألمانية</option>
-                    <option value="tr">التركية</option>
-                </select>
-            </div>
+            <select id="targetLang">
+                <option value="en">الإنجليزية</option>
+                <option value="ar" selected>العربية</option>
+                <option value="fr">الفرنسية</option>
+                <option value="es">الإسبانية</option>
+                <option value="de">الألمانية</option>
+                <option value="tr">التركية</option>
+                <option value="zh">الصينية</option>
+                <option value="ja">اليابانية</option>
+                <option value="ru">الروسية</option>
+                <option value="hi">الهندية</option>
+                <option value="it">الإيطالية</option>
+                <option value="ko">الكورية</option>
+            </select>
+        </div>
 
-            <!-- صندوق الترجمة الثنائي -->
-            <div class="translation-boxes">
-                <!-- صندوق النص الأصلي -->
-                <div class="box source-box">
-                    <textarea id="sourceText" placeholder="اكتب أو لصق النص هنا للترجمة..."></textarea>
-                    <div class="box-footer">
-                        <span class="counter"><span id="charCount">0</span> / 5000 حرف</span>
-                        <div class="box-actions">
-                            <button id="clearBtn" class="action-btn" title="مسح"><i class="fa-solid fa-trash-can"></i></button>
-                            <button id="speakSource" class="action-btn" title="استماع"><i class="fa-solid fa-volume-high"></i></button>
-                        </div>
+        <!-- صندوق النص الأصلي مع زر استيراد الملفات -->
+        <div class="translator-grid">
+            <div class="box source-box">
+                <textarea id="sourceText" placeholder="اكتب النص هنا أو قم برفع ملف..."></textarea>
+                <div class="box-footer">
+                    <span id="charCount" class="char-count">0 / 5000</span>
+                    <div class="box-actions">
+                        <button id="clearBtn" class="action-btn" title="مسح النص"><i class="fa-solid fa-trash"></i></button>
+                        <button id="speakSource" class="action-btn" title="استماع"><i class="fa-solid fa-volume-high"></i></button>
+                        <!-- زر استيراد الملفات في مكانه الصحيح داخل الصندوق -->
+                        <label class="action-btn" title="رفع ملف نصي أو مستند">
+                            <i class="fa-solid fa-file-arrow-up"></i>
+                            <input type="file" id="importAllFiles" accept=".txt,.html,.css,.js,.json,.md,.csv" style="display: none;">
+                        </label>
                     </div>
                 </div>
-
-                <!-- صندوق النص المترجم -->
-                <div class="box target-box">
-                    <div id="loading" class="loader-container" style="display: none;">
-                        <div class="spinner"></div>
-                    </div>
-                    <textarea id="targetText" placeholder="الترجمة ستظهر هنا..." readonly></textarea>
-                    <div class="box-footer">
-                        <span class="status-indicator">جاهز للترجمة</span>
-                        <div class="box-actions">
-                            <button id="copyBtn" class="action-btn" title="نسخ الترجمة"><i class="fa-solid fa-copy"></i></button>
-                            <button id="speakTarget" class="action-btn" title="استماع للترجمة"><i class="fa-solid fa-volume-high"></i></button>
-                        </div>
-                    </div>
-                </div>
             </div>
 
-            <!-- زر الترجمة الرئيسي -->
-            <div class="translate-action-container">
-                <button id="translateBtn" class="primary-btn">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> ترجمة الآن
-                </button>
+            <!-- صندوق النص المترجم مع زر التصدير والتحميل -->
+            <div class="box target-box">
+                <div id="loading" class="loader-container" style="display: none;">
+                    <div class="spinner"></div>
+                </div>
+                <textarea id="targetText" placeholder="الترجمة ستظهر هنا..." readonly></textarea>
+                <div class="box-footer">
+                    <span class="status-indicator">جاهز للترجمة</span>
+                    <div class="box-actions">
+                        <button id="copyBtn" class="action-btn" title="نسخ الترجمة"><i class="fa-solid fa-copy"></i></button>
+                        <button id="speakTarget" class="action-btn" title="استماع للترجمة"><i class="fa-solid fa-volume-high"></i></button>
+                        <button id="downloadBtn" class="action-btn" title="تحميل الترجمة كملف"><i class="fa-solid fa-file-arrow-down"></i></button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- سجل الترجمات الأخيرة -->
-        <section class="history-section">
-            <h3><i class="fa-solid fa-clock-rotate-left"></i> الترجمات الأخيرة</h3>
-            <div id="historyList" class="history-list">
-                <p class="no-history">لا توجد ترجمات سابقة حتى الآن.</p>
-            </div>
-        </section>
+        <!-- زر الترجمة الرئيسي -->
+        <div class="translate-action-container">
+            <button id="translateBtn" class="primary-btn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> ترجمة الآن
+            </button>
+        </div>
+
     </main>
 
-    <!-- إشعار نجاح النسخ (Toast) -->
+    <!-- إشعار النجاح -->
     <div id="toast" class="toast">تم النسخ إلى الحافظة بنجاح!</div>
 
-    <!-- ملف الجافاسكريبت -->
-    <script src="script.js"></script>
+    <!-- ملف الجافاسكريبت والوظائف -->
+    <script>
+        // --- 1. استيراد وقراءة الملفات ووضعها في خانة النص الأصلي ---
+        document.getElementById('importAllFiles').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('sourceText').value = e.target.result;
+                if (typeof updateCharCount === 'function') {
+                    updateCharCount();
+                }
+            };
+            reader.readAsText(file, 'UTF-8');
+        });
+
+        // --- 2. تصدير وتحميل النص المترجم كملف نصي ---
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const translatedText = document.getElementById('targetText').value;
+            if (!translatedText.trim()) {
+                alert('لا يوجد نص مترجم لتحميله!');
+                return;
+            }
+
+            const blob = new Blob([translatedText], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'translated-text.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    </script>
 </body>
 </html>
