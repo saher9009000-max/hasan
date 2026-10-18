@@ -1,77 +1,33 @@
-/* --- تعديلات خاصة بالشاشات الصغيرة (الهواتف المحمولة) --- */
+
+/* إصلاح تنسيق الهيدر والعناصر على الهواتف المحمولة */
 @media (max-width: 768px) {
-    /* تصغير الهيدر وترتيب أزراره */
     .app-header {
-        padding: 0.75rem 1rem;
-        flex-wrap: nowrap;
-    }
-    
-    .logo {
-        font-size: 1rem;
-        gap: 0.5rem;
-    }
-
-    .logo h1 {
-        font-size: 1.1rem;
-    }
-
-    /* ضبط الهوامش والحشوات العامة للمحتوى على الهاتف */
-    .app-main {
-        padding: 1rem 0.5rem;
+        flex-direction: column;
+        align-items: center;
         gap: 1rem;
-    }
-
-    /* تصغير العناوين الكبيرة إن وجدت لكي لا تسبب ازدحاما */
-    .app-main h1, .hero-title {
-        font-size: 1.5rem !important;
+        padding: 1rem;
         text-align: center;
     }
 
-    /* شريط اللغات: جعل العناصر تصطف بشكل مريح */
-    .lang-bar {
-        flex-direction: column;
-        gap: 0.75rem;
-        padding: 0.75rem;
-    }
-
-    .lang-select-group {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .swap-btn {
-        margin-top: 0;
-        align-self: center;
-        transform: rotate(90deg); /* جعل أيقونة التبديل رأسية للشاشات الصغيرة لتناسب المظهر */
-    }
-
-    /* شبكة صناديق الترجمة لتكون عمودية بالكامل */
-    .translator-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    /* تعديل مساحة حقول النص لتكون ملائمة للشاشة */
-    textarea {
-        min-height: 150px;
-        font-size: 1rem;
-        padding: 0.75rem;
-    }
-
-    /* زر الترجمة الرئيسي ليغطي عرض الشاشة بشكل مريح */
-    .primary-btn {
-        width: 100%;
+    .app-header nav, 
+    .app-header .nav-links {
+        display: flex;
+        flex-wrap: wrap;
         justify-content: center;
-        padding: 0.75rem;
-        font-size: 1rem;
+        gap: 0.5rem;
     }
 
-    /* تحسين أزرار التحكم العلوية داخل الصناديق */
-    .panel-actions {
-        gap: 0.4rem;
+    .logo {
+        justify-content: center;
     }
-    
-    .text-btn {
-        font-size: 0.8rem;
+
+    /* ضبط محاذاة العناوين والنصوص لكي لا تتداخل */
+    .app-main {
+        padding: 1rem;
+    }
+
+    h1, h2 {
+        font-size: 1.3rem !important;
+        line-height: 1.4;
     }
 }
