@@ -13,18 +13,18 @@
         }
 
         body {
-            background-color: #0d1117;
+            background-color: #0b0f19;
             color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 15px;
+            padding: 12px;
         }
 
         header {
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -34,7 +34,7 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .logo-icon {
@@ -55,9 +55,9 @@
         }
 
         .icon-btn {
-            background-color: #161b22;
-            border: 1px solid #30363d;
-            color: #8b949e;
+            background-color: #1a2332;
+            border: 1px solid #2d3748;
+            color: #a0aec0;
             width: 38px;
             height: 38px;
             border-radius: 50%;
@@ -70,94 +70,112 @@
         .hero {
             text-align: center;
             max-width: 500px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .hero h1 {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+            font-size: 1.75rem;
+            margin-bottom: 8px;
             font-weight: 800;
         }
 
         .hero p {
-            color: #8b949e;
-            font-size: 0.95rem;
+            color: #94a3b8;
+            font-size: 0.9rem;
             line-height: 1.5;
         }
 
-        .translate-card {
-            background-color: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 18px;
-            width: 100%;
-            max-width: 600px;
-            padding: 16px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        .start-btn {
+            background-color: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* إصلاح حقول اللغات حتى لا ينقطع الكلام */
+        .translate-card {
+            background-color: #131b2e;
+            border: 1px solid #212d45;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            padding: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        /* إصلاح الخانات بشكل كامل لمنع انقطاع النص */
         .language-selectors {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 8px;
             margin-bottom: 15px;
+            width: 100%;
         }
 
         .select-wrapper {
             flex: 1;
-            min-width: 0;
+            width: 100%;
         }
 
         select {
             width: 100%;
-            background-color: #21262d;
+            background-color: #1d283d;
             color: #ffffff;
-            border: 1px solid #30363d;
-            padding: 10px 8px;
-            border-radius: 10px;
-            font-size: 0.85rem;
+            border: 1px solid #334361;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
             outline: none;
             cursor: pointer;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
             text-align: center;
+            appearance: auto; /* إظهار السهم بشكل افتراضي صحيح */
         }
 
         .swap-btn {
-            background-color: #21262d;
-            border: 1px solid #30363d;
+            background-color: #1d283d;
+            border: 1px solid #334361;
             color: #ffffff;
-            width: 38px;
-            height: 38px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            font-size: 1.2rem;
         }
 
         .input-box {
-            background-color: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 12px;
+            background-color: #0b0f19;
+            border: 1px solid #212d45;
+            border-radius: 14px;
             padding: 12px;
         }
 
         textarea {
             width: 100%;
-            height: 120px;
+            height: 130px;
             background: transparent;
             border: none;
             color: #ffffff;
             font-size: 0.95rem;
             resize: none;
             outline: none;
+            line-height: 1.5;
         }
 
         textarea::placeholder {
-            color: #484f58;
+            color: #64748b;
         }
 
         /* أزرار الأدوات: صوت + استيراد + ترجمة */
@@ -167,7 +185,7 @@
             align-items: center;
             margin-top: 10px;
             padding-top: 10px;
-            border-top: 1px solid #21262d;
+            border-top: 1px solid #1d283d;
             flex-wrap: wrap;
             gap: 8px;
         }
@@ -178,9 +196,9 @@
         }
 
         .btn-action {
-            background-color: #21262d;
-            border: 1px solid #30363d;
-            color: #c9d1d9;
+            background-color: #1d283d;
+            border: 1px solid #334361;
+            color: #cbd5e1;
             padding: 8px 12px;
             border-radius: 8px;
             cursor: pointer;
@@ -192,20 +210,20 @@
         }
 
         .btn-action:hover {
-            background-color: #30363d;
+            background-color: #334361;
             color: #ffffff;
         }
 
         .btn-action.recording {
-            background-color: #da3633;
+            background-color: #ef4444;
             color: #ffffff;
-            border-color: #f85149;
+            border-color: #f87171;
             animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
             0% { opacity: 1; }
-            50% { opacity: 0.6; }
+            50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
 
@@ -219,7 +237,7 @@
             border: none;
             padding: 8px 18px;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
         }
@@ -227,19 +245,10 @@
         .translate-btn:hover {
             background-color: #4f46e5;
         }
-    </style>
-</head>
-<body>
 
-    <header>
-        <button class="icon-btn">☰</button>
-        <div class="logo-container">
-            <span class="logo-text">LingoFlow</span>
-            <div class="logo-icon">🌐</div>
-        </div>
-        <button class="icon-btn">⚙</button>
-    </header>
-
-    <div class="hero">
-        <h1>كل اللغات أقرب مما تتخيل.</h1>
-        <p>ترجم نصوك فورياً وبدقة عالية بين أكثر من 100 لغة عالمية مع تجربة
+        /* في الشاشات الصغيرة جداً توضع خانات الاختيار تحت بعض لضمان العرض التام بدون قطع */
+        @media (max-width: 360px) {
+            .language-selectors {
+                flex-direction: column;
+            }
+            .swap-btn
