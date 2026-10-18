@@ -1,526 +1,559 @@
 /* ==========================================
-   LingoFlow — Core JavaScript Logic
+   LingoFlow Application Logic
    ========================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements Reference
-    const htmlEl = document.documentElement;
-    const themeToggleBtn = document.getElementById('themeToggle');
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const navLinks = document.getElementById('navLinks');
+
+    /* --- DOM Elements --- */
+    const themeToggle = document.getElementById('themeToggle');
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('navMenu');
     
-    // Translation Elements
-    const sourceText = document.getElementById('sourceText');
-    const targetText = document.getElementById('targetText');
     const sourceLang = document.getElementById('sourceLang');
     const targetLang = document.getElementById('targetLang');
-    const translateBtn = document.getElementById('translateBtn');
     const swapLangsBtn = document.getElementById('swapLangsBtn');
-    const clearTextBtn = document.getElementById('clearTextBtn');
-    const pasteBtn = document.getElementById('pasteBtn');
-    const voiceInputBtn = document.getElementById('voiceInputBtn');
-    const fileInput = document.getElementById('fileInput');
+    
+    const sourceText = document.getElementById('sourceText');
+    const targetText = document.getElementById('targetText');
     const charCount = document.getElementById('charCount');
-    const loadingSpinner = document.getElementById('loadingSpinner');
     
-    // Action Tools
-    const copyBtn = document.getElementById('copyBtn');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const ttsBtn = document.getElementById('ttsBtn');
+    const clearSourceBtn = document.getElementById('clearSourceBtn');
+    const pasteBtn = document.getElementById('pasteBtn');
+    const speakSourceBtn = document.getElementById('speakSourceBtn');
+    
+    const copyTargetBtn = document.getElementById('copyTargetBtn');
+    const speakTargetBtn = document.getElementById('speakTargetBtn');
     const favoriteBtn = document.getElementById('favoriteBtn');
-    const favoriteIcon = document.getElementById('favoriteIcon');
-    const translationMeta = document.getElementById('translationMeta');
+    const clearTargetBtn = document.getElementById('clearTargetBtn');
     
-    // Tabs Elements
+    const translateBtn = document.getElementById('translateBtn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    
     const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabPanes = document.querySelectorAll('.tab-pane');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
     const historyList = document.getElementById('historyList');
-    const historyEmpty = document.getElementById('historyEmpty');
-    const historyFooter = document.getElementById('historyFooter');
-    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
     const favoritesList = document.getElementById('favoritesList');
-    const favoritesEmpty = document.getElementById('favoritesEmpty');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+    const clearFavoritesBtn = document.getElementById('clearFavoritesBtn');
+    const favCount = document.getElementById('favCount');
     
-    // FAQ Accordion
+    const toastContainer = document.getElementById('toastContainer');
     const faqItems = document.querySelectorAll('.faq-item');
-    
-    // Current Year Update
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-    // ==========================================
-    // 1. Theme Management
-    // ==========================================
-    const savedTheme = localStorage.getItem('lingoflow_theme') || 'light';
-    setTheme(savedTheme);
+    /* --- State Management --- */
+    let history = JSON.parse(localStorage.getItem('lingoflow_history')) || [];
+    let favorites = JSON.parse(localStorage.getItem('lingoflow_favorites')) || [];
+    let currentTranslatedResult = "";
 
-    themeToggleBtn.addEventListener('click', () => {
-        const currentTheme = htmlEl.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        setTheme(newTheme);
-    });
+    /* --- Initialization --- */
+    initTheme();
+    renderHistory();
+    renderFavorites();
 
-    function setTheme(theme) {
-        htmlEl.setAttribute('data-theme', theme);
-        localStorage.setItem('lingoflow_theme', theme);
-        const icon = themeToggleBtn.querySelector('i');
-        if (theme === 'dark') {
-            icon.className = 'fa-solid fa-sun';
-        } else {
-            icon.className = 'fa-solid fa-moon';
-        }
+    /* ==========================================
+       Theme Toggle
+       ========================================== */
+    function initTheme() {
+        const savedTheme = localStorage.getItem('lingoflow_theme') || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', savedTheme);
     }
 
-    // Mobile Menu Toggle
-    mobileMenuBtn.addEventListener('click', () => {
-        navLinks.classList.toggle('show');
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('lingoflow_theme', newTheme);
     });
 
-    // ==========================================
-    // 2. Character Counter & Input Handling
-    // ==========================================
+    /* --- Mobile Menu --- */
+    mobileMenuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+    });
+
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.addEventListener('click', () => navMenu.classList.remove('active'));
+    });
+
+    /* ==========================================
+       Character Counter & Textarea Actions
+       ========================================== */
     sourceText.addEventListener('input', () => {
         const len = sourceText.value.length;
         charCount.textContent = len;
     });
 
-    // Clear Text
-    clearTextBtn.addEventListener('click', () => {
+    clearSourceBtn.addEventListener('click', () => {
         sourceText.value = '';
         charCount.textContent = '0';
-        targetText.innerHTML = 'ستظهر الترجمة هنا...';
-        targetText.className = 'output-placeholder';
-        disableOutputTools(true);
-        showToast('تم مسح النص بنجاح', 'success');
+        sourceText.focus();
     });
 
-    // Paste Text
     pasteBtn.addEventListener('click', async () => {
         try {
             const text = await navigator.clipboard.readText();
             sourceText.value = text;
             charCount.textContent = text.length;
-            showToast('تم لصق النص من الحافظة', 'success');
+            showToast('تم لصق النص بنجاح', 'success');
         } catch (err) {
             showToast('تعذر الوصول إلى الحافظة', 'error');
         }
     });
 
-    // File Upload
-    fileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            sourceText.value = event.target.result;
-            charCount.textContent = sourceText.value.length;
-            showToast(`تم استيراد الملف (${file.name}) بنجاح`, 'success');
-        };
-        reader.onerror = function() {
-            showToast('حدث خطأ أثناء قراءة الملف', 'error');
-        };
-        reader.readAsText(file);
+    clearTargetBtn.addEventListener('click', () => {
+        targetText.innerHTML = '<span class="placeholder-text">ستظهر الترجمة هنا فوراً...</span>';
+        currentTranslatedResult = "";
+        copyTargetBtn.disabled = true;
+        speakTargetBtn.disabled = true;
+        favoriteBtn.disabled = true;
+        favoriteBtn.querySelector('i').className = "fa-regular fa-star";
     });
 
-    // Voice Input (Speech Recognition Simulation/API)
-    voiceInputBtn.addEventListener('click', () => {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) {
-            showToast('الإدخال الصوتي غير مدعوم في متصفحك الحالي', 'error');
-            return;
-        }
-        const recognition = new SpeechRecognition();
-        recognition.lang = sourceLang.value === 'auto' ? 'ar-SA' : sourceLang.value;
-        recognition.start();
-        showToast('جاري الاستماع... تحدث الآن', 'success');
-
-        recognition.onresult = (event) => {
-            const speechToText = event.results[0][0].transcript;
-            sourceText.value += ' ' + speechToText;
-            charCount.textContent = sourceText.value.length;
-            showToast('تم إدخال النص صوتياً بنجاح', 'success');
-        };
-
-        recognition.onerror = () => {
-            showToast('تعذر التعرف على الصوت', 'error');
-        };
-    });
-
-    // Swap Languages
+    /* ==========================================
+       Language Swap
+       ========================================== */
     swapLangsBtn.addEventListener('click', () => {
-        const srcVal = sourceLang.value;
-        const tgtVal = targetLang.value;
+        const sVal = sourceLang.value;
+        const tVal = targetLang.value;
         
-        if (srcVal === 'auto') {
-            showToast('لا يمكن التبديل عندما يكون المصدر على وضع الاكتشاف التلقائي', 'error');
+        if (sVal === 'auto') {
+            showToast('لا يمكن التبديل عندما يكون مصدر اللغة "اكتشاف تلقائي"', 'info');
             return;
         }
         
-        sourceLang.value = tgtVal;
-        targetLang.value = srcVal;
+        sourceLang.value = tVal;
+        targetLang.value = sVal;
         
-        // Swap text contents if target has text
-        const srcValText = sourceText.value;
-        const tgtValText = targetText.textContent;
-        if (targetText.classList.contains('output-translated') && tgtValText) {
-            sourceText.value = tgtValText;
-            targetText.textContent = srcValText;
+        // Swap text if translation exists
+        if (currentTranslatedResult && sourceText.value) {
+            const temp = sourceText.value;
+            sourceText.value = currentTranslatedResult;
             charCount.textContent = sourceText.value.length;
+            targetText.textContent = temp;
+            currentTranslatedResult = temp;
         }
-        showToast('تم تبديل اللغات بنجاح', 'success');
     });
 
-    // ==========================================
-    // 3. Translation Engine (`translateText`)
-    // ==========================================
-    async function translateText(text, srcLang, tgtLang) {
-        if (!text || text.trim() === '') {
-            throw new Error('النص المراد ترجمته فارغ.');
+    /* ==========================================
+       Translation Engine (MyMemory Real API)
+       ========================================== */
+    async function translateText(text, src, tgt) {
+        if (!text.trim()) return "";
+        
+        // Handle auto-detect for MyMemory API (uses 'autodetect' or omits)
+        let langPair = `${src === 'auto' ? '' : src}|${tgt}`;
+        if (src === 'auto') {
+            langPair = `en|${tgt}`; // Fallback default source if auto
         }
 
-        // محرك ذكي متطور للوضع التجريبي والفعلي
-        // في حال توفر اتصال أو استخدام API خارجي، يتم توجيهه هنا.
-        // قمنا ببناء محرك محلي ذكي وعالي الدقة لتجربة فورية وخالية من الأخطاء.
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                let translated = '';
-                const cleanText = text.trim();
-                
-                // قاموس تحليلي ذكي ونموذجي للعروض التوضيحية والاحترافية
-                const demoDatabase = {
-                    'en': {
-                        'ar': {
-                            'hello': 'مرحباً',
-                            'how are you': 'كيف حالك',
-                            'welcome to lingoflow': 'مرحباً بك في منصة LingoFlow',
-                            'empowering global communication with seamless ai translation.': 'تمكين التواصل العالمي باستخدام الترجمة الذكية السلسة.',
-                            'artificial intelligence': 'الذكاء الاصطناعي',
-                            'translation': 'الترجمة'
-                        }
-                    },
-                    'ar': {
-                        'en': {
-                            'مرحباً': 'Hello',
-                            'كيف حالك': 'How are you',
-                            'مرحباً بك في منصة lingoflow': 'Welcome to LingoFlow platform',
-                            'الذكاء الاصطناعي': 'Artificial Intelligence',
-                            'الترجمة': 'Translation'
-                        }
-                    }
-                };
+        const encodedText = encodeURIComponent(text);
+        const url = `https://api.mymemory.translated.net/get?q=${encodedText}&langpair=${langPair}`;
 
-                const lowerText = cleanText.toLowerCase();
-                if (demoDatabase[srcLang]?.[tgtLang]?.[lowerText]) {
-                    translated = demoDatabase[srcLang][tgtLang][lowerText];
-                } else if (demoDatabase['en']?.[tgtLang]?.[lowerText]) {
-                    translated = demoDatabase['en'][tgtLang][lowerText];
-                } else {
-                    // خوارزمية توليد ترجمة افتراضية احترافية في وضع العرض
-                    translated = `[ترجمة ${srcLang.toUpperCase()} ➔ ${tgtLang.toUpperCase()}]: ${cleanText}`;
-                }
-                resolve(translated);
-            }, 600);
-        });
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('حدث خطأ في الاتصال بخدمة الترجمة.');
+        }
+
+        const data = await response.json();
+        if (data && data.responseData && data.responseData.translatedText) {
+            return data.responseData.translatedText;
+        } else {
+            throw new Error('فشل معالجة الترجمة من الخادم.');
+        }
     }
 
-    // Execute Translation Action
-    translateBtn.addEventListener('click', performTranslation);
-    
-    // Keyboard Shortcut: Ctrl + Enter
+    translateBtn.addEventListener('click', handleTranslationProcess);
+
     sourceText.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key === 'Enter') {
-            e.preventDefault();
-            performTranslation();
+        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            handleTranslationProcess();
         }
     });
 
-    async function performTranslation() {
+    async function handleTranslationProcess() {
         const text = sourceText.value.trim();
-        const src = sourceLang.value;
-        const tgt = targetLang.value;
-
         if (!text) {
-            showToast('الرجاء إدخال نص صحيح للترجمة', 'error');
+            showToast('الرجاء إدخال نص للترجمة أولاً', 'error');
             sourceText.focus();
             return;
         }
 
-        if (src === tgt) {
-            showToast('لا يمكن الترجمة بين نفس اللغة', 'error');
+        const src = sourceLang.value;
+        const tgt = targetLang.value;
+
+        if (src === tgt && src !== 'auto') {
+            showToast('اللغة الأصلية واللغة المستهدفة متطابقتان', 'error');
             return;
         }
 
-        // UI Loading State
-        targetText.innerHTML = '';
-        targetText.className = 'output-wrapper';
-        loadingSpinner.classList.remove('hidden');
+        // Show loading state
+        loadingOverlay.classList.remove('hidden');
         translateBtn.disabled = true;
-        translationMeta.textContent = 'جارٍ الترجمة...';
 
         try {
             const result = await translateText(text, src, tgt);
+            currentTranslatedResult = result;
             
-            loadingSpinner.classList.add('hidden');
             targetText.textContent = result;
-            targetText.classList.add('output-translated');
-            disableOutputTools(false);
-            translationMeta.textContent = `تمت الترجمة بنجاح (${src.toUpperCase()} ➔ ${tgt.toUpperCase()})`;
+            copyTargetBtn.disabled = false;
+            speakTargetBtn.disabled = false;
+            favoriteBtn.disabled = false;
             
-            // Save to History
+            // Check if already in favorites
+            updateFavoriteButtonState();
+
+            // Save to history
             saveToHistory(text, result, src, tgt);
             showToast('تمت الترجمة بنجاح', 'success');
 
         } catch (error) {
-            loadingSpinner.classList.add('hidden');
-            targetText.textContent = 'حدث خطأ أثناء عملية الترجمة. يجدر التحقق من الاتصال.';
-            targetText.classList.add('output-placeholder');
-            disableOutputTools(true);
-            translationMeta.textContent = 'فشلت الترجمة';
-            showToast(error.message || 'فشلت عملية الترجمة', 'error');
+            showToast(error.message || 'تعذر إتمام الترجمة، تأكد من الاتصال بالإنترنت', 'error');
         } finally {
+            loadingOverlay.classList.add('hidden');
             translateBtn.disabled = false;
         }
     }
 
-    function disableOutputTools(disabled) {
-        copyBtn.disabled = disabled;
-        downloadBtn.disabled = disabled;
-        ttsBtn.disabled = disabled;
-        favoriteBtn.disabled = disabled;
-    }
-
-    // ==========================================
-    // 4. Output Tools (Copy, Download, TTS, Favorite)
-    // ==========================================
-    copyBtn.addEventListener('click', () => {
-        const textToCopy = targetText.textContent;
-        if (!textToCopy) return;
-        navigator.clipboard.writeText(textToCopy).then(() => {
+    /* ==========================================
+       Clipboard & Speech Synthesis
+       ========================================== */
+    copyTargetBtn.addEventListener('click', async () => {
+        if (!currentTranslatedResult) return;
+        try {
+            await navigator.clipboard.writeText(currentTranslatedResult);
             showToast('تم نسخ الترجمة إلى الحافظة', 'success');
-        }).catch(() => {
-            showToast('تعذر النسخ', 'error');
-        });
+        } catch (err) {
+            showToast('تعذر النسخ إلى الحافظة', 'error');
+        }
     });
 
-    downloadBtn.addEventListener('click', () => {
-        const textToDownload = targetText.textContent;
-        if (!textToDownload) return;
-        const blob = new Blob([textToDownload], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `LingoFlow_Translation_${Date.now()}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast('تم تنزيل الملف بنجاح', 'success');
+    speakSourceBtn.addEventListener('click', () => {
+        speakText(sourceText.value, sourceLang.value);
     });
 
-    ttsBtn.addEventListener('click', () => {
-        const textToSpeak = targetText.textContent;
-        if (!textToSpeak) return;
+    speakTargetBtn.addEventListener('click', () => {
+        speakText(currentTranslatedResult, targetLang.value);
+    });
+
+    function speakText(text, langCode) {
+        if (!text) return;
         if (!('speechSynthesis' in window)) {
             showToast('خاصية القراءة الصوتية غير مدعومة في متصفحك', 'error');
             return;
         }
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.lang = targetLang.value === 'ar' ? 'ar-SA' : targetLang.value;
+
+        window.speechSynthesis.cancel(); // Stop any ongoing speech
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = langCode === 'auto' ? 'en-US' : langCode;
+        utterance.rate = 1.0;
+        
+        utterance.onerror = () => {
+            showToast('حدث خطأ أثناء تشغيل الصوت', 'error');
+        };
+
         window.speechSynthesis.speak(utterance);
-        showToast('جاري قراءة النص...', 'success');
-    });
+    }
 
-    // Favorites Toggle
-    favoriteBtn.addEventListener('click', () => {
-        const srcTxt = sourceText.value.trim();
-        const tgtTxt = targetText.textContent.trim();
-        if (!srcTxt || !tgtTxt) return;
-
-        const favoriteItem = {
+    /* ==========================================
+       History & Favorites Management (localStorage)
+       ========================================== */
+    function saveToHistory(orig, trans, src, tgt) {
+        const record = {
             id: Date.now(),
-            source: srcTxt,
-            target: tgtTxt,
-            sourceLang: sourceLang.value,
-            targetLang: targetLang.value
+            original: orig,
+            translated: trans,
+            sourceLang: src,
+            targetLang: tgt,
+            date: new Date().toLocaleDateString('ar-SA')
         };
 
-        let favorites = JSON.parse(localStorage.getItem('lingoflow_favorites')) || [];
-        const existsIndex = favorites.findIndex(item => item.source === srcTxt && item.target === tgtTxt);
-
-        if (existsIndex > -1) {
-            favorites.splice(existsIndex, 1);
-            favoriteIcon.className = 'fa-regular fa-star';
-            showToast('تمت الإزالة من المفضلة', 'success');
-        } else {
-            favorites.unshift(favoriteItem);
-            favoriteIcon.className = 'fa-solid fa-star';
-            showToast('تم الحفظ في المفضلة بنجاح', 'success');
-        }
-        localStorage.setItem('lingoflow_favorites', JSON.stringify(favorites));
-        renderFavorites();
-    });
-
-    // ==========================================
-    // 5. History & Favorites Storage Management
-    // ==========================================
-    function saveToHistory(src, tgt, srcLangCode, tgtLangCode) {
-        let history = JSON.parse(localStorage.getItem('lingoflow_history')) || [];
-        // منع التكرار المباشر لآخر عنصر
-        if (history.length > 0 && history[0].source === src && history[0].target === tgt) {
-            return;
-        }
-        const historyItem = {
-            id: Date.now(),
-            source: src,
-            target: tgt,
-            sourceLang: srcLangCode,
-            targetLang: tgtLangCode,
-            time: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })
-        };
-        history.unshift(historyItem);
-        if (history.length > 50) history.pop(); // الحد الأقصى 50 عنصر
+        history.unshift(record);
+        if (history.length > 30) history.pop(); // Max 30 items
         localStorage.setItem('lingoflow_history', JSON.stringify(history));
         renderHistory();
     }
 
     function renderHistory() {
-        let history = JSON.parse(localStorage.getItem('lingoflow_history')) || [];
         if (history.length === 0) {
-            historyEmpty.style.display = 'block';
-            historyList.innerHTML = '';
-            historyFooter.style.display = 'none';
+            historyList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fa-solid fa-box-open"></i>
+                    <p>لا توجد ترجمات سابقة في السجل بعد.</p>
+                </div>
+            `;
             return;
         }
-        historyEmpty.style.display = 'none';
-        historyFooter.style.display = 'block';
-        historyList.innerHTML = '';
 
-        history.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'history-item';
-            div.innerHTML = `
-                <div class="history-content">
-                    <div class="history-text-snippet" title="${item.source}"><strong>${item.sourceLang.toUpperCase()}:</strong> ${item.source}</div>
-                    <div class="history-text-snippet" title="${item.target}"><strong>${item.targetLang.toUpperCase()}:</strong> ${item.target}</div>
+        historyList.innerHTML = history.map(item => `
+            <div class="record-card" data-id="${item.id}">
+                <div class="record-header">
+                    <span class="record-langs">${item.sourceLang.toUpperCase()} → ${item.targetLang.toUpperCase()}</span>
+                    <span>${item.date}</span>
                 </div>
-                <button class="tool-btn load-history-btn" title="تحميل النص" data-id="${item.id}">
-                    <i class="fa-solid fa-arrow-turn-up"></i>
-                </button>
-            `;
-            historyList.appendChild(div);
-        });
+                <div class="record-body">
+                    <div class="record-text-item">${escapeHTML(item.original)}</div>
+                    <div class="record-text-item target">${escapeHTML(item.translated)}</div>
+                </div>
+                <div class="record-footer">
+                    <button class="tool-btn reuse-record" title="استخدام هذه الترجمة" aria-label="استخدام">
+                        <i class="fa-solid fa-arrow-turn-up"></i>
+                    </button>
+                    <button class="tool-btn copy-record" title="نسخ النتيجة" aria-label="نسخ">
+                        <i class="fa-solid fa-copy"></i>
+                    </button>
+                    <button class="tool-btn delete-record text-danger" title="حذف" aria-label="حذف">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
 
-        // ربط أحداث أزرار التحميل من السجل
-        document.querySelectorAll('.load-history-btn').forEach(btn => {
+        attachHistoryListeners();
+    }
+
+    function attachHistoryListeners() {
+        document.querySelectorAll('.reuse-record').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = Number(e.currentTarget.getAttribute('data-id'));
-                const hist = JSON.parse(localStorage.getItem('lingoflow_history')) || [];
-                const found = hist.find(h => h.id === id);
-                if (found) {
-                    sourceText.value = found.source;
-                    sourceLang.value = found.sourceLang;
-                    targetLang.value = found.targetLang;
-                    targetText.textContent = found.target;
-                    targetText.className = 'output-translated';
-                    charCount.textContent = found.source.length;
-                    disableOutputTools(false);
-                    showToast('تم استرجاع الترجمة من السجل', 'success');
-                    window.scrollTo({ top: document.getElementById('translator').offsetTop - 80, behavior: 'smooth' });
+                const card = e.target.closest('.record-card');
+                const id = Number(card.dataset.id);
+                const item = history.find(h => h.id === id);
+                if (item) {
+                    sourceText.value = item.original;
+                    charCount.textContent = item.original.length;
+                    sourceLang.value = item.sourceLang;
+                    targetLang.value = item.targetLang;
+                    targetText.textContent = item.translated;
+                    currentTranslatedResult = item.translated;
+                    copyTargetBtn.disabled = false;
+                    speakTargetBtn.disabled = false;
+                    favoriteBtn.disabled = false;
+                    updateFavoriteButtonState();
+                    window.scrollTo({ top: 300, behavior: 'smooth' });
+                    showToast('تم استرجاع الترجمة بنجاح', 'info');
                 }
             });
         });
-    }
 
-    function renderFavorites() {
-        let favorites = JSON.parse(localStorage.getItem('lingoflow_favorites')) || [];
-        if (favorites.length === 0) {
-            favoritesEmpty.style.display = 'block';
-            favoritesList.innerHTML = '';
-            return;
-        }
-        favoritesEmpty.style.display = 'none';
-        favoritesList.innerHTML = '';
-
-        favorites.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'history-item';
-            div.innerHTML = `
-                <div class="history-content">
-                    <div class="history-text-snippet" title="${item.source}"><strong>${item.sourceLang.toUpperCase()}:</strong> ${item.source}</div>
-                    <div class="history-text-snippet" title="${item.target}"><strong>${item.targetLang.toUpperCase()}:</strong> ${item.target}</div>
-                </div>
-                <button class="tool-btn remove-fav-btn" title="حذف من المفضلة" data-id="${item.id}">
-                    <i class="fa-solid fa-trash-can"></i>
-                </button>
-            `;
-            favoritesList.appendChild(div);
+        document.querySelectorAll('.copy-record').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const card = e.target.closest('.record-card');
+                const id = Number(card.dataset.id);
+                const item = history.find(h => h.id === id);
+                if (item) {
+                    await navigator.clipboard.writeText(item.translated);
+                    showToast('تم نسخ الترجمة إلى الحافظة', 'success');
+                }
+            });
         });
 
-        document.querySelectorAll('.remove-fav-btn').forEach(btn => {
+        document.querySelectorAll('.delete-record').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = Number(e.currentTarget.getAttribute('data-id'));
-                let favorites = JSON.parse(localStorage.getItem('lingoflow_favorites')) || [];
-                favorites = favorites.filter(f => f.id !== id);
-                localStorage.setItem('lingoflow_favorites', JSON.stringify(favorites));
-                renderFavorites();
-                showToast('تمت الإزالة من المفضلة', 'success');
+                const card = e.target.closest('.record-card');
+                const id = Number(card.dataset.id);
+                history = history.filter(h => h.id !== id);
+                localStorage.setItem('lingoflow_history', JSON.stringify(history));
+                renderHistory();
+                showToast('تم حذف العنصر من السجل', 'info');
             });
         });
     }
 
     clearHistoryBtn.addEventListener('click', () => {
-        localStorage.removeItem('lingoflow_history');
-        renderHistory();
-        showToast('تم مسح سجل الترجمات بنجاح', 'success');
+        if (confirm('هل أنت متأكد من مسح جميع سجل الترجمات؟')) {
+            history = [];
+            localStorage.removeItem('lingoflow_history');
+            renderHistory();
+            showToast('تم مسح السجل بالكامل', 'success');
+        }
     });
 
-    // Tabs Navigation Switch
+    /* --- Favorites Logic --- */
+    favoriteBtn.addEventListener('click', () => {
+        if (!currentTranslatedResult) return;
+        
+        const currentRecord = {
+            id: Date.now(),
+            original: sourceText.value,
+            translated: currentTranslatedResult,
+            sourceLang: sourceLang.value,
+            targetLang: targetLang.value
+        };
+
+        const index = favorites.findIndex(f => f.translated === currentTranslatedResult && f.original === sourceText.value);
+        if (index > -1) {
+            favorites.splice(index, 1);
+            showToast('تمت الإزالة من المفضلة', 'info');
+        } else {
+            favorites.unshift(currentRecord);
+            showToast('تمت الإضافة إلى المفضلة', 'success');
+        }
+
+        localStorage.setItem('lingoflow_favorites', JSON.stringify(favorites));
+        renderFavorites();
+        updateFavoriteButtonState();
+    });
+
+    function updateFavoriteButtonState() {
+        const isFav = favorites.some(f => f.translated === currentTranslatedResult && f.original === sourceText.value);
+        const icon = favoriteBtn.querySelector('i');
+        if (isFav) {
+            icon.className = "fa-solid fa-star";
+            favoriteBtn.style.color = "var(--warning)";
+        } else {
+            icon.className = "fa-regular fa-star";
+            favoriteBtn.style.color = "inherit";
+        }
+    }
+
+    function renderFavorites() {
+        favCount.textContent = favorites.length;
+        if (favorites.length === 0) {
+            favoritesList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fa-regular fa-star"></i>
+                    <p>لم تقم بحفظ أي ترجمات في المفضلة بعد.</p>
+                </div>
+            `;
+            return;
+        }
+
+        favoritesList.innerHTML = favorites.map(item => `
+            <div class="record-card fav-card" data-id="${item.id}">
+                <div class="record-header">
+                    <span class="record-langs">${item.sourceLang.toUpperCase()} → ${item.targetLang.toUpperCase()}</span>
+                    <button class="tool-btn remove-fav text-danger" title="إزالة من المفضلة"><i class="fa-solid fa-star"></i></button>
+                </div>
+                <div class="record-body">
+                    <div class="record-text-item">${escapeHTML(item.original)}</div>
+                    <div class="record-text-item target">${escapeHTML(item.translated)}</div>
+                </div>
+                <div class="record-footer">
+                    <button class="tool-btn reuse-fav" title="استخدام"><i class="fa-solid fa-arrow-turn-up"></i></button>
+                    <button class="tool-btn copy-fav" title="نسخ"><i class="fa-solid fa-copy"></i></button>
+                </div>
+            </div>
+        `).join('');
+
+        attachFavoritesListeners();
+    }
+
+    function attachFavoritesListeners() {
+        document.querySelectorAll('.remove-fav').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const card = e.target.closest('.fav-card');
+                const id = Number(card.dataset.id);
+                favorites = favorites.filter(f => f.id !== id);
+                localStorage.setItem('lingoflow_favorites', JSON.stringify(favorites));
+                renderFavorites();
+                updateFavoriteButtonState();
+                showToast('تمت الإزالة من المفضلة', 'info');
+            });
+        });
+
+        document.querySelectorAll('.reuse-fav').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const card = e.target.closest('.fav-card');
+                const id = Number(card.dataset.id);
+                const item = favorites.find(f => f.id === id);
+                if (item) {
+                    sourceText.value = item.original;
+                    charCount.textContent = item.original.length;
+                    sourceLang.value = item.sourceLang;
+                    targetLang.value = item.targetLang;
+                    targetText.textContent = item.translated;
+                    currentTranslatedResult = item.translated;
+                    copyTargetBtn.disabled = false;
+                    speakTargetBtn.disabled = false;
+                    favoriteBtn.disabled = false;
+                    updateFavoriteButtonState();
+                    window.scrollTo({ top: 300, behavior: 'smooth' });
+                    showToast('تم استرجاع الترجمة من المفضلة', 'info');
+                }
+            });
+        });
+
+        document.querySelectorAll('.copy-fav').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const card = e.target.closest('.fav-card');
+                const id = Number(card.dataset.id);
+                const item = favorites.find(f => f.id === id);
+                if (item) {
+                    await navigator.clipboard.writeText(item.translated);
+                    showToast('تم نسخ الترجمة إلى الحافظة', 'success');
+                }
+            });
+        });
+    }
+
+    clearFavoritesBtn.addEventListener('click', () => {
+        if (confirm('هل أنت متأكد من إفراغ قائمة المفضلة؟')) {
+            favorites = [];
+            localStorage.removeItem('lingoflow_favorites');
+            renderFavorites();
+            updateFavoriteButtonState();
+            showToast('تم إفراغ المفضلة بالكامل', 'success');
+        }
+    });
+
+    /* ==========================================
+       Tabs Navigation (History / Favorites)
+       ========================================== */
     tabBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             tabBtns.forEach(b => b.classList.remove('active'));
-            tabPanes.forEach(p => p.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
             btn.classList.add('active');
-            const targetPaneId = btn.getAttribute('data-tab') === 'history' ? 'historyPane' : 'favoritesPane';
-            document.getElementById(targetPaneId).classList.add('active');
+            const targetTab = document.getElementById(btn.dataset.tab);
+            targetTab.classList.add('active');
         });
     });
 
-    // ==========================================
-    // 6. FAQ Accordion Interaction
-    // ==========================================
+    /* ==========================================
+       FAQ Accordion
+       ========================================== */
     faqItems.forEach(item => {
         const questionBtn = item.querySelector('.faq-question');
         questionBtn.addEventListener('click', () => {
-            const isActive = item.classList.contains('active');
+            const isOpen = item.classList.contains('active');
             faqItems.forEach(i => i.classList.remove('active'));
-            if (!isActive) {
+            if (!isOpen) {
                 item.classList.add('active');
             }
         });
     });
 
-    // ==========================================
-    // 7. Toast Notification System
-    // ==========================================
-    window.showToast = function(message, type = 'success') {
-        const container = document.getElementById('toastContainer');
+    /* ==========================================
+       Toast Notification System
+       ========================================== */
+    function showToast(message, type = 'info') {
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
         
-        let iconHtml = type === 'success' ? '<i class="fa-solid fa-circle-check" style="color:var(--secondary)"></i>' : '<i class="fa-solid fa-circle-exclamation" style="color:#ef4444"></i>';
-        toast.innerHTML = `${iconHtml} <span>${message}</span>`;
-        
-        container.appendChild(toast);
-        
+        let iconClass = 'fa-solid fa-circle-info';
+        if (type === 'success') iconClass = 'fa-solid fa-circle-check';
+        if (type === 'error') iconClass = 'fa-solid fa-triangle-exclamation';
+
+        toast.innerHTML = `
+            <i class="${iconClass}"></i>
+            <span>${escapeHTML(message)}</span>
+        `;
+
+        toastContainer.appendChild(toast);
+
         setTimeout(() => {
             toast.style.opacity = '0';
             toast.style.transform = 'translateY(20px)';
-            toast.style.transition = 'all 0.3s ease';
             setTimeout(() => toast.remove(), 300);
         }, 3000);
-    };
+    }
 
-    // Initial render call
-    renderHistory();
-    renderFavorites();
+    /* --- Security Helper --- */
+    function escapeHTML(str) {
+        return str.replace(/[&<>'"]/g, 
+            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+    }
+
 });
