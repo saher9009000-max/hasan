@@ -3,102 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinguaCraft Pro | منصة الترجمة الذكية</title>
-    <!-- مكتبة PDF.js لقراءة ملفات PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <title>مترجم الذكاء الاصطناعي الاحترافي</title>
     <link rel="stylesheet" href="style.css">
+    <!-- خط Cairo العصري -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- أيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body data-theme="light">
 
-    <!-- الهيدر العلوي -->
+    <!-- رأس الصفحة -->
     <header class="app-header">
-        <div class="logo-container">
-            <div class="logo-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path>
-                </svg>
-            </div>
-            <h1>Lingua<span class="gradient-text">Craft</span></h1>
+        <div class="logo">
+            <i class="fa-solid fa-language"></i>
+            <h1>مترجم الذكاء الاصطناعي</h1>
         </div>
-        <div class="header-badge">Pro SaaS</div>
+        <button id="theme-toggle" class="icon-btn" aria-label="تبديل الوضع المرئي" title="تبديل الوضع">
+            <i class="fa-solid fa-moon"></i>
+        </button>
     </header>
 
     <!-- المحتوى الرئيسي -->
-    <main class="main-container">
-       <div class="translator-card">
-           
-           <!-- شريط التحكم باللغات -->
-           <div class="toolbar">
-               <div class="language-selector-group">
-                   <select id="sourceLang" aria-label="لغة المصدر">
-                       <option value="ar" selected>العربية</option>
-                       <option value="en">الإنجليزية (English)</option>
-                       <option value="fr">الفرنسية (Français)</option>
-                       <option value="es">الإسبانية (Español)</option>
-                       <option value="de">الألمانية (Deutsch)</option>
-                       <option value="tr">التركية (Türkçe)</option>
-                       <option value="it">الإيطالية (Italiano)</option>
-                       <option value="ru">الروسية (Русский)</option>
-                       <option value="zh">الصينية (中文)</option>
-                       <option value="ja">اليابانية (日本語)</option>
-                   </select>
+    <main class="app-main">
+        <!-- شريط اختيار اللغات -->
+        <div class="lang-bar">
+            <div class="lang-select-group">
+                <label for="source-lang">اللغة الأصلية:</label>
+                <select id="source-lang">
+                    <option value="auto">اكتشاف تلقائي</option>
+                    <option value="ar">العربية</option>
+                    <option value="en">الإنجليزية</option>
+                    <option value="fr">الفرنسية</option>
+                    <option value="es">الإسبانية</option>
+                    <option value="de">الألمانية</option>
+                    <option value="tr">التركية</option>
+                </select>
+            </div>
 
-                   <button id="swapBtn" class="icon-btn" aria-label="تبديل اللغات" title="تبديل اللغات">
-                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                           <path d="M7 16V4M7 4L3 8M7 4l4 4M17 8v12M17 20l4-4M17 20l-4-4"/>
-                       </svg>
-                   </button>
+            <button id="swap-lang" class="icon-btn swap-btn" aria-label="تبديل اللغات" title="تبديل اللغات">
+                <i class="fa-solid fa-right-left"></i>
+            </button>
 
-                   <select id="targetLang" aria-label="اللغة الهدف">
-                       <option value="ar">العربية</option>
-                       <option value="en" selected>الإنجليزية (English)</option>
-                       <option value="fr">الفرنسية (Français)</option>
-                       <option value="es">الإسبانية (Español)</option>
-                       <option value="de">الألمانية (Deutsch)</option>
-                       <option value="tr">التركية (Türkçe)</option>
-                       <option value="it">الإيطالية (Italiano)</option>
-                       <option value="ru">الروسية (Русский)</option>
-                       <option value="zh">الصينية (中文)</option>
-                       <option value="ja">اليابانية (日本語)</option>
-                   </select>
-               </div>
-           </div>
+            <div class="lang-select-group">
+                <label for="target-lang">اللغة المترجمة:</label>
+                <select id="target-lang">
+                    <option value="en" selected>الإنجليزية</option>
+                    <option value="ar">العربية</option>
+                    <option value="fr">الفرنسية</option>
+                    <option value="es">الإسبانية</option>
+                    <option value="de">الألمانية</option>
+                    <option value="tr">التركية</option>
+                </select>
+            </div>
+        </div>
 
-           <!-- شبكة إدخال وإخراج النصوص -->
-           <div class="panes-grid">
-               
-               <!-- لوحة المصدر -->
-               <div class="pane source-pane">
-                   <div class="pane-header">
-                       <span class="pane-title">النص الأصلي</span>
-                       <div class="header-actions">
-                           <!-- خيار رفع المستندات PDF / TXT -->
-                           <label for="fileInput" class="action-btn-link" title="استيراد ملف PDF أو TXT">
-                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                               <span>رفع ملف</span>
-                           </label>
-                           <input type="file" id="fileInput" accept=".txt,.pdf" style="display: none;">
+        <!-- لوحة الترجمة (صندوق الإدخال وصندوق النتيجة) -->
+        <div class="translator-grid">
+            <!-- صندوق النص الأصلي -->
+            <div class="panel source-panel">
+                <div class="panel-header">
+                    <span>النص الأصلي</span>
+                    <div class="panel-actions">
+                        <button id="paste-btn" class="text-btn" title="لصق النص">
+                            <i class="fa-solid fa-paste"></i> لصق
+                        </button>
+                        <button id="clear-btn" class="text-btn" title="مسح النص">
+                            <i class="fa-solid fa-trash-can"></i> مسح
+                        </button>
+                    </div>
+                </div>
+                <div class="textarea-wrapper">
+                    <textarea id="source-text" placeholder="اكتب أو ألصق النص هنا للترجمة... (اضغط Ctrl + Enter للترجمة)"></textarea>
+                </div>
+                <div class="panel-footer">
+                    <span class="char-count"><span id="char-counter">0</span> / 5000</span>
+                    <button id="copy-source" class="icon-btn sm" title="نسخ النص الأصلي">
+                        <i class="fa-solid fa-copy"></i>
+                    </button>
+                </div>
+            </div>
 
-                           <!-- زر إدخال صوتي -->
-                           <button id="micBtn" class="action-btn-icon" title="الإملاء الصوتي">
-                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
-                           </button>
+            <!-- صندوق الترجمة -->
+            <div class="panel target-panel">
+                <div class="panel-header">
+                    <span>الترجمة بالذكاء الاصطناعي</span>
+                </div>
+                <div class="textarea-wrapper">
+                    <textarea id="target-text" placeholder="ستظهر الترجمة هنا..." readonly></textarea>
+                    
+                    <!-- حالة التحميل -->
+                    <div id="loading-overlay" class="state-overlay hidden">
+                        <div class="spinner"></div>
+                        <span>جاري معالجة الترجمة...</span>
+                    </div>
 
-                           <button id="clearBtn" class="text-action-btn" title="مسح النص">مسح</button>
-                       </div>
-                   </div>
-                   <div class="textarea-wrapper">
-                       <textarea id="sourceText" placeholder="اكتب، الصق، أو ارفع ملف PDF للترجمة..." dir="rtl" maxlength="25000"></textarea>
-                   </div>
-                   <div class="pane-footer">
-                       <span class="char-counter"><span id="charCount">0</span> / 25,000 حرف</span>
-                   </div>
-               </div>
+                    <!-- حالة الخطأ -->
+                    <div id="error-overlay" class="state-overlay hidden">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span id="error-message">تعذر الاتصال بخدمة الترجمة.</span>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <span></span>
+                    <button id="copy-target" class="icon-btn sm" title="نسخ النتيجة">
+                        <i class="fa-solid fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-               <!-- لوحة الهدف -->
-               <div class="pane target-pane">
-                   <div class="pane-header">
-                       <span class="pane-title">الترجمة الفورية</span>
-                       <div class="pane-actions">
-                           <button id="speakBtn" class="icon-action-btn" title="استماع للترجمة" disabled>
-                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14
+        <!-- زر الترجمة الرئيسي -->
+        <div class="action-container">
+            <button id="translate-btn" class="primary-btn">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> ترجمة بالذكاء الاصطناعي
+            </button>
+        </div>
+
+        <!-- قسم سجل الترجمات السابقة -->
+        <section class="history-section">
+            <div class="history-header">
+                <h2><i class="fa-solid fa-clock-rotate-left"></i> الترجمات السابقة</h2>
+                <button id="clear-history" class="text-btn sm">مسح السجل</button>
+            </div>
+            <div id="history-list" class="history-list">
+                <div class="empty-history">لا توجد ترجمات سابقة حتى الآن.</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- حاوية التنبيهات الموقّتة (Toasts) -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
