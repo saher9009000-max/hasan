@@ -1,30 +1,31 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="light">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LingoFlow | منصة الترجمة الذكية المتطورة</title>
-    <!-- خطوط جوجل: Cairo و Tajawal -->
+    <title>LingoFlow - منصة الترجمة الذكية المتطورة</title>
+    <meta name="description" content="منصة ترجمة احترافية، سريعة، وعصرية تدعم العديد من اللغات مع سجل للترجمات والمفضلة ووضع ليلي مريح.">
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- مكتبة الأيقونات FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- ملف التنسيقات الرئيسي -->
+    <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <!-- الشريط العلوي Navbar -->
     <header class="navbar" id="navbar">
-        <div class="nav-container">
+        <div class="container nav-container">
             <a href="#" class="logo">
                 <div class="logo-icon">
                     <i class="fa-solid fa-language"></i>
                 </div>
-                <span class="logo-text">Lingo<span class="highlight">Flow</span></span>
+                <span class="logo-text">LingoFlow</span>
             </a>
-
+            
             <nav class="nav-menu" id="navMenu">
                 <a href="#hero" class="nav-link active">الرئيسية</a>
                 <a href="#translator" class="nav-link">الترجمة</a>
@@ -35,84 +36,100 @@
 
             <div class="nav-actions">
                 <button id="themeToggle" class="icon-btn" aria-label="تبديل الوضع الليلي والنهاري" title="تبديل الوضع المظلم">
-                    <i class="fa-solid fa-moon dark-icon"></i>
-                    <i class="fa-solid fa-sun light-icon"></i>
+                    <i class="fa-solid fa-moon"></i>
                 </button>
                 <a href="#translator" class="btn btn-primary start-btn">ابدأ الترجمة</a>
-                <button class="menu-toggle" id="menuToggle" aria-label="قائمة التنقل">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="القائمة">
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- القسم الرئيسي Hero Section -->
-    <section class="hero" id="hero">
-        <div class="hero-container">
-            <div class="hero-badge">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <span>ترجمة ذكية • تجربة بسيطة • لغات متعددة</span>
+    <main>
+        <!-- القسم الرئيسي Hero Section -->
+        <section class="hero" id="hero">
+            <div class="container hero-container">
+                <div class="hero-badge">
+                    <span class="pulse-dot"></span>
+                    <span>ترجمة ذكية • تجربة بسيطة • لغات متعددة</span>
+                </div>
+                <h1 class="hero-title">تجاوز حواجز اللغة، <br><span class="gradient-text">وتواصل بلا حدود</span></h1>
+                <p class="hero-subtitle">استمتع بتجربة ترجمة فورية وعالية الدقة مدعومة بأحدث التقنيات. واجهة عصرية، سرعة فائقة، ودعم لأكثر من 15 لغة عالمية.</p>
+                <div class="hero-cta">
+                    <a href="#translator" class="btn btn-primary btn-lg">
+                        <i class="fa-solid fa-arrow-down"></i> جرب الترجمة الآن
+                    </a>
+                </div>
             </div>
-            <h1 class="hero-title">تجاوز حواجز اللغة، وتواصل بلا حدود</h1>
-            <p class="hero-subtitle">
-                اكتشف قوة الترجمة الفورية المدعومة بأحدث التقنيات. دقة عالية، سرعة فائقة، واجهة عصرية مصممة خصيصاً لتناسب احتياجاتك.
-            </p>
-            <div class="hero-cta">
-                <a href="#translator" class="btn btn-primary btn-lg">
-                    <span>جرب الترجمة الآن</span>
-                    <i class="fa-solid fa-arrow-down"></i>
-                </a>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- واجهة الترجمة الأساسية -->
-    <main class="main-content">
+        <!-- واجهة الترجمة الأساسية Translator Section -->
         <section class="translator-section" id="translator">
             <div class="container">
-                <div class="section-header">
-                    <h2>صندوق الترجمة الفورية</h2>
-                    <p>اختر اللغات واكتب النص أو ارفع ملفاً للحصول على ترجمة فورية دقيقة</p>
-                </div>
-
                 <div class="translator-card">
                     <!-- شريط اختيار اللغات -->
-                    <div class="language-bar">
-                        <div class="lang-select-group">
-                            <label for="sourceLang">من:</label>
+                    <div class="languages-bar">
+                        <div class="lang-select-wrapper">
+                            <label for="sourceLang" class="visually-hidden">لغة النص الأصلي</label>
                             <select id="sourceLang" class="lang-select">
                                 <option value="auto">اكتشاف تلقائي</option>
+                                <option value="ar" selected>العربية</option>
+                                <option value="en">الإنجليزية</option>
+                                <option value="fr">الفرنسية</option>
+                                <option value="de">الألمانية</option>
+                                <option value="es">الإسبانية</option>
+                                <option value="it">الإيطالية</option>
+                                <option value="tr">التركية</option>
+                                <option value="ru">الروسية</option>
+                                <option value="zh">الصينية</option>
+                                <option value="ja">اليابانية</option>
+                                <option value="ko">الكورية</option>
+                                <option value="pt">البرتغالية</option>
+                                <option value="hi">الهندية</option>
+                                <option value="nl">الهولندية</option>
+                                <option value="fa">الفارسية</option>
                             </select>
                         </div>
 
-                        <button id="swapLangs" class="icon-btn swap-btn" aria-label="تبديل اللغات" title="تبديل اللغات">
+                        <button id="swapLangsBtn" class="icon-btn swap-btn" aria-label="تبديل اللغتين" title="تبديل اللغات">
                             <i class="fa-solid fa-right-left"></i>
                         </button>
 
-                        <div class="lang-select-group">
-                            <label for="targetLang">إلى:</label>
+                        <div class="lang-select-wrapper">
+                            <label for="targetLang" class="visually-hidden">اللغة المستهدفة</label>
                             <select id="targetLang" class="lang-select">
-                                <!-- يتم تعبئتها بواسطة JavaScript -->
+                                <option value="ar">العربية</option>
+                                <option value="en" selected>الإنجليزية</option>
+                                <option value="fr">الفرنسية</option>
+                                <option value="de">الألمانية</option>
+                                <option value="es">الإسبانية</option>
+                                <option value="it">الإيطالية</option>
+                                <option value="tr">التركية</option>
+                                <option value="ru">الروسية</option>
+                                <option value="zh">الصينية</option>
+                                <option value="ja">اليابانية</option>
+                                <option value="ko">الكورية</option>
+                                <option value="pt">البرتغالية</option>
+                                <option value="hi">الهندية</option>
+                                <option value="nl">الهولندية</option>
+                                <option value="fa">الفارسية</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- مساحات النص (إدخال وإخراج) -->
+                    <!-- مناطق الإدخال والترجمة (جنبًا إلى جنب على الشاشات الكبيرة) -->
                     <div class="translator-panels">
-                        <!-- لوحة الإدخال -->
-                        <div class="panel source-panel">
+                        <!-- لوحة النص الأصلي -->
+                        <div class="translator-panel source-panel">
                             <div class="panel-header">
-                                <span class="panel-title">النص الأصلي</span>
-                                <div class="panel-tools">
-                                    <input type="file" id="fileInput" accept=".txt" class="hidden">
-                                    <button id="importBtn" class="tool-btn" title="استيراد ملف نصي">
-                                        <i class="fa-solid fa-file-arrow-up"></i> استيراد ملف
+                                <span class="panel-title" id="sourceLangTitle">العربية</span>
+                                <div class="panel-actions">
+                                    <button id="pasteBtn" class="action-btn" title="لصق النص">
+                                        <i class="fa-solid fa-paste"></i> <span>لصق</span>
                                     </button>
-                                    <button id="clearBtn" class="tool-btn" title="مسح النص">
-                                        <i class="fa-solid fa-trash-can"></i> مسح
-                                    </button>
-                                    <button id="pasteBtn" class="tool-btn" title="لصق من الحافظة">
-                                        <i class="fa-solid fa-paste"></i> لصق
+                                    <button id="clearBtn" class="action-btn" title="مسح النص">
+                                        <i class="fa-solid fa-trash-can"></i> <span>مسح</span>
                                     </button>
                                 </div>
                             </div>
@@ -121,31 +138,29 @@
                             </div>
                             <div class="panel-footer">
                                 <span class="char-counter"><span id="charCount">0</span> / 5000</span>
-                                <button id="translateBtn" class="btn btn-primary">
-                                    <i class="fa-solid fa-language"></i> ترجم الآن
-                                </button>
                             </div>
                         </div>
 
-                        <!-- لوحة الإخراج -->
-                        <div class="panel target-panel">
+                        <!-- لوحة النص المترجم -->
+                        <div class="translator-panel target-panel">
                             <div class="panel-header">
-                                <span class="panel-title">النص المترجم</span>
-                                <div class="panel-tools">
-                                    <button id="speakBtn" class="tool-btn" title="استماع للنص" disabled>
-                                        <i class="fa-solid fa-volume-high"></i> استماع
+                                <span class="panel-title" id="targetLangTitle">الإنجليزية</span>
+                                <div class="panel-actions">
+                                    <button id="speakTargetBtn" class="action-btn" title="استماع للنص المترجم" disabled>
+                                        <i class="fa-solid fa-volume-high"></i> <span>استماع</span>
                                     </button>
-                                    <button id="copyBtn" class="tool-btn" title="نسخ الترجمة" disabled>
-                                        <i class="fa-solid fa-copy"></i> نسخ
+                                    <button id="copyBtn" class="action-btn" title="نسخ الترجمة" disabled>
+                                        <i class="fa-solid fa-copy"></i> <span>نسخ</span>
                                     </button>
-                                    <button id="favoriteBtn" class="tool-btn" title="إضافة للمفضلة" disabled>
-                                        <i class="fa-regular fa-star"></i> المفضلة
+                                    <button id="favoriteBtn" class="action-btn" title="إضافة للمفضلة" disabled>
+                                        <i class="fa-regular fa-star"></i> <span>المفضلة</span>
                                     </button>
                                 </div>
                             </div>
-                            <div class="textarea-wrapper output-wrapper">
-                                <div id="targetText" class="output-placeholder">ستظهر الترجمة هنا...</div>
-                                <div id="loadingIndicator" class="loading-spinner hidden">
+                            <div class="textarea-wrapper result-wrapper">
+                                <div id="targetText" class="result-content placeholder-text">ستظهر الترجمة هنا...</div>
+                                <!-- مؤشر التحميل -->
+                                <div id="loadingIndicator" class="loading-overlay hidden">
                                     <div class="spinner"></div>
                                     <span>جاري الترجمة...</span>
                                 </div>
@@ -155,65 +170,13 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- قسم السجل والمفضلة -->
-        <section class="history-section" id="history-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>سجل الترجمات والمفضلة</h2>
-                    <p>الوصول السريع لترجماتك السابقة والعناصر المحفوظة</p>
-                </div>
-                
-                <div class="tabs-container">
-                    <div class="tabs-header">
-                        <button class="tab-btn active" data-tab="history">سجل الترجمات (<span id="historyCount">0</span>)</button>
-                        <button class="tab-btn" data-tab="favorites">المفضلة (<span id="favoriteCount">0</span>)</button>
-                    </div>
-
-                    <div class="tab-content active" id="history-tab">
-                        <div class="actions-bar">
-                            <button id="clearHistoryBtn" class="btn btn-danger-outline btn-sm">مسح السجل بالكامل</button>
-                        </div>
-                        <div id="historyList" class="items-list">
-                            <div class="empty-state">
-                                <i class="fa-solid fa-clock-rotate-left"></i>
-                                <p>لا توجد ترجمات سابقة في السجل</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-content" id="favorites-tab">
-                        <div id="favoritesList" class="items-list">
-                            <div class="empty-state">
-                                <i class="fa-regular fa-star"></i>
-                                <p>لا توجد عناصر مضافة إلى المفضلة حتى الآن</p>
-                            </div>
-                        </div>
+                    <!-- الأزرار الرئيسية للترجمة -->
+                    <div class="translator-actions-bar">
+                        <button id="translateBtn" class="btn btn-primary btn-xl">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> ترجم الآن
+                        </button>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <!-- قسم المميزات -->
-        <section class="features-section" id="features">
-            <div class="container">
-                <div class="section-header">
-                    <h2>لماذا تختار LingoFlow؟</h2>
-                    <p>مصمم ليمنحك تجربة ترجمة استثنائية وبدون تعقيد</p>
-                </div>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
-                        <h3>سرعة فائقة</h3>
-                        <p>نتائج فورية تظهر بمجرد كتابتك أو رفع ملفك المكتوب.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fa-solid fa-globe"></i></div>
-                        <h3>تعدد اللغات</h3>
-                        <p>دعم واسع لأبرز اللغات العالمية والعربية بتناسق تام واتجاهات صحيحة.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="fa-solid fa-volume-high">
+        </
