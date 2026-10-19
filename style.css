@@ -1,6 +1,3 @@
-/* ==========================================
-   1. المتغيرات والأنماط الأساسية (CSS Variables)
-   ================================---------- */
 :root {
     --primary: #6366f1;
     --primary-hover: #4f46e5;
@@ -9,14 +6,14 @@
     
     --bg-main: #f8fafc;
     --bg-card: #ffffff;
-    --bg-header: rgba(255, 255, 255, 0.9);
+    --bg-header: rgba(255, 255, 255, 0.95);
     --text-main: #1e293b;
     --text-muted: #64748b;
     --border-color: #e2e8f0;
     
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     
     --radius-sm: 8px;
     --radius-md: 12px;
@@ -34,14 +31,10 @@
     
     --bg-main: #0f172a;
     --bg-card: #1e293b;
-    --bg-header: rgba(30, 41, 59, 0.9);
+    --bg-header: rgba(30, 41, 59, 0.95);
     --text-main: #f1f5f9;
     --text-muted: #94a3b8;
     --border-color: #334155;
-    
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -59,47 +52,31 @@ body {
     background-color: var(--bg-main);
     color: var(--text-main);
     line-height: 1.6;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-ul {
-    list-style: none;
-}
-
-button, select, textarea, input {
-    font-family: inherit;
-    border: none;
-    outline: none;
-    background: none;
-}
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+button, select, textarea, input { font-family: inherit; border: none; outline: none; background: none; }
 
 .container {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 15px;
 }
 
-.hidden {
-    display: none !important;
-}
+.hidden { display: none !important; }
 
-/* ==========================================
-   2. الأزرار والعناصر المشتركة
-   ================================---------- */
+/* الأزرار والأدوات */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 10px 20px;
+    padding: 10px 18px;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: var(--transition);
@@ -110,37 +87,15 @@ button, select, textarea, input {
     color: white;
     box-shadow: var(--shadow-sm);
 }
+.btn-primary:hover { background-color: var(--primary-hover); }
 
-.btn-primary:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-}
-
-.btn-lg {
-    padding: 12px 28px;
-    font-size: 1.05rem;
-    border-radius: var(--radius-md);
-}
-
-.btn-sm {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-}
-
-.btn-danger-outline {
-    border: 1px solid #ef4444;
-    color: #ef4444;
-}
-
-.btn-danger-outline:hover {
-    background-color: #ef4444;
-    color: white;
-}
+.btn-lg { padding: 12px 24px; font-size: 1rem; border-radius: var(--radius-md); }
+.btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+.btn-danger-outline { border: 1px solid #ef4444; color: #ef4444; }
 
 .icon-btn {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border-radius: var(--radius-full);
     display: flex;
     align-items: center;
@@ -149,17 +104,9 @@ button, select, textarea, input {
     background-color: var(--bg-card);
     border: 1px solid var(--border-color);
     color: var(--text-main);
-    transition: var(--transition);
 }
 
-.icon-btn:hover {
-    background-color: var(--primary-light);
-    color: var(--primary);
-}
-
-/* ==========================================
-   3. الشريط العلوي Navbar
-   ================================---------- */
+/* الشريط العلوي */
 .navbar {
     position: fixed;
     top: 0;
@@ -169,145 +116,107 @@ button, select, textarea, input {
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
     z-index: 1000;
-    transition: var(--transition);
 }
 
 .nav-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 75px;
+    height: 70px;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 15px;
 }
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-weight: 800;
-    font-size: 1.4rem;
+    font-size: 1.25rem;
 }
 
 .logo-icon {
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
     background: linear-gradient(135deg, var(--primary), var(--accent));
     color: white;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
 }
 
-.logo .highlight {
-    color: var(--primary);
-}
+.logo .highlight { color: var(--primary); }
 
 .nav-menu {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
 }
 
-.nav-link {
-    font-weight: 500;
-    color: var(--text-muted);
-    transition: var(--transition);
-}
-
-.nav-link:hover, .nav-link.active {
-    color: var(--primary);
-}
+.nav-link { font-weight: 500; font-size: 0.95rem; color: var(--text-muted); }
+.nav-link:hover, .nav-link.active { color: var(--primary); }
 
 .nav-actions {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
-[data-theme="dark"] .dark-icon {
-    display: none;
-}
-[data-theme="light"] .light-icon {
-    display: none;
-}
+[data-theme="dark"] .dark-icon { display: none; }
+[data-theme="light"] .light-icon { display: none; }
 
 .menu-toggle {
     display: none;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     cursor: pointer;
     color: var(--text-main);
 }
 
-/* ==========================================
-   4. القسم الرئيسي Hero Section
-   ================================---------- */
+/* القسم الرئيسي Hero */
 .hero {
-    position: relative;
-    padding: 160px 20px 80px;
+    padding: 130px 15px 50px;
     text-align: center;
-    overflow: hidden;
-}
-
-.hero-container {
-    max-width: 800px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
 }
 
 .hero-badge {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 16px;
+    gap: 6px;
+    padding: 5px 12px;
     background-color: var(--primary-light);
     color: var(--primary);
     border-radius: var(--radius-full);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .hero-title {
-    font-size: 2.8rem;
+    font-size: 2.1rem;
     font-weight: 800;
-    margin-bottom: 20px;
-    line-height: 1.2;
+    margin-bottom: 15px;
+    line-height: 1.3;
 }
 
 .hero-subtitle {
-    font-size: 1.15rem;
+    font-size: 1rem;
     color: var(--text-muted);
-    margin-bottom: 30px;
-    line-height: 1.7;
+    margin-bottom: 25px;
 }
 
-/* ==========================================
-   5. واجهة الترجمة الأساسية
-   ================================---------- */
+/* صندوق الترجمة الرئيسي */
 .translator-section {
-    padding: 40px 0 80px;
+    padding: 20px 0 60px;
 }
 
 .section-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
-
-.section-header h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.section-header p {
-    color: var(--text-muted);
-    font-size: 1rem;
-}
+.section-header h2 { font-size: 1.7rem; margin-bottom: 8px; }
+.section-header p { color: var(--text-muted); font-size: 0.9rem; }
 
 .translator-card {
     background-color: var(--bg-card);
@@ -321,99 +230,78 @@ button, select, textarea, input {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 25px;
+    padding: 12px 15px;
     background-color: var(--bg-main);
     border-bottom: 1px solid var(--border-color);
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .lang-select-group {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
 }
 
 .lang-select {
-    padding: 8px 14px;
+    padding: 6px 10px;
     background-color: var(--bg-card);
     color: var(--text-main);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.lang-select:focus {
-    border-color: var(--primary);
-}
-
-.swap-btn {
-    background-color: var(--bg-card);
 }
 
 .translator-panels {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    min-height: 350px;
+    min-height: 320px;
 }
 
 .panel {
     display: flex;
     flex-direction: column;
-    padding: 20px 25px;
+    padding: 15px;
 }
 
-.source-panel {
-    border-left: 1px solid var(--border-color);
-}
+.source-panel { border-left: 1px solid var(--border-color); }
 
 .panel-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.panel-title {
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--text-muted);
-}
+.panel-title { font-weight: 700; font-size: 0.9rem; color: var(--text-muted); }
 
 .panel-tools {
     display: flex;
-    gap: 10px;
+    gap: 6px;
+    flex-wrap: wrap;
 }
 
 .tool-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    font-size: 0.85rem;
+    gap: 4px;
+    padding: 5px 10px;
+    font-size: 0.78rem;
     font-weight: 600;
     color: var(--text-muted);
     background-color: var(--bg-main);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: var(--transition);
 }
-
-.tool-btn:hover:not(:disabled) {
-    color: var(--primary);
-    border-color: var(--primary);
-    background-color: var(--primary-light);
-}
-
-.tool-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
+.tool-btn:hover:not(:disabled) { color: var(--primary); border-color: var(--primary); background-color: var(--primary-light); }
+.tool-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .textarea-wrapper {
     flex: 1;
@@ -425,18 +313,13 @@ button, select, textarea, input {
 .textarea-wrapper textarea {
     width: 100%;
     height: 100%;
-    min-height: 200px;
+    min-height: 180px;
     resize: none;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     color: var(--text-main);
-    line-height: 1.6;
 }
 
-.output-placeholder {
-    color: var(--text-muted);
-    font-size: 1.05rem;
-    user-select: none;
-}
+.output-placeholder { color: var(--text-muted); font-size: 0.95rem; }
 
 .loading-spinner {
     position: absolute;
@@ -446,384 +329,75 @@ button, select, textarea, input {
     align-items: center;
     justify-content: center;
     background-color: var(--bg-card);
-    gap: 12px;
+    gap: 10px;
     color: var(--primary);
     font-weight: 600;
 }
 
 .spinner {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     border: 3px solid var(--primary-light);
     border-top-color: var(--primary);
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 .panel-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 15px;
-    padding-top: 15px;
+    margin-top: 12px;
+    padding-top: 12px;
     border-top: 1px solid var(--border-color);
-    font-size: 0.85rem;
-    color: var(--text-muted);
-}
-
-/* ==========================================
-   6. سجل الترجمات والمفضلة
-   ================================---------- */
-.history-section {
-    padding: 60px 0;
-    background-color: var(--bg-card);
-    border-top: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.tabs-container {
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-.tabs-header {
-    display: flex;
-    gap: 15px;
-    border-bottom: 2px solid var(--border-color);
-    margin-bottom: 20px;
-}
-
-.tab-btn {
-    padding: 10px 20px;
-    font-weight: 700;
-    font-size: 1rem;
-    color: var(--text-muted);
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    transition: var(--transition);
-}
-
-.tab-btn.active {
-    color: var(--primary);
-    border-bottom-color: var(--primary);
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-.actions-bar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 15px;
-}
-
-.items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 40px;
-    color: var(--text-muted);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.empty-state i {
-    font-size: 2.5rem;
-    color: var(--border-color);
-}
-
-.history-item {
-    background-color: var(--bg-main);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 15px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: var(--transition);
-}
-
-.history-item:hover {
-    border-color: var(--primary);
-}
-
-.history-item-header {
-    display: flex;
-    justify-content: space-between;
     font-size: 0.8rem;
     color: var(--text-muted);
 }
 
-.history-item-body {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
+/* السجل والمفضلة */
+.history-section { padding: 40px 0; background-color: var(--bg-card); border-top: 1px solid var(--border-color); }
+.tabs-container { max-width: 800px; margin: 0 auto; }
+.tabs-header { display: flex; gap: 10px; border-bottom: 2px solid var(--border-color); margin-bottom: 15px; }
+.tab-btn { padding: 8px 15px; font-weight: 700; font-size: 0.9rem; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.actions-bar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+.items-list { display: flex; flex-direction: column; gap: 10px; max-height: 350px; overflow-y: auto; }
+.empty-state { text-align: center; padding: 30px; color: var(--text-muted); }
+.history-item { background-color: var(--bg-main); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.history-item-header { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); }
+.history-item-body { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.history-text-box { background-color: var(--bg-card); padding: 8px; border-radius: 6px; font-size: 0.85rem; }
+.history-item-footer { display: flex; justify-content: flex-end; gap: 6px; }
 
-.history-text-box {
-    background-color: var(--bg-card);
-    padding: 10px;
-    border-radius: var(--radius-sm);
-    font-size: 0.9rem;
-}
+/* المميزات والأسئلة الشائعة */
+.features-section, .faq-section { padding: 50px 0; }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+.feature-card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; }
+.feature-icon { width: 40px; height: 40px; background-color: var(--primary-light); color: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+.feature-card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+.feature-card p { color: var(--text-muted); font-size: 0.85rem; }
 
-.history-item-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
+.faq-container { max-width: 750px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
+.faq-item { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); overflow: hidden; }
+.faq-question { padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; font-size: 0.9rem; }
+.faq-answer { padding: 0 15px 15px; color: var(--text-muted); font-size: 0.85rem; display: none; }
+.faq-item.active .faq-answer { display: block; }
 
-/* ==========================================
-   7. قسم المميزات والأسئلة الشائعة
-   ================================---------- */
-.features-section, .how-it-works, .faq-section {
-    padding: 80px 0;
-}
+/* Footer */
+.footer { background-color: var(--bg-card); border-top: 1px solid var(--border-color); padding: 40px 0 15px; }
+.footer-desc { color: var(--text-muted); margin-top: 10px; font-size: 0.85rem; }
+.footer-bottom { text-align: center; padding-top: 15px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.8rem; }
 
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-}
+/* Toast Notifications */
+.toast-container { position: fixed; bottom: 20px; left: 20px; display: flex; flex-direction: column; gap: 8px; z-index: 9999; }
+.toast { background-color: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color); padding: 10px 15px; border-radius: var(--radius-sm); box-shadow: var(--shadow-md); display: flex; align-items: center; gap: 8px; font-size: 0.85rem; }
 
-.feature-card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 30px;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-}
-
-.feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--primary);
-}
-
-.feature-icon {
-    width: 50px;
-    height: 50px;
-    background-color: var(--primary-light);
-    color: var(--primary);
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.3rem;
-    margin-bottom: 20px;
-}
-
-.feature-card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-    font-weight: 700;
-}
-
-.feature-card p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-}
-
-.steps-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 25px;
-}
-
-.step-card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 30px 20px;
-    text-align: center;
-    position: relative;
-}
-
-.step-number {
-    width: 40px;
-    height: 40px;
-    background-color: var(--primary);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    margin: 0 auto 20px;
-}
-
-.step-card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-    font-weight: 700;
-}
-
-.step-card p {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-.faq-container {
-    max-width: 800px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.faq-item {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-}
-
-.faq-question {
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    font-weight: 700;
-}
-
-.faq-question i {
-    transition: transform 0.3s ease;
-    color: var(--text-muted);
-}
-
-.faq-item.active .faq-question i {
-    transform: rotate(180deg);
-    color: var(--primary);
-}
-
-.faq-answer {
-    padding: 0 20px 20px;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    display: none;
-}
-
-.faq-item.active .faq-answer {
-    display: block;
-}
-
-/* ==========================================
-   8. Footer
-   ================================---------- */
-.footer {
-    background-color: var(--bg-card);
-    border-top: 1px solid var(--border-color);
-    padding: 60px 0 20px;
-}
-
-.footer-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 40px;
-    margin-bottom: 40px;
-}
-
-.footer-desc {
-    color: var(--text-muted);
-    margin-top: 15px;
-    font-size: 0.95rem;
-    max-width: 350px;
-}
-
-.footer-col h4 {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
-    font-weight: 700;
-}
-
-.footer-col ul {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.footer-col ul a {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    transition: var(--transition);
-}
-
-.footer-col ul a:hover {
-    color: var(--primary);
-}
-
-.footer-bottom {
-    text-align: center;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-color);
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-/* ==========================================
-   9. Toast Notifications
-   ================================---------- */
-.toast-container {
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 9999;
-}
-
-.toast {
-    background-color: var(--bg-card);
-    color: var(--text-main);
-    border: 1px solid var(--border-color);
-    padding: 12px 20px;
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow-lg);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.95rem;
-    animation: slideIn 0.3s ease forwards;
-}
-
-.toast.success {
-    border-right: 4px solid #10b981;
-}
-
-.toast.error {
-    border-right: 4px solid #ef4444;
-}
-
-@keyframes slideIn {
-    from { transform: translateX(-100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-/* ==========================================
-   10. التصميم المتجاوب Responsive Design
-   ================================---------- */
-@media (max-width: 968px) {
+/* إصلاحات حاسمة للشاشات الصغيرة والجوال (Mobile Specific Breakpoints) */
+@media (max-width: 768px) {
     .translator-panels {
         grid-template-columns: 1fr;
     }
@@ -831,16 +405,12 @@ button, select, textarea, input {
         border-left: none;
         border-bottom: 1px solid var(--border-color);
     }
-    .footer-container {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
     .nav-menu {
         position: fixed;
-        top: 75px;
+        top: 70px;
         left: -100%;
         width: 100%;
-        height: calc(100vh - 75px);
+        height: calc(100vh - 70px);
         background-color: var(--bg-card);
         flex-direction: column;
         align-items: center;
@@ -848,23 +418,11 @@ button, select, textarea, input {
         transition: 0.3s ease;
         box-shadow: var(--shadow-lg);
     }
-    .nav-menu.active {
-        left: 0;
-    }
-    .menu-toggle {
-        display: block;
-    }
-    .hero-title {
-        font-size: 2.2rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .language-bar {
-        flex-direction: column;
-        gap: 15px;
-    }
-    .history-item-body {
-        grid-template-columns: 1fr;
-    }
+    .nav-menu.active { left: 0; }
+    .menu-toggle { display: block; }
+    .hero-title { font-size: 1.7rem; }
+    .language-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+    .lang-select-group { justify-content: space-between; }
+    .history-item-body { grid-template-columns: 1fr; }
+    .start-btn { display: none; }
 }
