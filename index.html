@@ -4,67 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LingoFlow - منصة الترجمة الذكية المتطورة</title>
-    <meta name="description" content="منصة ترجمة احترافية، سريعة، وعصرية تدعم العديد من اللغات مع سجل للترجمات والمفضلة ووضع ليلي مريح.">
-    <!-- Google Fonts -->
+    <meta name="description" content="منصة ترجمة احترافية وسريعة مع دعم استيراد الملفات وسجل الترجمات.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- الشريط العلوي Navbar -->
     <header class="navbar" id="navbar">
         <div class="container nav-container">
             <a href="#" class="logo">
-                <div class="logo-icon">
-                    <i class="fa-solid fa-language"></i>
-                </div>
+                <div class="logo-icon"><i class="fa-solid fa-language"></i></div>
                 <span class="logo-text">LingoFlow</span>
             </a>
-            
             <nav class="nav-menu" id="navMenu">
                 <a href="#hero" class="nav-link active">الرئيسية</a>
                 <a href="#translator" class="nav-link">الترجمة</a>
                 <a href="#features" class="nav-link">المميزات</a>
                 <a href="#history-section" class="nav-link">السجل والمفضلة</a>
-                <a href="#faq" class="nav-link">الأسئلة الشائعة</a>
             </nav>
-
             <div class="nav-actions">
-                <button id="themeToggle" class="icon-btn" aria-label="تبديل الوضع الليلي والنهاري" title="تبديل الوضع المظلم">
+                <button id="themeToggle" class="icon-btn" aria-label="تبديل الوضع" title="تبديل الوضع المظلم/الفاتح">
                     <i class="fa-solid fa-moon"></i>
                 </button>
                 <a href="#translator" class="btn btn-primary start-btn">ابدأ الترجمة</a>
-                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="القائمة">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="القائمة"><i class="fa-solid fa-bars"></i></button>
             </div>
         </div>
     </header>
 
     <main>
-        <!-- القسم الرئيسي Hero Section -->
         <section class="hero" id="hero">
             <div class="container hero-container">
                 <div class="hero-badge">
                     <span class="pulse-dot"></span>
-                    <span>ترجمة ذكية • تجربة بسيطة • لغات متعددة</span>
+                    <span>ترجمة ذكية • استيراد ملفات • لغات متعددة</span>
                 </div>
                 <h1 class="hero-title">تجاوز حواجز اللغة، <br><span class="gradient-text">وتواصل بلا حدود</span></h1>
-                <p class="hero-subtitle">استمتع بتجربة ترجمة فورية وعالية الدقة مدعومة بأحدث التقنيات. واجهة عصرية، سرعة فائقة، ودعم لأكثر من 15 لغة عالمية.</p>
+                <p class="hero-subtitle">استمتع بتجربة ترجمة فورية مع دعم استيراد النصوص والملفات بسهولة تامة.</p>
                 <div class="hero-cta">
-                    <a href="#translator" class="btn btn-primary btn-lg">
-                        <i class="fa-solid fa-arrow-down"></i> جرب الترجمة الآن
-                    </a>
+                    <a href="#translator" class="btn btn-primary btn-lg"><i class="fa-solid fa-arrow-down"></i> جرب الترجمة الآن</a>
                 </div>
             </div>
         </section>
 
-        <!-- واجهة الترجمة الأساسية Translator Section -->
         <section class="translator-section" id="translator">
             <div class="container">
                 <div class="translator-card">
@@ -118,13 +103,18 @@
                         </div>
                     </div>
 
-                    <!-- مناطق الإدخال والترجمة (جنبًا إلى جنب على الشاشات الكبيرة) -->
+                    <!-- لوحات النصوص -->
                     <div class="translator-panels">
-                        <!-- لوحة النص الأصلي -->
                         <div class="translator-panel source-panel">
                             <div class="panel-header">
                                 <span class="panel-title" id="sourceLangTitle">العربية</span>
                                 <div class="panel-actions">
+                                    <!-- زر استيراد ملفات جديد -->
+                                    <label for="fileInput" class="action-btn file-upload-label" title="استيراد ملف نصي">
+                                        <i class="fa-solid fa-file-arrow-up"></i> <span>استيراد</span>
+                                    </label>
+                                    <input type="file" id="fileInput" accept=".txt,.doc,.docx" class="hidden">
+
                                     <button id="pasteBtn" class="action-btn" title="لصق النص">
                                         <i class="fa-solid fa-paste"></i> <span>لصق</span>
                                     </button>
@@ -134,32 +124,30 @@
                                 </div>
                             </div>
                             <div class="textarea-wrapper">
-                                <textarea id="sourceText" placeholder="اكتب النص الذي تريد ترجمته هنا... (اضغط Ctrl + Enter للترجمة)" maxlength="5000"></textarea>
+                                <textarea id="sourceText" placeholder="اكتب النص أو استورد ملفاً هنا... (Ctrl + Enter للترجمة)" maxlength="5000"></textarea>
                             </div>
                             <div class="panel-footer">
                                 <span class="char-counter"><span id="charCount">0</span> / 5000</span>
                             </div>
                         </div>
 
-                        <!-- لوحة النص المترجم -->
                         <div class="translator-panel target-panel">
                             <div class="panel-header">
                                 <span class="panel-title" id="targetLangTitle">الإنجليزية</span>
                                 <div class="panel-actions">
-                                    <button id="speakTargetBtn" class="action-btn" title="استماع للنص المترجم" disabled>
+                                    <button id="speakTargetBtn" class="action-btn" title="استماع" disabled>
                                         <i class="fa-solid fa-volume-high"></i> <span>استماع</span>
                                     </button>
-                                    <button id="copyBtn" class="action-btn" title="نسخ الترجمة" disabled>
+                                    <button id="copyBtn" class="action-btn" title="نسخ" disabled>
                                         <i class="fa-solid fa-copy"></i> <span>نسخ</span>
                                     </button>
-                                    <button id="favoriteBtn" class="action-btn" title="إضافة للمفضلة" disabled>
+                                    <button id="favoriteBtn" class="action-btn" title="المفضلة" disabled>
                                         <i class="fa-regular fa-star"></i> <span>المفضلة</span>
                                     </button>
                                 </div>
                             </div>
                             <div class="textarea-wrapper result-wrapper">
                                 <div id="targetText" class="result-content placeholder-text">ستظهر الترجمة هنا...</div>
-                                <!-- مؤشر التحميل -->
                                 <div id="loadingIndicator" class="loading-overlay hidden">
                                     <div class="spinner"></div>
                                     <span>جاري الترجمة...</span>
@@ -171,7 +159,6 @@
                         </div>
                     </div>
 
-                    <!-- الأزرار الرئيسية للترجمة -->
                     <div class="translator-actions-bar">
                         <button id="translateBtn" class="btn btn-primary btn-xl">
                             <i class="fa-solid fa-wand-magic-sparkles"></i> ترجم الآن
@@ -179,4 +166,62 @@
                     </div>
                 </div>
             </div>
-        </
+        </section>
+
+        <!-- السجل والمفضلة -->
+        <section class="history-section" id="history-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>السجل والمفضلة</h2>
+                    <p>إدارة ترجماتك السابقة والوصول السريع إليها</p>
+                </div>
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-tab="history">سجل الترجمات (<span id="historyCount">0</span>)</button>
+                    <button class="tab-btn" data-tab="favorites">المفضلة (<span id="favCount">0</span>)</button>
+                </div>
+                <div class="tabs-content">
+                    <div class="tab-pane active" id="historyTab">
+                        <div class="pane-actions">
+                            <button id="clearHistoryBtn" class="btn btn-outline btn-sm">مسح السجل بالكامل</button>
+                        </div>
+                        <div id="historyList" class="items-list">
+                            <div class="empty-state">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <p>لا توجد ترجمات سابقة حتى الآن</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="favoritesTab">
+                        <div id="favoritesList" class="items-list">
+                            <div class="empty-state">
+                                <i class="fa-regular fa-star"></i>
+                                <p>لم تقم بإضافة أي ترجمات إلى المفضلة بعد</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-col">
+                <a href="#" class="logo">
+                    <div class="logo-icon"><i class="fa-solid fa-language"></i></div>
+                    <span class="logo-text">LingoFlow</span>
+                </a>
+                <p>منصة ترجمة احترافية ومتكاملة.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 LingoFlow. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toastContainer" class="toast-container"></div>
+    <script src="script.js" defer></script>
+</body>
+</html>
