@@ -1,189 +1,375 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ترجمة احترافية - TranslateHub</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>LingoFlow | منصة الترجمة الذكية المتطورة</title>
+    <!-- خطوط جوجل: Cairo و Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- مكتبة الأيقونات FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ملف التنسيقات الرئيسي -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-content">
-                <div class="logo">
-                    <i class="fas fa-globe"></i>
-                    <span>TranslateHub</span>
+
+    <!-- الشريط العلوي Navbar -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-language"></i>
                 </div>
-                <ul class="nav-links">
-                    <li><a href="#home">الرئيسية</a></li>
-                    <li><a href="#features">المميزات</a></li>
-                    <li><a href="#translator">الترجمة</a></li>
-                    <li><a href="#contact">التواصل</a></li>
-                </ul>
-                <button class="theme-toggle" id="themeToggle">
-                    <i class="fas fa-moon"></i>
+                <span class="logo-text">Lingo<span class="highlight">Flow</span></span>
+            </a>
+
+            <nav class="nav-menu" id="navMenu">
+                <a href="#hero" class="nav-link active">الرئيسية</a>
+                <a href="#translator" class="nav-link">الترجمة</a>
+                <a href="#features" class="nav-link">المميزات</a>
+                <a href="#how-it-works" class="nav-link">كيف يعمل</a>
+                <a href="#history-section" class="nav-link">السجل والمفضلة</a>
+                <a href="#faq" class="nav-link">الأسئلة الشائعة</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button id="themeToggle" class="icon-btn" aria-label="تبديل الوضع الليلي والنهاري" title="تبديل الوضع المظلم">
+                    <i class="fa-solid fa-moon dark-icon"></i>
+                    <i class="fa-solid fa-sun light-icon"></i>
+                </button>
+                <a href="#translator" class="btn btn-primary start-btn">ابدأ الترجمة</a>
+                <button class="menu-toggle" id="menuToggle" aria-label="قائمة التنقل">
+                    <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>ترجمة احترافية بجودة عالية</h1>
-                <p>ترجم نصوصك وملفاتك بسهولة وسرعة مع دقة عالية</p>
-                <button class="btn btn-primary" onclick="document.getElementById('translator').scrollIntoView({behavior: 'smooth'})">
-                    ابدأ الترجمة الآن
-                </button>
+    <!-- القسم الرئيسي Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-container">
+            <div class="hero-badge">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>ترجمة ذكية • تجربة بسيطة • لغات متعددة</span>
             </div>
-            <div class="hero-image">
-                <i class="fas fa-language"></i>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="features">
-        <div class="container">
-            <h2>لماذا تختار TranslateHub؟</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3>سريع جداً</h3>
-                    <p>ترجمة فورية للنصوص والملفات بدون تأخير</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>آمن وموثوق</h3>
-                    <p>بيانات مشفرة وحماية كاملة للخصوصية</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-globe"></i>
-                    </div>
-                    <h3>100+ لغة</h3>
-                    <p>ترجمة بين أكثر من 100 لغة حول العالم</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <h3>سهل الاستخدام</h3>
-                    <p>واجهة بسيطة وسهلة للجميع</p>
-                </div>
+            <h1 class="hero-title">تجاوز حواجز اللغة، وتواصل بلا حدود</h1>
+            <p class="hero-subtitle">
+                اكتشف قوة الترجمة الفورية المدعومة بأحدث التقنيات. دقة عالية، سرعة فائقة، واجهة عصرية مصممة خصيصاً لتناسب احتياجاتك اليومية والمهنية.
+            </p>
+            <div class="hero-cta">
+                <a href="#translator" class="btn btn-primary btn-lg">
+                    <span>جرب الترجمة الآن</span>
+                    <i class="fa-solid fa-arrow-down"></i>
+                </a>
             </div>
         </div>
+        <div class="hero-shape"></div>
     </section>
 
-    <!-- Translator Section -->
-    <section id="translator" class="translator-section">
-        <div class="container">
-            <h2>أداة الترجمة</h2>
-            <div class="translator-box">
-                <!-- Language Selection -->
-                <div class="language-selector">
-                    <div class="selector-group">
-                        <label>من اللغة:</label>
-                        <select id="fromLanguage" class="language-dropdown">
-                            <option value="ar">العربية</option>
-                            <option value="en">الإنجليزية</option>
-                            <option value="fr">الفرنسية</option>
-                            <option value="es">الإسبانية</option>
-                            <option value="de">الألمانية</option>
-                            <option value="zh">الصينية</option>
-                            <option value="ja">اليابانية</option>
-                        </select>
-                    </div>
-                    <button class="swap-btn" id="swapBtn" title="تبديل اللغات">
-                        <i class="fas fa-exchange-alt"></i>
-                    </button>
-                    <div class="selector-group">
-                        <label>إلى اللغة:</label>
-                        <select id="toLanguage" class="language-dropdown">
-                            <option value="en">الإنجليزية</option>
-                            <option value="ar">العربية</option>
-                            <option value="fr">الفرنسية</option>
-                            <option value="es">الإسبانية</option>
-                            <option value="de">الألمانية</option>
-                            <option value="zh">الصينية</option>
-                            <option value="ja">اليابانية</option>
-                        </select>
-                    </div>
+    <!-- واجهة الترجمة الأساسية -->
+    <main class="main-content">
+        <section class="translator-section" id="translator">
+            <div class="container">
+                <div class="section-header">
+                    <h2>صندوق الترجمة الفورية</h2>
+                    <p>اختر اللغات واكتب النص للحصول على ترجمة فورية دقيقة</p>
                 </div>
 
-                <!-- Input/Output Area -->
-                <div class="translation-area">
-                    <div class="input-box">
-                        <textarea id="inputText" placeholder="أدخل النص المراد ترجمته..." class="text-input"></textarea>
-                        <div class="input-actions">
-                            <span id="charCount" class="char-count">0 / 5000</span>
-                            <button id="clearBtn" class="icon-btn" title="مسح النص">
-                                <i class="fas fa-times"></i>
-                            </button>
+                <div class="translator-card">
+                    <!-- شريط اختيار اللغات -->
+                    <div class="language-bar">
+                        <div class="lang-select-group">
+                            <label for="sourceLang">من:</label>
+                            <select id="sourceLang" class="lang-select">
+                                <option value="auto">اكتشاف تلقائي</option>
+                            </select>
+                        </div>
+
+                        <button id="swapLangs" class="icon-btn swap-btn" aria-label="تبديل اللغات" title="تبديل اللغات">
+                            <i class="fa-solid fa-right-left"></i>
+                        </button>
+
+                        <div class="lang-select-group">
+                            <label for="targetLang">إلى:</label>
+                            <select id="targetLang" class="lang-select">
+                                <!-- سيتم تعبئتها بواسطة JavaScript -->
+                            </select>
                         </div>
                     </div>
 
-                    <div class="output-box">
-                        <textarea id="outputText" placeholder="ستظهر الترجمة هنا..." class="text-input" readonly></textarea>
-                        <div class="output-actions">
-                            <button id="copyBtn" class="icon-btn" title="نسخ النص">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                            <button id="downloadBtn" class="icon-btn" title="تحميل الترجمة">
-                                <i class="fas fa-download"></i>
-                            </button>
+                    <!-- مساحات النص (إدخال وإخراج) -->
+                    <div class="translator-panels">
+                        <!-- لوحة الإدخال -->
+                        <div class="panel source-panel">
+                            <div class="panel-header">
+                                <span class="panel-title">النص الأصلي</span>
+                                <div class="panel-tools">
+                                    <button id="clearBtn" class="tool-btn" title="مسح النص" aria-label="مسح النص">
+                                        <i class="fa-solid fa-trash-can"></i> مسح
+                                    </button>
+                                    <button id="pasteBtn" class="tool-btn" title="لصق من الحافظة" aria-label="لصق">
+                                        <i class="fa-solid fa-paste"></i> لصق
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="textarea-wrapper">
+                                <textarea id="sourceText" placeholder="اكتب النص الذي تريد ترجمته هنا... (اضغط Ctrl + Enter للترجمة)" maxlength="5000"></textarea>
+                            </div>
+                            <div class="panel-footer">
+                                <span class="char-counter"><span id="charCount">0</span> / 5000</span>
+                                <button id="translateBtn" class="btn btn-primary">
+                                    <i class="fa-solid fa-language"></i> ترجم الآن
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- لوحة الإخراج -->
+                        <div class="panel target-panel">
+                            <div class="panel-header">
+                                <span class="panel-title">النص المترجم</span>
+                                <div class="panel-tools">
+                                    <button id="speakBtn" class="tool-btn" title="استماع للنص" aria-label="استماع" disabled>
+                                        <i class="fa-solid fa-volume-high"></i> استماع
+                                    </button>
+                                    <button id="copyBtn" class="tool-btn" title="نسخ الترجمة" aria-label="نسخ" disabled>
+                                        <i class="fa-solid fa-copy"></i> نسخ
+                                    </button>
+                                    <button id="favoriteBtn" class="tool-btn" title="إضافة للمفضلة" aria-label="المفضلة" disabled>
+                                        <i class="fa-regular fa-star"></i> المفضلة
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="textarea-wrapper output-wrapper">
+                                <div id="targetText" class="output-placeholder">ستظهر الترجمة هنا...</div>
+                                <div id="loadingIndicator" class="loading-spinner hidden">
+                                    <div class="spinner"></div>
+                                    <span>جاري الترجمة...</span>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <span class="translation-status" id="translationStatus">جاهز للترجمة</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Translate Button -->
-                <button id="translateBtn" class="btn btn-primary btn-large">
-                    <i class="fas fa-language"></i> ترجم الآن
-                </button>
-
-                <!-- File Upload -->
-                <div class="file-upload-section">
-                    <h3>أو احمّل ملفك</h3>
-                    <div class="file-upload-area" id="fileUploadArea">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        <p>اسحب الملف هنا أو انقر للاختيار</p>
-                        <input type="file" id="fileInput" class="file-input" accept=".txt,.pdf,.docx,.xlsx" hidden>
+        <!-- قسم السجل والمفضلة -->
+        <section class="history-section" id="history-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>سجل الترجمات والمفضلة</h2>
+                    <p>الوصول السريع لترجماتك السابقة والعناصر المحفوظة</p>
+                </div>
+                
+                <div class="tabs-container">
+                    <div class="tabs-header">
+                        <button class="tab-btn active" data-tab="history">سجل الترجمات (<span id="historyCount">0</span>)</button>
+                        <button class="tab-btn" data-tab="favorites">المفضلة (<span id="favoriteCount">0</span>)</button>
                     </div>
-                    <div id="fileStatus" class="file-status"></div>
+
+                    <div class="tab-content active" id="history-tab">
+                        <div class="actions-bar">
+                            <button id="clearHistoryBtn" class="btn btn-danger-outline btn-sm">مسح السجل بالكامل</button>
+                        </div>
+                        <div id="historyList" class="items-list">
+                            <!-- يتم تعبئتها ديناميكياً -->
+                            <div class="empty-state">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <p>لا توجد ترجمات سابقة في السجل</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="favorites-tab">
+                        <div id="favoritesList" class="items-list">
+                            <!-- يتم تعبئتها ديناميكياً -->
+                            <div class="empty-state">
+                                <i class="fa-regular fa-star"></i>
+                                <p>لا توجد عناصر مضافة إلى المفضلة حتى الآن</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- History Section -->
-    <section class="history-section">
-        <div class="container">
-            <h2>السجل الأخير</h2>
-            <div id="historyList" class="history-list">
-                <!-- History items will be added here -->
+        <!-- قسم المميزات -->
+        <section class="features-section" id="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>لماذا تختار LingoFlow؟</h2>
+                    <p>مصمم ليمنحك تجربة ترجمة استثنائية وبدون تعقيد</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
+                        <h3>سرعة فائقة</h3>
+                        <p>نتائج فورية تظهر بمجرد كتابتك للنضغط على زر الترجمة أو استخدام الاختصار.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fa-solid fa-globe"></i></div>
+                        <h3>تعدد اللغات</h3>
+                        <p>دعم واسع لأبرز اللغات العالمية والعربية بتناسق تام واتجاهات صحيحة.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fa-solid fa-volume-high"></i></div>
+                        <h3>نطق صوتي دقيق</h3>
+                        <p>استمع إلى النطق الصحيح للنصوص المترجمة باللغات المدعومة عبر تقنية المتصفح.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fa-solid fa-bookmark"></i></div>
+                        <h3>السجل والمفضلة</h3>
+                        <p>حفظ تلقائي لترجماتك السابقة وإمكانية العودة إليها أو حفظها في المفضلة بسهولة.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fa-solid fa-moon"></i></div>
+                        <h3>وضع ليلي مريح</h3>
+                        <p>تجربة بصرية مريحة للعينين في الإضاءة المنخفضة مع حفظ تلقائي لتفضيلاتك.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h3>أمان وخصوصية</h3>
+                        <p>بياناتك وسجلك يتم تخزينها محلياً على جهازك لتوفير أعلى مستويات الأمان والخصوصية.</p>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- قسم كيفية الاستخدام -->
+        <section class="how-it-works" id="how-it-works">
+            <div class="container">
+                <div class="section-header">
+                    <h2>كيف تستخدم الموقع؟</h2>
+                    <p>أربع خطوات بسيطة للحصول على ترجمة مثالية</p>
+                </div>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>اختر اللغة الأصلية</h3>
+                        <p>حدد لغة النص المراد ترجمته أو اتركه على وضع الاكتشاف التلقائي.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>اختر لغة الهدف</h3>
+                        <p>حدد اللغة التي تريد ترجمة النص إليها بكل سهولة من القائمة.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>أدخل النص</h3>
+                        <p>اكتب أو الصق النص المطلوب في صندوق الإدخال المخصص.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3>احصل على الترجمة</h3>
+                        <p>اضغط على "ترجمة الآن" أو استخدم اختصار لوحة المفاتيح للاستمتاع بالنتيجة.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- الأسئلة الشائعة FAQ -->
+        <section class="faq-section" id="faq">
+            <div class="container">
+                <div class="section-header">
+                    <h2>الأسئلة الشائعة</h2>
+                    <p>إجابات واضحة حول المنصة وخدمات الترجمة</p>
+                </div>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>كيف أستخدم الموقع؟</h3>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>ببساطة قم بتحديد لغة النص ولغة الهدف، ثم اكتب نصك في المربع الأيسر أو الأيمن حسب الاتجاه، واضغط على زر الترجمة للحصول على النتيجة فوراً.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>ما اللغات المتاحة للترجمة؟</h3>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>ندعم مجموعة واسعة من اللغات العالمية تشمل العربية، الإنجليزية، الفرنسية، الألمانية، الإسبانية، التركية، الروسية، الصينية، وغيرها الكثير.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>هل الترجمة مجانية تماماً؟</h3>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>نعم، المنصة تستخدم خدمات ترجمة موثوقة ومتاحة للاستخدام العام بسلاسة وبدون رسوم مخفية.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>هل تُحفظ ترجماتي على خوادم خارجية؟</h3>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>لا، يتم حفظ سجل الترجمات والمفضلة محلياً في متصفحك (LocalStorage) لضمان خصوصيتك التامة، ولا يتم تخزينها في أي خادم خارجي.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <h3>لماذا قد تفشل الترجمة أحياناً؟</h3>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>قد يحدث ذلك أحياناً بسبب انقطاع الاتصال بالإنترنت، أو تجاوز الحد المؤقت لطلبات واجهة الترجمة المجانية. تأكد من اتصالك وحاول مرة أخرى بعد قليل.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 TranslateHub. جميع الحقوق محفوظة.</p>
-            <div class="social-links">
-                <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
-                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <div class="container footer-container">
+            <div class="footer-col">
+                <a href="#" class="logo">
+                    <div class="logo-icon"><i class="fa-solid fa-language"></i></div>
+                    <span class="logo-text">Lingo<span class="highlight">Flow</span></span>
+                </a>
+                <p class="footer-desc">
+                    منصة ترجمة ذكية متطورة تجمع بين دقة الأداء وسلاسة التصميم لتسهيل التواصل العالمي.
+                </p>
+            </div>
+            <div class="footer-col">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="#hero">الرئيسية</a></li>
+                    <li><a href="#translator">الترجمة الفورية</a></li>
+                    <li><a href="#features">المميزات</a></li>
+                    <li><a href="#history-section">السجل والمفضلة</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>دعم ومساعدة</h4>
+                <ul>
+                    <li><a href="#faq">الأسئلة الشائعة</a></li>
+                    <li><a href="#how-it-works">كيف يعمل الموقع</a></li>
+                    <li><a href="#">سياسة الخصوصية</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 LingoFlow. جميع الحقوق محفوظة. صُمم بعناية لتجربة مستخدم متميزة.</p>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- ملف الجافاسكريبت الرئيسي -->
+    <script src="script.js" defer></script>
 </body>
 </html>
