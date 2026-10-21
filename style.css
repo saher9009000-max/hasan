@@ -1,225 +1,94 @@
-/**
- * مترجم برو - نسخة الترجمة الحقيقية
- * يستخدم Google Translate API غير الرسمي المجاني
- */
-
-// === 1. إدارة المظهر (Dark/Light) ===
-const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
-
-themeToggle.addEventListener('click', () => {
-    body.classList.toggle('light-mode');
-    const icon = themeToggle.querySelector('i');
-    icon.className = body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
-});
-
-// === 2. منطق الترجمة الحقيقية ===
-const inputText = document.getElementById('inputText');
-const outputText = document.getElementById('outputText');
-const charCount = document.getElementById('charCount');
-const translateBtn = document.getElementById('translateBtn');
-const sourceLang = document.getElementById('sourceLang');
-const targetLang = document.getElementById('targetLang');
-
-// عداد الأحرف
-inputText.addEventListener('input', () => {
-    charCount.textContent = `${inputText.value.length}/5000`;
-});
-
-// مسح النص
-document.getElementById('clearBtn').addEventListener('click', () => {
-    inputText.value = '';
-    outputText.value = '';
-    charCount.textContent = '0/5000';
-});
-
-// تبديل اللغات
-document.getElementById('swapBtn').addEventListener('click', () => {
-    if (sourceLang.value === 'auto') return; // لا يمكن تبديل الكشف التلقائي
-    [sourceLang.value, targetLang.value] = [targetLang.value, sourceLang.value];
-    [inputText.value, outputText.value] = [outputText.value, inputText.value];
-});
-
-// ✅ دالة الترجمة الحقيقية باستخدام Google Translate
-async function realTranslate(text, from, to) {
-    try {
-        // استخدام API مجاني عبر CORS proxy لتجنب مشاكل المتصفح
-        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
-        
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        // استخراج النص المترجم من استجابة جوجل
-        let translatedText = '';
-        if (data && data[0]) {
-            data[0].forEach(segment => {
-                if (segment[0]) translatedText += segment[0];
-            });
-        }
-        
-        return translatedText || 'حدث خطأ في الترجمة';
-    } catch (error) {
-        console.error('Translation Error:', error);
-        throw new Error('فشل الاتصال بخادم الترجمة');
-    }
+:root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --input: #334155;
+    --primary: #8b5cf6;
+    --accent: #ec4899;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --border: #475569;
+    --grad: linear-gradient(135deg, #8b5cf6, #ec4899);
+    --shadow: 0 20px 50px rgba(0,0,0,0.3);
 }
 
-// زر الترجمة
-translateBtn.addEventListener('click', async () => {
-    const text = inputText.value.trim();
-    if (!text) return showNotification('الرجاء كتابة نص أولاً', 'error');
-    
-    const originalBtnHTML = translateBtn.innerHTML;
-    translateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الترجمة...';
-    translateBtn.disabled = true;
-    
-    try {
-        const result = await realTranslate(
-            text, 
-            sourceLang.value, 
-            targetLang.value
-        );
-        outputText.value = result;
-        showNotification('تمت الترجمة بنجاح! ✨');
-    } catch (err) {
-        showNotification(err.message, 'error');
-    } finally {
-        translateBtn.innerHTML = originalBtnHTML;
-        translateBtn.disabled = false;
-    }
-});
-
-// نظام الإشعارات الأنيق
-function showNotification(msg, type = 'success') {
-    const existing = document.querySelector('.custom-notification');
-    if (existing) existing.remove();
-    
-    const notif = document.createElement('div');
-    notif.className = 'custom-notification';
-    notif.textContent = msg;
-    notif.style.cssText = `
-        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-        background: ${type === 'success' ? '#6366f1' : '#ef4444'};
-        color: white; padding: 12px 30px; border-radius: 12px;
-        font-weight: bold; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        animation: slideDown 0.4s ease;
-    `;
-    document.body.appendChild(notif);
-    setTimeout(() => {
-        notif.style.opacity = '0';
-        setTimeout(() => notif.remove(), 300);
-    }, 3000);
+.light {
+    --bg: #f1f5f9; --card: #ffffff; --input: #f8fafc;
+    --text: #0f172a; --muted: #64748b; --border: #e2e8f0;
+    --shadow: 0 20px 50px rgba(0,0,0,0.08);
 }
 
-// إضافة أنيميشن للإشعارات
-const styleSheet = document.createElement('style');
-styleSheet.textContent = `@keyframes slideDown { from {opacity:0; transform:translateX(-50%) translateY(-20px);} to {opacity:1; transform:translateX(-50%) translateY(0);}}`;
-document.head.appendChild(styleSheet);
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',system-ui,sans-serif; }
+body { background:var(--bg); color:var(--text); transition:0.4s; min-height:100vh; }
 
-// نسخ النص
-document.getElementById('copyBtn').addEventListener('click', () => {
-    if (outputText.value) {
-        navigator.clipboard.writeText(outputText.value);
-        showNotification('تم نسخ الترجمة! 📋');
-    }
-});
+/* Header */
+.header { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 5%; background:var(--card); border-bottom:1px solid var(--border); }
+.logo { display:flex; align-items:center; gap:12px; }
+.logo i { font-size:2rem; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.logo h1 { font-size:1.6rem; font-weight:800; }
+.theme-btn { width:48px; height:48px; border-radius:50%; border:2px solid var(--border); background:var(--input); color:var(--text); cursor:pointer; font-size:1.2rem; transition:0.3s; }
+.theme-btn:hover { transform:rotate(180deg); border-color:var(--primary); }
 
-// قراءة النص صوتياً
-function speak(text, lang) {
-    if (!text) return;
-    speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = lang === 'auto' ? 'ar-SA' : lang;
-    utterance.rate = 0.9;
-    speechSynthesis.speak(utterance);
-}
+/* Container */
+.container { max-width:1100px; margin:2rem auto; padding:0 1.5rem; }
 
-document.getElementById('speakInput').addEventListener('click', () => 
-    speak(inputText.value, sourceLang.value));
-document.getElementById('speakOutput').addEventListener('click', () => 
-    speak(outputText.value, targetLang.value));
+/* Translator Card */
+.translator-card { background:var(--card); border-radius:24px; padding:2rem; box-shadow:var(--shadow); border:1px solid var(--border); margin-bottom:2rem; }
 
-// === 3. استيراد الملفات ===
-const uploadZone = document.getElementById('uploadZone');
-const fileInput = document.getElementById('fileInput');
-const fileInfo = document.getElementById('fileInfo');
-const fileNameSpan = document.getElementById('fileName');
+.lang-bar { display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; }
+.lang-select { flex:1; padding:14px; background:var(--input); border:2px solid var(--border); border-radius:14px; color:var(--text); font-size:1rem; outline:none; cursor:pointer; transition:0.3s; }
+.lang-select:focus { border-color:var(--primary); }
+.swap-btn { width:50px; height:50px; border-radius:50%; background:var(--grad); border:none; color:#fff; font-size:1.2rem; cursor:pointer; transition:0.4s; flex-shrink:0; }
+.swap-btn:hover { transform:rotate(180deg); box-shadow:0 0 20px rgba(139,92,246,0.5); }
 
-uploadZone.addEventListener('click', () => fileInput.click());
-uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.style.borderColor = 'var(--accent)'; });
-uploadZone.addEventListener('dragleave', () => { uploadZone.style.borderColor = 'var(--border)'; });
-uploadZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadZone.style.borderColor = 'var(--border)';
-    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-});
-fileInput.addEventListener('change', (e) => {
-    if (e.target.files.length) handleFile(e.target.files[0]);
-});
+.text-grid { display:grid; gap:1.5rem; }
+.text-box textarea { width:100%; min-height:200px; padding:1.5rem; background:var(--input); border:2px solid var(--border); border-radius:16px; color:var(--text); font-size:1.15rem; resize:vertical; outline:none; transition:0.3s; line-height:1.7; }
+.text-box textarea:focus { border-color:var(--primary); }
+.text-box.output textarea { background:rgba(139,92,246,0.05); border-color:rgba(139,92,246,0.3); }
 
-function handleFile(file) {
-    fileNameSpan.textContent = file.name;
-    fileInfo.style.display = 'flex';
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        inputText.value = e.target.result;
-        charCount.textContent = `${inputText.value.length}/5000`;
-        showNotification('تم تحميل الملف بنجاح! 📄');
-    };
-    reader.readAsText(file);
-}
+.box-tools { display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding:0 5px; }
+.counter { color:var(--muted); font-size:0.85rem; }
+.tools-right { display:flex; gap:8px; }
+.tool-btn { background:transparent; border:none; color:var(--muted); cursor:pointer; font-size:1.1rem; padding:8px 12px; border-radius:10px; transition:0.3s; }
+.tool-btn:hover { color:var(--primary); background:rgba(139,92,246,0.1); }
+.tool-btn.sm { padding:6px 10px; font-size:0.9rem; }
 
-document.getElementById('removeFile').addEventListener('click', () => {
-    fileInfo.style.display = 'none';
-    fileInput.value = '';
-    inputText.value = '';
-    charCount.textContent = '0/5000';
-});
+.translate-btn { width:100%; padding:16px; background:var(--grad); border:none; border-radius:14px; color:#fff; font-size:1.3rem; font-weight:800; cursor:pointer; transition:0.3s; display:flex; align-items:center; justify-content:center; gap:10px; margin:1rem 0; }
+.translate-btn:hover { transform:translateY(-3px); box-shadow:0 15px 30px rgba(139,92,246,0.4); }
+.translate-btn:disabled { opacity:0.7; cursor:not-allowed; transform:none; }
 
-// === 4. الترجمة الصوتية ===
-const startRecord = document.getElementById('startRecord');
-const stopRecord = document.getElementById('stopRecord');
-const recordingIndicator = document.getElementById('recordingIndicator');
-const voiceResult = document.getElementById('voiceResult');
-let recognition;
+/* Extras Grid */
+.extras-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:1.5rem; }
+.extra-card { background:var(--card); padding:2rem; border-radius:24px; border:1px solid var(--border); box-shadow:var(--shadow); }
+.extra-card h3 { font-size:1.3rem; margin-bottom:1.5rem; display:flex; align-items:center; gap:10px; }
 
-if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    recognition = new SR();
-    recognition.lang = 'ar-SA';
-    recognition.continuous = false;
-    
-    recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        voiceResult.textContent = transcript;
-        voiceResult.style.display = 'block';
-        inputText.value = transcript;
-        charCount.textContent = `${transcript.length}/5000`;
-        stopRecordingUI();
-        showNotification('تم التعرف على الصوت! 🎙️');
-    };
-    recognition.onerror = () => { showNotification('خطأ في التعرف على الصوت', 'error'); stopRecordingUI(); };
-    recognition.onend = stopRecordingUI;
-}
+.drop-zone { border:2px dashed var(--border); border-radius:16px; padding:2.5rem 1rem; text-align:center; cursor:pointer; transition:0.3s; background:var(--input); }
+.drop-zone:hover { border-color:var(--accent); background:rgba(236,72,153,0.05); }
+.drop-zone i { font-size:2.5rem; color:var(--accent); margin-bottom:10px; }
+.drop-zone p { font-weight:600; margin-bottom:5px; }
+.drop-zone small { color:var(--muted); }
 
-startRecord.addEventListener('click', () => {
-    if (recognition) {
-        recognition.start();
-        startRecord.disabled = true;
-        stopRecord.disabled = false;
-        recordingIndicator.classList.add('active');
-    } else {
-        showNotification('متصفحك لا يدعم الترجمة الصوتية', 'error');
-    }
-});
+.file-status { display:flex; align-items:center; gap:10px; padding:12px; background:var(--input); border-radius:12px; margin-top:12px; }
+.file-status i { color:var(--primary); font-size:1.3rem; }
+.file-status span { flex:1; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-stopRecord.addEventListener('click', () => {
-    if (recognition) recognition.stop();
-    stopRecordingUI();
-});
+.voice-ui { display:flex; gap:10px; margin-bottom:15px; }
+.voice-btn { flex:1; padding:14px; border:none; border-radius:12px; font-weight:700; font-size:1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:0.3s; }
+.voice-btn.start { background:var(--primary); color:#fff; }
+.voice-btn.stop { background:var(--border); color:var(--muted); }
+.voice-btn:disabled { opacity:0.5; cursor:not-allowed; }
 
-function stopRecordingUI() {
-    startRecord.disabled = false;
-    stopRecord.disabled = true;
-    recordingIndicator.classList.remove('active');
+.rec-status { display:none; align-items:center; gap:10px; color:var(--accent); font-weight:700; margin-bottom:12px; }
+.rec-status.active { display:flex; }
+.dot { width:12px; height:12px; background:var(--accent); border-radius:50%; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(236,72,153,0.7)} 70%{box-shadow:0 0 0 10px rgba(236,72,153,0)} 100%{box-shadow:0 0 0 0 rgba(236,72,153,0)} }
+
+.voice-output { padding:15px; background:var(--input); border-radius:12px; border-right:4px solid var(--accent); margin-top:10px; line-height:1.6; }
+
+.footer { text-align:center; padding:2rem; color:var(--muted); margin-top:2rem; }
+
+@media(max-width:768px) {
+    .lang-bar { flex-direction:column; }
+    .swap-btn { transform:rotate(90deg); }
+    .swap-btn:hover { transform:rotate(270deg); }
+    .translator-card, .extra-card { padding:1.5rem; }
 }
