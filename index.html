@@ -3,420 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ترجمة | موقع الترجمة الاحترافي</title>
+  <title>LinguaPro - ترجمة احترافية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-  
-  <style>
-    /* الألوان والوضع الفاتح والداكن */
-    :root {
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --shadow: 0 10px 30px rgba(0,0,0,0.05);
-    }
-    [data-theme="dark"] {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: #334155;
-      --shadow: 0 10px 30px rgba(0,0,0,0.3);
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Cairo', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      transition: background-color 0.3s, color 0.3s;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* الهيدر */
-    .header {
-      background-color: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: var(--shadow);
-    }
-    .logo-text {
-      font-size: 28px;
-      font-weight: 900;
-      background: linear-gradient(135deg, #6366f1, #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .header-actions { display: flex; gap: 12px; align-items: center; }
-    
-    /* زر الوضع الداكن/الفاتح */
-    .theme-btn {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      width: 40px; height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 20px;
-      display: flex; justify-content: center; align-items: center;
-      transition: 0.3s;
-    }
-    .theme-btn:hover { border-color: var(--primary); }
-
-    /* المحتوى */
-    .container { max-width: 800px; margin: 40px auto; padding: 0 20px; width: 100%; flex: 1; }
-    
-    /* التبويبات */
-    .tabs {
-      display: flex; background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 12px; padding: 6px; margin-bottom: 24px;
-    }
-    .tab {
-      flex: 1; padding: 12px; border: none; background: transparent;
-      color: var(--text-muted); font-family: inherit; font-size: 16px; font-weight: 700;
-      border-radius: 8px; cursor: pointer; transition: 0.3s;
-      display: flex; justify-content: center; align-items: center; gap: 8px;
-    }
-    .tab.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
-
-    /* لوحات الإدخال */
-    .panel { display: none; background: var(--card-bg); padding: 24px; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow); }
-    .panel.active { display: block; animation: fadeIn 0.3s; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* قائمة اللغات */
-    .lang-select-group {
-      display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
-    }
-    .lang-select {
-      flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--border);
-      background: var(--bg); color: var(--text); font-family: inherit; font-size: 15px; font-weight: 600;
-      outline: none; cursor: pointer;
-    }
-
-    /* النص */
-    textarea {
-      width: 100%; height: 180px; padding: 16px; border-radius: 12px;
-      border: 1px solid var(--border); background: var(--bg); color: var(--text);
-      font-family: inherit; font-size: 16px; resize: vertical; outline: none;
-      transition: 0.3s;
-    }
-    textarea:focus { border-color: var(--primary); }
-
-    /* الأزرار */
-    .btn {
-      padding: 12px 24px; border-radius: 8px; border: none; cursor: pointer;
-      font-family: inherit; font-size: 16px; font-weight: 700; transition: 0.3s;
-      display: inline-flex; justify-content: center; align-items: center; gap: 8px;
-    }
-    .btn-primary { background: var(--primary); color: white; width: 100%; margin-top: 16px; }
-    .btn-primary:hover { background: var(--primary-hover); }
-    .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
-    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
-
-    /* الملفات */
-    .dropzone {
-      border: 2px dashed var(--border); border-radius: 12px; padding: 40px 20px;
-      text-align: center; cursor: pointer; transition: 0.3s; background: var(--bg);
-    }
-    .dropzone:hover { border-color: var(--primary); background: rgba(99,102,241,0.05); }
-    .dropzone-icon { font-size: 40px; margin-bottom: 12px; }
-    
-    /* الصوت */
-    .audio-recorder {
-      text-align: center; padding: 30px; background: var(--bg); border-radius: 12px; border: 1px solid var(--border);
-    }
-    .record-btn {
-      width: 80px; height: 80px; border-radius: 50%; border: none; cursor: pointer;
-      background: #ef4444; color: white; font-size: 32px; margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(239,68,68,0.4); transition: 0.3s;
-    }
-    .record-btn.recording { animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); } 70% { box-shadow: 0 0 0 20px rgba(239,68,68,0); } 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); } }
-
-    /* النتيجة */
-    .result-box {
-      margin-top: 24px; padding: 24px; background: var(--card-bg);
-      border: 1px solid var(--primary); border-radius: 12px; display: none;
-    }
-    .result-box.show { display: block; animation: fadeIn 0.3s; }
-    .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .result-title { font-weight: 700; color: var(--primary); font-size: 18px; }
-    .result-text { font-size: 16px; line-height: 1.8; background: var(--bg); padding: 16px; border-radius: 8px; white-space: pre-wrap; }
-
-    /* الفوتر */
-    .footer { text-align: center; padding: 24px; color: var(--text-muted); border-top: 1px solid var(--border); background: var(--card-bg); }
-
-    .hidden { display: none !important; }
-    
-    /* الجوال */
-    @media (max-width: 600px) {
-      .lang-select-group { flex-direction: column; gap: 8px; }
-      .logo-text { font-size: 22px; }
-    }
-  </style>
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 
   <!-- الهيدر -->
   <header class="header">
-    <div class="logo-text">ترجمة</div>
+    <div class="logo">
+      <span class="logo-icon">🌐</span>
+      <span class="logo-text">LinguaPro</span>
+      <span class="version-badge">v1.0.0</span>
+    </div>
     <div class="header-actions">
-      <button class="theme-btn" id="themeBtn" title="تبديل الوضع">🌙</button>
+      <!-- زر تبديل لغة الواجهة -->
+      <button class="icon-btn" id="uiLangBtn" title="تغيير لغة الواجهة">عربي/EN</button>
+      <!-- زر الوضع الداكن/الفاتح -->
+      <button class="icon-btn" id="themeBtn" title="الوضع الداكن/الفاتح">🌙</button>
     </div>
   </header>
 
-  <main class="container">
+  <!-- القسم الرئيسي -->
+  <main class="main-container">
+    <div class="hero">
+      <h1 class="hero-title" id="heroTitle">ترجم أي شيء بدقة احترافية</h1>
+      <p class="hero-sub" id="heroSub">ترجمة فورية بالذكاء الاصطناعي تدعم أكثر من 140 لغة — نصوص، ملفات، صور وصوت.</p>
+    </div>
+
     <!-- التبويبات -->
-    <div class="tabs">
-      <button class="tab active" data-target="text-panel">📝 نص</button>
-      <button class="tab" data-target="file-panel">📁 ملفات</button>
-      <button class="tab" data-target="audio-panel">🎤 صوت</button>
+    <div class="tabs-container">
+      <button class="tab-btn active" data-target="text-panel" id="tabText">📝 نص</button>
+      <button class="tab-btn" data-target="file-panel" id="tabFile">📁 ملفات</button>
+      <button class="tab-btn" data-target="audio-panel" id="tabAudio">🎤 صوت</button>
     </div>
 
     <!-- لوحة النص -->
     <div class="panel active" id="text-panel">
       <div class="lang-select-group">
-        <select class="lang-select" id="sourceLang"></select>
-        <select class="lang-select" id="targetLang"></select>
+        <select class="lang-select" id="srcLangText"></select>
+        <button class="swap-btn" id="swapTextLangs" title="تبديل">⇄</button>
+        <select class="lang-select" id="tgtLangText"></select>
       </div>
       <textarea id="textInput" placeholder="اكتب أو الصق النص هنا للترجمة..."></textarea>
-      <button class="btn btn-primary" onclick="startTranslation('نص')">ترجم الآن ✨</button>
+      <button class="btn-primary" id="translateTextBtn">ترجم الآن ✨</button>
     </div>
 
     <!-- لوحة الملفات -->
     <div class="panel" id="file-panel">
       <div class="lang-select-group">
-        <select class="lang-select" id="fileTargetLang"></select>
+        <select class="lang-select" id="tgtLangFile"></select>
       </div>
       <div class="dropzone" id="dropzone">
-        <div class="dropzone-icon">📄</div>
-        <p><b>اسحب وأفلت ملفك هنا</b></p>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 8px;">PDF, DOCX, TXT, صور (PNG, JPG)</p>
-        <input type="file" id="fileInput" hidden accept=".pdf,.docx,.txt,.png,.jpg,.jpeg">
-        <button class="btn btn-secondary" style="margin-top: 16px;" onclick="document.getElementById('fileInput').click()">اختر ملفاً</button>
+        <div class="drop-icon">📄</div>
+        <p class="drop-title">اسحب وأفلت ملفك هنا</p>
+        <p class="drop-hint">PDF, DOCX, TXT, PNG, JPG, MP3, WAV</p>
+        <input type="file" id="fileInput" hidden>
+        <button class="btn-secondary" id="browseBtn">اختر ملفاً</button>
       </div>
-      <div id="filePreview" class="hidden" style="margin-top: 16px; padding: 16px; background: var(--bg); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-        <span id="fileNameDisplay">اسم الملف</span>
-        <button class="btn-secondary" style="padding: 4px 8px;" onclick="clearFile()">✕</button>
+      <div class="file-preview hidden" id="filePreview">
+        <span id="fileName">اسم الملف</span>
+        <button class="btn-remove" id="clearFileBtn">✕</button>
       </div>
-      <button class="btn btn-primary" id="translateFileBtn" onclick="startTranslation('ملف')" disabled>ترجم الملف 🚀</button>
+      <button class="btn-primary" id="translateFileBtn" disabled>ترجم الملف 🚀</button>
     </div>
 
     <!-- لوحة الصوت -->
     <div class="panel" id="audio-panel">
       <div class="lang-select-group">
-        <select class="lang-select" id="audioTargetLang"></select>
+        <select class="lang-select" id="tgtLangAudio"></select>
       </div>
       <div class="audio-recorder">
-        <button class="record-btn" id="recordBtn" onclick="toggleRecording()">🎤</button>
-        <p id="recordStatus" style="font-weight: 700;">اضغط للتسجيل الصوتي</p>
-        <p style="color: var(--text-muted); font-size: 14px; margin-top: 8px;">سيتم تحويل صوتك إلى نص وترجمته</p>
+        <button class="record-btn" id="recordBtn">🎤</button>
+        <p class="record-status" id="recordStatus">اضغط للتسجيل الصوتي</p>
       </div>
-      <button class="btn btn-primary" onclick="startTranslation('صوت')">ترجم الصوت ✨</button>
+      <button class="btn-primary" id="translateAudioBtn">ترجم الصوت ✨</button>
     </div>
 
     <!-- النتيجة -->
-    <div class="result-box" id="resultBox">
+    <div class="result-box hidden" id="resultBox">
       <div class="result-header">
-        <span class="result-title">النتيجة</span>
-        <button class="btn btn-secondary" style="padding: 4px 12px;" onclick="copyResult()">نسخ 📋</button>
+        <span class="result-title" id="resultTitle">النتيجة</span>
+        <button class="btn-secondary small" id="copyBtn">نسخ 📋</button>
       </div>
       <div class="result-text" id="resultText"></div>
     </div>
   </main>
 
+  <!-- الفوتر -->
   <footer class="footer">
-    <p>© 2026 ترجمة — جميع الحقوق محفوظة</p>
+    <p>© 2026 LinguaPro — <span id="footerVersion">الإصدار 1.0.0</span> — جميع الحقوق محفوظة</p>
   </footer>
 
-  <script>
-    // 1. بيانات اللغات (أكثر من 140 لغة)
-    const languages = [
-      { code: 'ar', name: 'العربية' }, { code: 'en', name: 'English' }, { code: 'fr', name: 'Français' },
-      { code: 'es', name: 'Español' }, { code: 'de', name: 'Deutsch' }, { code: 'tr', name: 'Türkçe' },
-      { code: 'it', name: 'Italiano' }, { code: 'pt', name: 'Português' }, { code: 'ru', name: 'Русский' },
-      { code: 'zh', name: '中文' }, { code: 'ja', name: '日本語' }, { code: 'ko', name: '한국어' },
-      { code: 'hi', name: 'हिन्दी' }, { code: 'ur', name: 'اردو' }, { code: 'fa', name: 'فارسی' },
-      { code: 'he', name: 'עברית' }, { code: 'nl', name: 'Nederlands' }, { code: 'pl', name: 'Polski' },
-      { code: 'sv', name: 'Svenska' }, { code: 'no', name: 'Norsk' }, { code: 'da', name: 'Dansk' },
-      { code: 'fi', name: 'Suomi' }, { code: 'el', name: 'Ελληνικά' }, { code: 'cs', name: 'Čeština' },
-      { code: 'ro', name: 'Română' }, { code: 'hu', name: 'Magyar' }, { code: 'uk', name: 'Українська' },
-      { code: 'id', name: 'Bahasa Indonesia' }, { code: 'ms', name: 'Bahasa Melayu' }, { code: 'th', name: 'ไทย' },
-      { code: 'vi', name: 'Tiếng Việt' }, { code: 'bn', name: 'বাংলা' }, { code: 'ta', name: 'தமிழ்' },
-      { code: 'te', name: 'తెలుగు' }, { code: 'mr', name: 'मराठी' }, { code: 'gu', name: 'ગુજરાતી' },
-      { code: 'kn', name: 'ಕನ್ನಡ' }, { code: 'ml', name: 'മലയാളം' }, { code: 'pa', name: 'ਪੰਜਾਬੀ' },
-      { code: 'sw', name: 'Kiswahili' }, { code: 'am', name: 'አማርኛ' }, { code: 'ha', name: 'Hausa' },
-      { code: 'yo', name: 'Yorùbá' }, { code: 'ig', name: 'Igbo' }, { code: 'zu', name: 'isiZulu' },
-      { code: 'af', name: 'Afrikaans' }, { code: 'bg', name: 'Български' }, { code: 'hr', name: 'Hrvatski' },
-      { code: 'sk', name: 'Slovenčina' }, { code: 'sl', name: 'Slovenščina' }, { code: 'sr', name: 'Српски' },
-      { code: 'lt', name: 'Lietuvių' }, { code: 'lv', name: 'Latviešu' }, { code: 'et', name: 'Eesti' },
-      { code: 'ka', name: 'ქართული' }, { code: 'hy', name: 'Հայերեն' }, { code: 'az', name: 'Azərbaycan' },
-      { code: 'kk', name: 'Қазақ' }, { code: 'uz', name: 'Oʻzbek' }, { code: 'ky', name: 'Кыргызча' },
-      { code: 'tg', name: 'Тоҷикӣ' }, { code: 'mn', name: 'Монгол' }, { code: 'ne', name: 'नेपाली' },
-      { code: 'si', name: 'සිංහල' }, { code: 'my', name: 'မြန်မာ' }, { code: 'km', name: 'ខ្មែរ' },
-      { code: 'lo', name: 'ລາວ' }, { code: 'tl', name: 'Filipino' }, { code: 'jv', name: 'Basa Jawa' },
-      { code: 'su', name: 'Basa Sunda' }, { code: 'ceb', name: 'Cebuano' }, { code: 'eu', name: 'Euskara' },
-      { code: 'ca', name: 'Català' }, { code: 'gl', name: 'Galego' }, { code: 'cy', name: 'Cymraeg' },
-      { code: 'ga', name: 'Gaeilge' }, { code: 'gd', name: 'Gàidhlig' }, { code: 'is', name: 'Íslenska' },
-      { code: 'mt', name: 'Malti' }, { code: 'sq', name: 'Shqip' }, { code: 'mk', name: 'Македонски' },
-      { code: 'bs', name: 'Bosanski' }, { code: 'be', name: 'Беларуская' }, { code: 'lb', name: 'Lëtzebuergesch' },
-      { code: 'fo', name: 'Føroyskt' }, { code: 'yi', name: 'ייִדיש' }, { code: 'ps', name: 'پښتو' },
-      { code: 'ku', name: 'Kurdî' }, { code: 'sd', name: 'سنڌي' }, { code: 'ug', name: 'ئۇيغۇرچە' },
-      { code: 'ckb', name: 'کوردی' }, { code: 'dv', name: 'ދިވެހި' }, { code: 'so', name: 'Soomaali' },
-      { code: 'mg', name: 'Malagasy' }, { code: 'ny', name: 'Chichewa' }, { code: 'sn', name: 'chiShona' },
-      { code: 'st', name: 'Sesotho' }, { code: 'xh', name: 'isiXhosa' }, { code: 'rw', name: 'Kinyarwanda' },
-      { code: 'ti', name: 'ትግርኛ' }, { code: 'om', name: 'Afaan Oromoo' }, { code: 'ht', name: 'Kreyòl Ayisyen' },
-      { code: 'la', name: 'Latina' }, { code: 'eo', name: 'Esperanto' }, { code: 'haw', name: 'ʻŌlelo Hawaiʻi' },
-      { code: 'mi', name: 'Te Reo Māori' }, { code: 'sm', name: 'Gagana Samoa' }, { code: 'to', name: 'Lea Fakatonga' },
-      { code: 'fj', name: 'Vosa Vakaviti' }, { code: 'qu', name: 'Runasimi' }, { code: 'ay', name: 'Aymar aru' },
-      { code: 'gn', name: "Avañe'ẽ" }, { code: 'nah', name: 'Nāhuatl' }, { code: 'iu', name: 'ᐃᓄᒃᑎᑐᑦ' },
-      { code: 'kl', name: 'Kalaallisut' }, { code: 'bo', name: 'བོད་སྐད' }, { code: 'dz', name: 'རྫོང་ཁ' },
-      { code: 'tt', name: 'Татарча' }, { code: 'ba', name: 'Башҡорт' }, { code: 'cv', name: 'Чӑвашла' },
-      { code: 'ce', name: 'Нохчийн' }, { code: 'os', name: 'Ирон' }, { code: 'ab', name: 'Аҧсуа' },
-      { code: 'av', name: 'Авар' }, { code: 'kab', name: 'Taqbaylit' }, { code: 'tzm', name: 'ⵜⴰⵎⴰⵣⵉⵖⵜ' },
-      { code: 'ber', name: 'ⵜⴰⵎⴰⵣⵉⵖⵜ' }, { code: 'wo', name: 'Wolof' }, { code: 'ff', name: 'Fulfulde' },
-      { code: 'bm', name: 'Bamanankan' }, { code: 'tw', name: 'Twi' }, { code: 'ee', name: 'Eʋegbe' },
-      { code: 'lg', name: 'Luganda' }, { code: 'ak', name: 'Akan' }, { code: 'ln', name: 'Lingála' },
-      { code: 'kg', name: 'Kikongo' }, { code: 'lu', name: 'Kiluba' }, { code: 'nso', name: 'Sepedi' },
-      { code: 'ts', name: 'Xitsonga' }, { code: 've', name: 'Tshivenda' }, { code: 'tn', name: 'Setswana' },
-      { code: 'ss', name: 'siSwati' }, { code: 'nr', name: 'isiNdebele' }
-    ];
-
-    // 2. تعبئة قوائم اللغات
-    const langSelects = document.querySelectorAll('.lang-select');
-    langSelects.forEach(select => {
-      languages.forEach(lang => {
-        const option = document.createElement('option');
-        option.value = lang.code;
-        option.textContent = lang.name;
-        select.appendChild(option);
-      });
-    });
-    // تعيين العربية كلغة افتراضية للهدف
-    document.querySelectorAll('.lang-select').forEach(sel => sel.value = 'ar');
-
-    // 3. الوضع الداكن والفاتح
-    const themeBtn = document.getElementById('themeBtn');
-    const html = document.documentElement;
-    themeBtn.addEventListener('click', () => {
-      if (html.getAttribute('data-theme') === 'dark') {
-        html.setAttribute('data-theme', 'light');
-        themeBtn.textContent = '🌙';
-      } else {
-        html.setAttribute('data-theme', 'dark');
-        themeBtn.textContent = '☀️';
-      }
-    });
-
-    // 4. التبويبات
-    const tabs = document.querySelectorAll('.tab');
-    const panels = document.querySelectorAll('.panel');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        panels.forEach(p => p.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(tab.dataset.target).classList.add('active');
-      });
-    });
-
-    // 5. التعامل مع الملفات
-    const dropzone = document.getElementById('dropzone');
-    const fileInput = document.getElementById('fileInput');
-    const filePreview = document.getElementById('filePreview');
-    const fileNameDisplay = document.getElementById('fileNameDisplay');
-    const translateFileBtn = document.getElementById('translateFileBtn');
-
-    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.style.borderColor = 'var(--primary)'; });
-    dropzone.addEventListener('dragleave', () => { dropzone.style.borderColor = 'var(--border)'; });
-    dropzone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      dropzone.style.borderColor = 'var(--border)';
-      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-    });
-    fileInput.addEventListener('change', (e) => {
-      if (e.target.files.length) handleFile(e.target.files[0]);
-    });
-    function handleFile(file) {
-      fileNameDisplay.textContent = `${file.name} (${(file.size/1024).toFixed(1)} KB)`;
-      filePreview.classList.remove('hidden');
-      translateFileBtn.disabled = false;
-    }
-    function clearFile() {
-      filePreview.classList.add('hidden');
-      translateFileBtn.disabled = true;
-      fileInput.value = '';
-    }
-
-    // 6. تسجيل الصوت
-    let isRecording = false;
-    let mediaRecorder;
-    const recordBtn = document.getElementById('recordBtn');
-    const recordStatus = document.getElementById('recordStatus');
-
-    async function toggleRecording() {
-      if (!isRecording) {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          mediaRecorder = new MediaRecorder(stream);
-          mediaRecorder.start();
-          isRecording = true;
-          recordBtn.classList.add('recording');
-          recordStatus.textContent = 'جارٍ التسجيل... اضغط للإيقاف';
-          recordStatus.style.color = '#ef4444';
-        } catch (err) {
-          alert('يرجى السماح بالوصول إلى الميكروفون لتسجيل الصوت.');
-        }
-      } else {
-        mediaRecorder.stop();
-        isRecording = false;
-        recordBtn.classList.remove('recording');
-        recordStatus.textContent = 'تم التسجيل بنجاح!';
-        recordStatus.style.color = 'var(--primary)';
-        mediaRecorder.stream.getTracks().forEach(track => track.stop());
-      }
-    }
-
-    // 7. محاكاة الترجمة
-    const resultBox = document.getElementById('resultBox');
-    const resultText = document.getElementById('resultText');
-
-    function startTranslation(type) {
-      resultBox.classList.remove('show');
-      resultText.textContent = '⏳ جارٍ الترجمة بالذكاء الاصطناعي...';
-      resultBox.classList.add('show');
-
-      setTimeout(() => {
-        let msg = '';
-        if (type === 'نص') {
-          const text = document.getElementById('textInput').value;
-          if (!text) return alert('يرجى كتابة نص أولاً!');
-          msg = `تمت ترجمة النص بنجاح!\n\nعدد الحروف: ${text.length}`;
-        } else if (type === 'ملف') {
-          msg = `تمت ترجمة الملف (${fileNameDisplay.textContent}) بنجاح!`;
-        } else if (type === 'صوت') {
-          msg = `تمت ترجمة الصوت بنجاح! تم تحويل الصوت إلى نص وترجمته.`;
-        }
-        
-        resultText.textContent = `✅ [محاكاة ترجمة]\n\n${msg}\n\nاللغة الهدف: ${document.querySelector('.lang-select').options[document.querySelector('.lang-select').selectedIndex].text}\n\n(هنا سيظهر النص المترجم الفعلي عند ربط خدمة ترجمة حقيقية).`;
-      }, 1500);
-    }
-
-    function copyResult() {
-      const text = resultText.textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        alert('تم نسخ النتيجة!');
-      });
-    }
-  </script>
+  <script src="./script.js"></script>
 </body>
 </html>
