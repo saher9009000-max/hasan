@@ -1,6 +1,5 @@
 :root {
   --bg: #0F172A;
-  --bg-soft: #111C34;
   --card: rgba(30, 41, 59, 0.55);
   --border: rgba(148, 163, 184, 0.15);
   --sky: #38BDF8;
@@ -125,7 +124,7 @@ body[dir="ltr"] { font-family: 'Inter', 'Cairo', sans-serif; }
   backdrop-filter: blur(12px);
   box-shadow: var(--shadow);
 }
-.panel.hidden { display: none; }
+.panel.hidden { display: none !important; }
 
 .source-text {
   width: 100%; min-height: 140px; resize: vertical;
@@ -182,7 +181,7 @@ body[dir="ltr"] { font-family: 'Inter', 'Cairo', sans-serif; }
   border: 1px solid var(--border); border-radius: 14px;
   padding: 14px 18px; margin-top: 16px;
 }
-.file-preview.hidden { display: none; }
+.file-preview.hidden { display: none !important; }
 .file-info { display: flex; align-items: center; gap: 14px; }
 .file-icon { font-size: 26px; }
 .file-name { font-weight: 600; font-size: 14px; }
@@ -195,7 +194,7 @@ body[dir="ltr"] { font-family: 'Inter', 'Cairo', sans-serif; }
 
 /* Progress */
 .progress-wrap { margin-top: 24px; text-align: center; }
-.progress-wrap.hidden { display: none; }
+.progress-wrap.hidden { display: none !important; }
 .progress-bar {
   height: 8px; background: rgba(148,163,184,0.15);
   border-radius: 999px; overflow: hidden; margin-bottom: 10px;
@@ -213,7 +212,7 @@ body[dir="ltr"] { font-family: 'Inter', 'Cairo', sans-serif; }
   border-radius: var(--radius); padding: 22px;
   backdrop-filter: blur(12px); animation: fadeIn 0.35s ease;
 }
-.result.hidden { display: none; }
+.result.hidden { display: none !important; }
 .result-header {
   display: flex; justify-content: space-between; align-items: center;
   margin-bottom: 14px;
