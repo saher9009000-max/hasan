@@ -1,4 +1,3 @@
-// 1. بيانات أكثر من 140 لغة
 const languages = [
   { code: 'ar', name: 'العربية' }, { code: 'en', name: 'English' }, { code: 'fr', name: 'Français' },
   { code: 'es', name: 'Español' }, { code: 'de', name: 'Deutsch' }, { code: 'tr', name: 'Türkçe' },
@@ -50,177 +49,99 @@ const languages = [
   { code: 'ss', name: 'siSwati' }, { code: 'nr', name: 'isiNdebele' }
 ];
 
-// 2. ترجمات الواجهة (عربي / إنجليزي)
-const uiTranslations = {
-  ar: {
-    title: 'LinguaPro - ترجمة احترافية',
-    heroTitle: 'ترجم أي شيء بدقة احترافية',
-    heroSub: 'ترجمة فورية بالذكاء الاصطناعي تدعم أكثر من 140 لغة — نصوص، ملفات، صور وصوت.',
-    tabText: '📝 نص', tabFile: '📁 ملفات', tabAudio: '🎤 صوت',
-    translateNow: 'ترجم الآن ✨', translateFile: 'ترجم الملف 🚀', translateAudio: 'ترجم الصوت ✨',
-    dropTitle: 'اسحب وأفلت ملفك هنا', dropHint: 'PDF, DOCX, TXT, PNG, JPG, MP3, WAV',
-    browse: 'اختر ملفاً', recordPrompt: 'اضغط للتسجيل الصوتي', recording: 'جارٍ التسجيل... اضغط للإيقاف',
-    recorded: 'تم التسجيل بنجاح!', resultTitle: 'النتيجة', copy: 'نسخ 📋',
-    footerVersion: 'الإصدار 1.0.0', copyright: 'جميع الحقوق محفوظة', langBtn: 'EN'
-  },
-  en: {
-    title: 'LinguaPro - Professional Translation',
-    heroTitle: 'Translate Anything with Professional Accuracy',
-    heroSub: 'Instant AI translation supporting 140+ languages — text, files, images and audio.',
-    tabText: '📝 Text', tabFile: '📁 Files', tabAudio: '🎤 Audio',
-    translateNow: 'Translate Now ✨', translateFile: 'Translate File 🚀', translateAudio: 'Translate Audio ✨',
-    dropTitle: 'Drag & drop your file here', dropHint: 'PDF, DOCX, TXT, PNG, JPG, MP3, WAV',
-    browse: 'Browse File', recordPrompt: 'Click to record audio', recording: 'Recording... click to stop',
-    recorded: 'Recorded successfully!', resultTitle: 'Result', copy: 'Copy 📋',
-    footerVersion: 'Version 1.0.0', copyright: 'All rights reserved', langBtn: 'عربي'
-  }
-};
-
-let currentUILang = 'ar';
-
-// 3. تعبئة قوائم اللغات
-function populateLanguages() {
-  const selects = document.querySelectorAll('.lang-select');
-  selects.forEach(select => {
-    select.innerHTML = '';
-    languages.forEach(lang => {
-      const option = document.createElement('option');
-      option.value = lang.code;
-      option.textContent = lang.name;
-      select.appendChild(option);
-    });
+// تعبئة القوائم
+document.querySelectorAll('.lang-select').forEach(select => {
+  languages.forEach(lang => {
+    const opt = document.createElement('option');
+    opt.value = lang.code; opt.textContent = lang.name;
+    select.appendChild(opt);
   });
-  // تعيين العربية والإنجليزية كقيم افتراضية
-  document.getElementById('srcLangText').value = 'ar';
-  document.getElementById('tgtLangText').value = 'en';
-  document.getElementById('tgtLangFile').value = 'en';
-  document.getElementById('tgtLangAudio').value = 'en';
-}
+});
+document.getElementById('srcLang').value = 'ar';
+document.getElementById('tgtLang').value = 'en';
+document.getElementById('tgtFileLang').value = 'en';
 
-// 4. تغيير لغة الواجهة
-function switchUILanguage() {
-  currentUILang = currentUILang === 'ar' ? 'en' : 'ar';
-  const dir = currentUILang === 'ar' ? 'rtl' : 'ltr';
-  document.documentElement.dir = dir;
-  document.documentElement.lang = currentUILang;
-  document.body.dir = dir;
-  
-  const t = uiTranslations[currentUILang];
-  document.title = t.title;
-  document.getElementById('heroTitle').textContent = t.heroTitle;
-  document.getElementById('heroSub').textContent = t.heroSub;
-  document.getElementById('tabText').textContent = t.tabText;
-  document.getElementById('tabFile').textContent = t.tabFile;
-  document.getElementById('tabAudio').textContent = t.tabAudio;
-  document.getElementById('translateTextBtn').textContent = t.translateNow;
-  document.getElementById('translateFileBtn').textContent = t.translateFile;
-  document.getElementById('translateAudioBtn').textContent = t.translateAudio;
-  document.querySelector('.drop-title').textContent = t.dropTitle;
-  document.querySelector('.drop-hint').textContent = t.dropHint;
-  document.getElementById('browseBtn').textContent = t.browse;
-  document.getElementById('recordStatus').textContent = t.recordPrompt;
-  document.getElementById('resultTitle').textContent = t.resultTitle;
-  document.getElementById('copyBtn').textContent = t.copy;
-  document.getElementById('footerVersion').textContent = t.footerVersion;
-  document.getElementById('uiLangBtn').textContent = t.langBtn;
-}
-
-// 5. الوضع الداكن والفاتح
-const themeBtn = document.getElementById('themeBtn');
-const html = document.documentElement;
-themeBtn.addEventListener('click', () => {
+// الوضع الداكن
+document.getElementById('themeBtn').addEventListener('click', function() {
+  const html = document.documentElement;
   if (html.getAttribute('data-theme') === 'dark') {
     html.setAttribute('data-theme', 'light');
-    themeBtn.textContent = '🌙';
-    localStorage.setItem('theme', 'light');
+    this.textContent = '🌙';
   } else {
     html.setAttribute('data-theme', 'dark');
-    themeBtn.textContent = '☀️';
-    localStorage.setItem('theme', 'dark');
+    this.textContent = '☀️';
   }
 });
-// استعادة الوضع المحفوظ
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme === 'dark') {
-  html.setAttribute('data-theme', 'dark');
-  themeBtn.textContent = '☀️';
-}
 
-// 6. التبويبات
-document.querySelectorAll('.tab-btn').forEach(tab => {
+// تبديل لغة الواجهة
+document.getElementById('langBtn').addEventListener('click', function() {
+  const isAr = document.documentElement.dir === 'rtl';
+  document.documentElement.dir = isAr ? 'ltr' : 'rtl';
+  this.textContent = isAr ? 'عربي' : 'English';
+});
+
+// التبويبات
+document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     tab.classList.add('active');
     document.getElementById(tab.dataset.target).classList.add('active');
   });
 });
 
-// 7. تبديل اللغات (النص)
-document.getElementById('swapTextLangs').addEventListener('click', () => {
-  const src = document.getElementById('srcLangText');
-  const tgt = document.getElementById('tgtLangText');
-  const temp = src.value;
-  src.value = tgt.value;
-  tgt.value = temp;
-});
-
-// 8. التعامل مع الملفات
+// استيراد الملفات
 const dropzone = document.getElementById('dropzone');
 const fileInput = document.getElementById('fileInput');
 const filePreview = document.getElementById('filePreview');
 const fileName = document.getElementById('fileName');
 const translateFileBtn = document.getElementById('translateFileBtn');
-const clearFileBtn = document.getElementById('clearFileBtn');
 
 document.getElementById('browseBtn').addEventListener('click', () => fileInput.click());
 
 dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('drag'); });
-dropzone.addEventListener('dragleave', () => { dropzone.classList.remove('drag'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag'));
 dropzone.addEventListener('drop', (e) => {
   e.preventDefault(); dropzone.classList.remove('drag');
-  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+  if (e.dataTransfer.files.length) {
+    fileName.textContent = e.dataTransfer.files[0].name;
+    filePreview.classList.remove('hidden');
+    translateFileBtn.disabled = false;
+  }
 });
 fileInput.addEventListener('change', (e) => {
-  if (e.target.files.length) handleFile(e.target.files[0]);
+  if (e.target.files.length) {
+    fileName.textContent = e.target.files[0].name;
+    filePreview.classList.remove('hidden');
+    translateFileBtn.disabled = false;
+  }
 });
-
-function handleFile(file) {
-  fileName.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
-  filePreview.classList.remove('hidden');
-  translateFileBtn.disabled = false;
-}
-clearFileBtn.addEventListener('click', () => {
+document.getElementById('clearFileBtn').addEventListener('click', () => {
   filePreview.classList.add('hidden');
   translateFileBtn.disabled = true;
   fileInput.value = '';
 });
 
-// 9. تسجيل الصوت
-let isRecording = false;
-let mediaRecorder;
-const recordBtn = document.getElementById('recordBtn');
-const recordStatus = document.getElementById('recordStatus');
+// محاكاة الترجمة
+function showResult(msg) {
+  const box = document.getElementById('resultBox');
+  const text = document.getElementById('resultText');
+  box.classList.remove('hidden');
+  text.textContent = '⏳ جارٍ الترجمة...';
+  setTimeout(() => { text.textContent = '✅ ' + msg; }, 1000);
+}
 
-recordBtn.addEventListener('click', async () => {
-  const t = uiTranslations[currentUILang];
-  if (!isRecording) {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
-      mediaRecorder.start();
-      isRecording = true;
-      recordBtn.classList.add('recording');
-      recordStatus.textContent = t.recording;
-      recordStatus.style.color = '#ef4444';
-    } catch (err) {
-      alert(currentUILang === 'ar' ? 'يرجى السماح بالوصول إلى الميكروفون.' : 'Please allow microphone access.');
-    }
-  } else {
-    mediaRecorder.stop();
-    isRecording = false;
-    recordBtn.classList.remove('recording');
-    recordStatus.textContent = t.recorded;
-    recordStatus.style.color = 'var(--primary)';
-    mediaRecorder.stream.getTracks().forEach(track => track.stop());
-  }
+document.getElementById('translateBtn').addEventListener('click', () => {
+  const txt = document.getElementById('textInput').value;
+  if (!txt) return alert('اكتب نصاً أولاً');
+  showResult(`تمت ترجمة النص (${txt.length} حرف) بنجاح.`);
+});
+
+document.getElementById('translateFileBtn').addEventListener('click', () => {
+  showResult(`تمت ترجمة الملف: ${fileName.textContent}`);
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  navigator.clipboard.writeText(document.getElementById('resultText').textContent);
+  alert('تم النسخ!');
+});
