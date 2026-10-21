@@ -1,53 +1,125 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عازل الصوت بالذكاء الاصطناعي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
-        body { background-color: #f8fafc; color: #1e293b; padding: 20px; text-align: center; }
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; max-width: 600px; margin: 0 auto; }
-        .logo { font-weight: bold; font-size: 1.2rem; color: #4f46e5; }
-        .card { background: white; border-radius: 20px; padding: 30px 20px; max-width: 600px; margin: 20px auto; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        h1 { font-size: 1.8rem; margin-bottom: 15px; color: #0f172a; }
-        p { color: #64748b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; }
-        .upload-area { border: 2px dashed #cbd5e1; border-radius: 15px; padding: 30px; background: #fafafa; cursor: pointer; }
-        input[type="file"] { display: none; }
-        .btn { background: #4f46e5; color: white; padding: 12px 25px; border-radius: 10px; border: none; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 15px; width: 100%; }
-        .btn:hover { background: #4338ca; }
-        #audioResults { margin-top: 25px; display: none; }
-        audio { width: 100%; margin-top: 10px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinguaPro — ترجمة احترافية بالذكاء الاصطناعي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo">🎙️ VocalRemover</div>
+  <!-- ===== Header ===== -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">🌐</div>
+      <span class="logo-text">Lingua<span class="accent">Pro</span></span>
     </div>
 
-    <div class="card">
-        <h1>عزل الغناء عن الموسيقى</h1>
-        <p>قم برفع الملف الصوتي ليتم فصل الصوت البشري عن الموسيقى مجاناً.</p>
+    <!-- Language Switcher -->
+    <div class="lang-switcher" id="langSwitcher">
+      <button class="lang-btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+        <span id="currentLangLabel">العربية</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </button>
 
-        <form id="uploadForm">
-            <label for="audioFile" class="upload-area">
-                <span>📁 اضغط هنا لاختيار ملف صوتي</span>
-                <input type="file" id="audioFile" accept="audio/*" required>
-            </label>
-            <button type="submit" class="btn">شروع في عزل الصوت</button>
-        </form>
+      <div class="lang-dropdown" id="langDropdown">
+        <input type="text" class="lang-search" id="langSearch" placeholder="ابحث عن لغة..." />
+        <ul class="lang-list" id="langList" role="listbox"></ul>
+      </div>
+    </div>
+  </header>
 
-        <div id="audioResults">
-            <h3>النتائج:</h3>
-            <p>الصوت البشري فقط:</p>
-            <audio id="vocalsAudio" controls></audio>
-            <p style="margin-top:15px;">الموسيقى فقط:</p>
-            <audio id="noVocalsAudio" controls></audio>
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <h1 class="hero-title" data-i18n="heroTitle">ترجم أي شيء بدقة احترافية</h1>
+    <p class="hero-sub" data-i18n="heroSub">ترجمة فورية بالذكاء الاصطناعي تدعم أكثر من 140 لغة — نصوص، ملفات، صور وصوت.</p>
+  </section>
+
+  <!-- ===== Main Translator ===== -->
+  <main class="container">
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="text" data-i18n="tabText">نص</button>
+      <button class="tab" data-tab="files" data-i18n="tabFiles">ملفات</button>
+    </div>
+
+    <!-- Text panel -->
+    <div class="panel" id="panel-text">
+      <textarea id="sourceText" class="source-text" placeholder="اكتب النص هنا..." data-i18n-placeholder="placeholderText"></textarea>
+      <div class="actions">
+        <button class="btn-primary" id="translateTextBtn" data-i18n="translateNow">ترجم الآن</button>
+      </div>
+    </div>
+
+    <!-- Files panel -->
+    <div class="panel hidden" id="panel-files">
+      <div class="dropzone" id="dropzone">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+        </svg>
+        <p class="dz-title" data-i18n="dropTitle">اسحب وأفلت ملفك هنا</p>
+        <p class="dz-hint" data-i18n="dropHint">يدعم: PDF, DOCX, TXT — صور PNG/JPG — صوت MP3/WAV/M4A</p>
+        <label class="btn-secondary">
+          <span data-i18n="browse">اختر ملفاً</span>
+          <input type="file" id="fileInput" hidden accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,.mp3,.wav,.m4a" />
+        </label>
+      </div>
+      <div class="file-preview hidden" id="filePreview">
+        <div class="file-info">
+          <span class="file-icon" id="fileIcon">📄</span>
+          <div>
+            <div class="file-name" id="fileName">file.pdf</div>
+            <div class="file-size" id="fileSize">0 KB</div>
+          </div>
         </div>
+        <button class="btn-remove" id="removeFile">✕</button>
+      </div>
+      <div class="actions">
+        <button class="btn-primary" id="translateFileBtn" data-i18n="translateNow" disabled>ترجم الآن</button>
+      </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Progress -->
+    <div class="progress-wrap hidden" id="progressWrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <p class="progress-text" id="progressText" data-i18n="translating">جارٍ الترجمة...</p>
+    </div>
+
+    <!-- Result -->
+    <div class="result hidden" id="result">
+      <div class="result-header">
+        <h3 data-i18n="resultTitle">النتيجة</h3>
+        <div class="result-actions">
+          <button class="btn-ghost" id="copyBtn" data-i18n="copy">نسخ</button>
+          <button class="btn-ghost" id="downloadBtn" data-i18n="download">تنزيل</button>
+        </div>
+      </div>
+      <div class="result-text" id="resultText"></div>
+    </div>
+
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="#" data-i18n="privacy">الخصوصية</a>
+      <a href="#" data-i18n="terms">الشروط</a>
+      <a href="#" data-i18n="contact">اتصل بنا</a>
+    </div>
+    <p class="copy" data-i18n="footerCopy">© 2026 LinguaPro — جميع الحقوق محفوظة</p>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
 </body>
 </html>
