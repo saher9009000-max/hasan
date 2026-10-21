@@ -1,75 +1,215 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="light">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ترجمة | موقع الترجمة الاحترافي</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="موقع ترجمة احترافي - ترجم النصوص بين اللغات بسهولة وسرعة">
+    <title>TranslatePro — ترجمة احترافية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- الهيدر -->
-  <header class="header">
-    <div class="header-right">
-      <button class="icon-btn" id="langBtn">English</button>
-    </div>
-    <div class="main-logo">ترجمة</div>
-    <div class="header-left">
-      <button class="icon-btn" id="themeBtn">🌙</button>
-    </div>
-  </header>
+    <!-- ============ HEADER ============ -->
+    <header class="header" role="banner">
+        <div class="container header__inner">
+            <a href="#" class="logo" aria-label="الصفحة الرئيسية">
+                <span class="logo__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 8h6M8 8v8M5 12h6M14 8h5M16.5 8v8M14 12h5"/>
+                    </svg>
+                </span>
+                <span class="logo__text">Translate<span class="logo__accent">Pro</span></span>
+            </a>
 
-  <main class="container">
-    <div class="tabs">
-      <button class="tab active" data-target="text-panel" id="tabText">نص</button>
-      <button class="tab" data-target="file-panel" id="tabFile">ملفات</button>
-    </div>
+            <div class="header__actions">
+                <button class="icon-btn" id="themeToggle" aria-label="تبديل الوضع الليلي" title="تبديل الوضع">
+                    <svg class="icon-btn__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="icon-btn__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
 
-    <!-- لوحة النص -->
-    <div class="panel active" id="text-panel">
-      <div class="lang-group">
-        <select class="lang-select" id="srcLang"></select>
-        <button class="swap-btn" id="swapBtn">⇄</button>
-        <select class="lang-select" id="tgtLang"></select>
-      </div>
-      <textarea id="textInput" placeholder="اكتب النص هنا للترجمة..."></textarea>
-      <button class="btn-primary" id="translateBtn">ترجم الآن</button>
-    </div>
+    <!-- ============ MAIN ============ -->
+    <main class="main" role="main">
+        
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container">
+                <h1 class="hero__title">ترجمة <span class="gradient-text">فورية</span> بين اللغات</h1>
+                <p class="hero__subtitle">ترجم نصوصك بدقة عالية مع دعم النطق الصوتي وحفظ السجل تلقائياً</p>
+            </div>
+        </section>
 
-    <!-- لوحة الملفات -->
-    <div class="panel" id="file-panel">
-      <div class="lang-group">
-        <select class="lang-select" id="tgtFileLang"></select>
-      </div>
-      <div class="dropzone" id="dropzone">
-        <div class="drop-icon">📁</div>
-        <p class="drop-title">اسحب وأفلت ملفك هنا</p>
-        <p class="drop-hint">PDF, DOCX, TXT, صور</p>
-        <input type="file" id="fileInput" hidden>
-        <button class="btn-secondary" id="browseBtn">اختر ملفاً</button>
-      </div>
-      <div class="file-preview hidden" id="filePreview">
-        <span id="fileName">اسم الملف</span>
-        <button class="btn-remove" id="clearFileBtn">✕</button>
-      </div>
-      <button class="btn-primary" id="translateFileBtn" disabled>ترجم الملف</button>
-    </div>
+        <!-- Translator -->
+        <section class="translator-section">
+            <div class="container">
+                <div class="translator glass">
 
-    <!-- النتيجة -->
-    <div class="result-box hidden" id="resultBox">
-      <div class="result-header">
-        <span class="result-title">النتيجة</span>
-        <button class="btn-secondary" id="copyBtn">نسخ</button>
-      </div>
-      <div class="result-text" id="resultText"></div>
-    </div>
-  </main>
+                    <!-- Language Selector Bar -->
+                    <div class="translator__bar">
+                        <div class="lang-select">
+                            <label for="sourceLang" class="sr-only">اللغة المصدر</label>
+                            <select id="sourceLang" class="lang-select__field" aria-label="اللغة المصدر">
+                                <option value="auto">🌐 كشف تلقائي</option>
+                                <option value="ar" selected>🇸🇦 العربية</option>
+                                <option value="en">🇬🇧 English</option>
+                                <option value="fr">🇫🇷 Français</option>
+                                <option value="es">🇪🇸 Español</option>
+                                <option value="de">🇩🇪 Deutsch</option>
+                                <option value="tr">🇹🇷 Türkçe</option>
+                            </select>
+                        </div>
 
-  <footer class="footer">
-    <p>© 2026 ترجمة | الإصدار 1.0.0</p>
-  </footer>
+                        <button class="swap-btn" id="swapBtn" aria-label="تبديل اللغات" title="تبديل اللغات">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/>
+                            </svg>
+                        </button>
 
-  <script src="script.js"></script>
+                        <div class="lang-select">
+                            <label for="targetLang" class="sr-only">اللغة الهدف</label>
+                            <select id="targetLang" class="lang-select__field" aria-label="اللغة الهدف">
+                                <option value="ar">🇸🇦 العربية</option>
+                                <option value="en" selected>🇬🇧 English</option>
+                                <option value="fr">🇫🇷 Français</option>
+                                <option value="es">🇪🇸 Español</option>
+                                <option value="de">🇩🇪 Deutsch</option>
+                                <option value="tr">🇹🇷 Türkçe</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Text Areas -->
+                    <div class="translator__panels">
+                        
+                        <!-- Source Panel -->
+                        <div class="panel">
+                            <div class="panel__header">
+                                <span class="panel__label">النص الأصلي</span>
+                                <span class="panel__counter" id="sourceCounter">0 / 5000</span>
+                            </div>
+                            <textarea 
+                                id="sourceText" 
+                                class="panel__textarea" 
+                                placeholder="اكتب أو الصق النص هنا..."
+                                maxlength="5000"
+                                aria-label="النص المراد ترجمته"></textarea>
+                            
+                            <div class="panel__actions">
+                                <button class="action-btn" id="speakSource" aria-label="نطق النص الأصلي" title="نطق">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                                    </svg>
+                                </button>
+                                <button class="action-btn" id="clearBtn" aria-label="مسح النص" title="مسح">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Target Panel -->
+                        <div class="panel panel--result">
+                            <div class="panel__header">
+                                <span class="panel__label">الترجمة</span>
+                                <span class="panel__badge" id="resultBadge">جاهز</span>
+                            </div>
+                            <div class="panel__result" id="targetText" aria-live="polite">
+                                <span class="panel__placeholder">ستظهر الترجمة هنا...</span>
+                            </div>
+                            
+                            <div class="panel__actions">
+                                <button class="action-btn" id="speakTarget" aria-label="نطق الترجمة" title="نطق الترجمة">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                                    </svg>
+                                </button>
+                                <button class="action-btn" id="copyBtn" aria-label="نسخ الترجمة" title="نسخ">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Translate Button -->
+                    <button class="translate-btn" id="translateBtn">
+                        <span class="translate-btn__text">ترجم الآن</span>
+                        <span class="translate-btn__loader" aria-hidden="true"></span>
+                        <svg class="translate-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+
+                    <p class="translator__hint">
+                        💡 اختصارات: <kbd>Ctrl</kbd> + <kbd>Enter</kbd> للترجمة • <kbd>Esc</kbd> للمسح
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- History -->
+        <section class="history-section">
+            <div class="container">
+                <div class="history glass">
+                    <div class="history__header">
+                        <h2 class="history__title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            سجل الترجمات
+                        </h2>
+                        <button class="btn-text" id="clearHistoryBtn">حذف الكل</button>
+                    </div>
+                    <div class="history__list" id="historyList">
+                        <div class="history__empty" id="historyEmpty">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="9" y1="15" x2="15" y2="15"/>
+                            </svg>
+                            <p>لا توجد ترجمات سابقة بعد</p>
+                            <span>ابدأ بترجمة نصك الأول</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer" role="contentinfo">
+        <div class="container footer__inner">
+            <p class="footer__text">© 2026 TranslatePro — جميع الحقوق محفوظة</p>
+            <p class="footer__made">صُنع بـ <span class="footer__heart">♥</span> باستخدام HTML/CSS/JS نقية</p>
+        </div>
+    </footer>
+
+    <!-- ============ TOAST ============ -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>
