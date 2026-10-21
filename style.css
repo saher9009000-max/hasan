@@ -1,270 +1,225 @@
-/* المتغيرات والألوان */
-:root {
-    --bg-dark: #0a0e17;
-    --card-bg: #111827;
-    --input-bg: #1f2937;
-    --primary: #6366f1;
-    --accent: #ec4899;
-    --text-main: #f9fafb;
-    --text-muted: #9ca3af;
-    --border: #374151;
-    --gradient: linear-gradient(135deg, #6366f1, #ec4899);
-    --shadow: 0 10px 40px rgba(0,0,0,0.4);
+/**
+ * مترجم برو - نسخة الترجمة الحقيقية
+ * يستخدم Google Translate API غير الرسمي المجاني
+ */
+
+// === 1. إدارة المظهر (Dark/Light) ===
+const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
+
+themeToggle.addEventListener('click', () => {
+    body.classList.toggle('light-mode');
+    const icon = themeToggle.querySelector('i');
+    icon.className = body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+});
+
+// === 2. منطق الترجمة الحقيقية ===
+const inputText = document.getElementById('inputText');
+const outputText = document.getElementById('outputText');
+const charCount = document.getElementById('charCount');
+const translateBtn = document.getElementById('translateBtn');
+const sourceLang = document.getElementById('sourceLang');
+const targetLang = document.getElementById('targetLang');
+
+// عداد الأحرف
+inputText.addEventListener('input', () => {
+    charCount.textContent = `${inputText.value.length}/5000`;
+});
+
+// مسح النص
+document.getElementById('clearBtn').addEventListener('click', () => {
+    inputText.value = '';
+    outputText.value = '';
+    charCount.textContent = '0/5000';
+});
+
+// تبديل اللغات
+document.getElementById('swapBtn').addEventListener('click', () => {
+    if (sourceLang.value === 'auto') return; // لا يمكن تبديل الكشف التلقائي
+    [sourceLang.value, targetLang.value] = [targetLang.value, sourceLang.value];
+    [inputText.value, outputText.value] = [outputText.value, inputText.value];
+});
+
+// ✅ دالة الترجمة الحقيقية باستخدام Google Translate
+async function realTranslate(text, from, to) {
+    try {
+        // استخدام API مجاني عبر CORS proxy لتجنب مشاكل المتصفح
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // استخراج النص المترجم من استجابة جوجل
+        let translatedText = '';
+        if (data && data[0]) {
+            data[0].forEach(segment => {
+                if (segment[0]) translatedText += segment[0];
+            });
+        }
+        
+        return translatedText || 'حدث خطأ في الترجمة';
+    } catch (error) {
+        console.error('Translation Error:', error);
+        throw new Error('فشل الاتصال بخادم الترجمة');
+    }
 }
 
-.light-mode {
-    --bg-dark: #f3f4f6;
-    --card-bg: #ffffff;
-    --input-bg: #f9fafb;
-    --text-main: #111827;
-    --text-muted: #6b7280;
-    --border: #e5e7eb;
-    --shadow: 0 10px 40px rgba(0,0,0,0.08);
+// زر الترجمة
+translateBtn.addEventListener('click', async () => {
+    const text = inputText.value.trim();
+    if (!text) return showNotification('الرجاء كتابة نص أولاً', 'error');
+    
+    const originalBtnHTML = translateBtn.innerHTML;
+    translateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الترجمة...';
+    translateBtn.disabled = true;
+    
+    try {
+        const result = await realTranslate(
+            text, 
+            sourceLang.value, 
+            targetLang.value
+        );
+        outputText.value = result;
+        showNotification('تمت الترجمة بنجاح! ✨');
+    } catch (err) {
+        showNotification(err.message, 'error');
+    } finally {
+        translateBtn.innerHTML = originalBtnHTML;
+        translateBtn.disabled = false;
+    }
+});
+
+// نظام الإشعارات الأنيق
+function showNotification(msg, type = 'success') {
+    const existing = document.querySelector('.custom-notification');
+    if (existing) existing.remove();
+    
+    const notif = document.createElement('div');
+    notif.className = 'custom-notification';
+    notif.textContent = msg;
+    notif.style.cssText = `
+        position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+        background: ${type === 'success' ? '#6366f1' : '#ef4444'};
+        color: white; padding: 12px 30px; border-radius: 12px;
+        font-weight: bold; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        animation: slideDown 0.4s ease;
+    `;
+    document.body.appendChild(notif);
+    setTimeout(() => {
+        notif.style.opacity = '0';
+        setTimeout(() => notif.remove(), 300);
+    }, 3000);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+// إضافة أنيميشن للإشعارات
+const styleSheet = document.createElement('style');
+styleSheet.textContent = `@keyframes slideDown { from {opacity:0; transform:translateX(-50%) translateY(-20px);} to {opacity:1; transform:translateX(-50%) translateY(0);}}`;
+document.head.appendChild(styleSheet);
 
-body {
-    background: var(--bg-dark);
-    color: var(--text-main);
-    transition: all 0.4s ease;
-    min-height: 100vh;
+// نسخ النص
+document.getElementById('copyBtn').addEventListener('click', () => {
+    if (outputText.value) {
+        navigator.clipboard.writeText(outputText.value);
+        showNotification('تم نسخ الترجمة! 📋');
+    }
+});
+
+// قراءة النص صوتياً
+function speak(text, lang) {
+    if (!text) return;
+    speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang === 'auto' ? 'ar-SA' : lang;
+    utterance.rate = 0.9;
+    speechSynthesis.speak(utterance);
 }
 
-/* الهيدر */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 5%;
-    background: var(--card-bg);
-    border-bottom: 1px solid var(--border);
+document.getElementById('speakInput').addEventListener('click', () => 
+    speak(inputText.value, sourceLang.value));
+document.getElementById('speakOutput').addEventListener('click', () => 
+    speak(outputText.value, targetLang.value));
+
+// === 3. استيراد الملفات ===
+const uploadZone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+const fileInfo = document.getElementById('fileInfo');
+const fileNameSpan = document.getElementById('fileName');
+
+uploadZone.addEventListener('click', () => fileInput.click());
+uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.style.borderColor = 'var(--accent)'; });
+uploadZone.addEventListener('dragleave', () => { uploadZone.style.borderColor = 'var(--border)'; });
+uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.style.borderColor = 'var(--border)';
+    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length) handleFile(e.target.files[0]);
+});
+
+function handleFile(file) {
+    fileNameSpan.textContent = file.name;
+    fileInfo.style.display = 'flex';
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        inputText.value = e.target.result;
+        charCount.textContent = `${inputText.value.length}/5000`;
+        showNotification('تم تحميل الملف بنجاح! 📄');
+    };
+    reader.readAsText(file);
 }
 
-.logo { display: flex; align-items: center; gap: 10px; }
-.logo i { font-size: 2rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.logo h1 { font-size: 1.5rem; font-weight: 800; }
+document.getElementById('removeFile').addEventListener('click', () => {
+    fileInfo.style.display = 'none';
+    fileInput.value = '';
+    inputText.value = '';
+    charCount.textContent = '0/5000';
+});
 
-.theme-toggle {
-    width: 45px; height: 45px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    background: var(--input-bg);
-    color: var(--text-main);
-    cursor: pointer;
-    transition: 0.3s;
-}
-.theme-toggle:hover { transform: rotate(180deg); border-color: var(--primary); }
+// === 4. الترجمة الصوتية ===
+const startRecord = document.getElementById('startRecord');
+const stopRecord = document.getElementById('stopRecord');
+const recordingIndicator = document.getElementById('recordingIndicator');
+const voiceResult = document.getElementById('voiceResult');
+let recognition;
 
-/* الحاوية الرئيسية */
-.container { max-width: 1000px; margin: 2rem auto; padding: 0 1.5rem; }
-
-/* بطاقة الترجمة */
-.translation-card {
-    background: var(--card-bg);
-    border-radius: 20px;
-    padding: 2rem;
-    box-shadow: var(--shadow);
-    margin-bottom: 2rem;
-    border: 1px solid var(--border);
-}
-
-.lang-selector {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SR();
+    recognition.lang = 'ar-SA';
+    recognition.continuous = false;
+    
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        voiceResult.textContent = transcript;
+        voiceResult.style.display = 'block';
+        inputText.value = transcript;
+        charCount.textContent = `${transcript.length}/5000`;
+        stopRecordingUI();
+        showNotification('تم التعرف على الصوت! 🎙️');
+    };
+    recognition.onerror = () => { showNotification('خطأ في التعرف على الصوت', 'error'); stopRecordingUI(); };
+    recognition.onend = stopRecordingUI;
 }
 
-.lang-select {
-    flex: 1;
-    padding: 12px;
-    background: var(--input-bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    color: var(--text-main);
-    font-size: 1rem;
-    outline: none;
-}
+startRecord.addEventListener('click', () => {
+    if (recognition) {
+        recognition.start();
+        startRecord.disabled = true;
+        stopRecord.disabled = false;
+        recordingIndicator.classList.add('active');
+    } else {
+        showNotification('متصفحك لا يدعم الترجمة الصوتية', 'error');
+    }
+});
 
-.swap-btn {
-    width: 45px; height: 45px;
-    border-radius: 50%;
-    background: var(--gradient);
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.swap-btn:hover { transform: rotate(180deg); }
+stopRecord.addEventListener('click', () => {
+    if (recognition) recognition.stop();
+    stopRecordingUI();
+});
 
-.text-areas { display: grid; gap: 1.5rem; }
-
-.input-box, .output-box { position: relative; }
-
-textarea {
-    width: 100%;
-    min-height: 180px;
-    padding: 1.5rem;
-    background: var(--input-bg);
-    border: 2px solid var(--border);
-    border-radius: 15px;
-    color: var(--text-main);
-    font-size: 1.1rem;
-    resize: vertical;
-    outline: none;
-    transition: 0.3s;
-}
-textarea:focus { border-color: var(--primary); }
-
-.box-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-    padding: 0 5px;
-}
-
-.char-count { color: var(--text-muted); font-size: 0.85rem; margin-left: auto; }
-
-.icon-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 1.1rem;
-    padding: 8px;
-    border-radius: 8px;
-    transition: 0.3s;
-}
-.icon-btn:hover { color: var(--primary); background: rgba(99,102,241,0.1); }
-
-.translate-btn {
-    width: 100%;
-    padding: 15px;
-    background: var(--gradient);
-    border: none;
-    border-radius: 12px;
-    color: white;
-    font-size: 1.2rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-.translate-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(99,102,241,0.3); }
-
-/* شبكة الأدوات */
-.tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
-.tool-card {
-    background: var(--card-bg);
-    padding: 2rem;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
-}
-
-.tool-card h2 {
-    font-size: 1.3rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* منطقة رفع الملفات */
-.upload-zone {
-    border: 2px dashed var(--border);
-    border-radius: 15px;
-    padding: 2rem;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.3s;
-    background: var(--input-bg);
-}
-.upload-zone:hover { border-color: var(--accent); background: rgba(236,72,153,0.05); }
-.upload-zone i { font-size: 2.5rem; color: var(--accent); margin-bottom: 10px; }
-.sub-text { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; }
-
-.file-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    background: var(--input-bg);
-    border-radius: 10px;
-    margin-top: 10px;
-}
-
-/* الترجمة الصوتية */
-.voice-controls { display: flex; gap: 10px; margin-bottom: 15px; }
-
-.voice-btn {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: 0.3s;
-}
-.voice-btn.record { background: var(--primary); color: white; }
-.voice-btn.stop { background: var(--border); color: var(--text-muted); }
-.voice-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.recording-indicator {
-    display: none;
-    align-items: center;
-    gap: 10px;
-    color: var(--accent);
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-.recording-indicator.active { display: flex; }
-
-.pulse-dot {
-    width: 12px; height: 12px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(236,72,153,0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(236,72,153,0); }
-    100% { box-shadow: 0 0 0 0 rgba(236,72,153,0); }
-}
-
-.voice-result {
-    padding: 15px;
-    background: var(--input-bg);
-    border-radius: 10px;
-    border-right: 4px solid var(--accent);
-    margin-top: 10px;
-}
-
-.footer {
-    text-align: center;
-    padding: 2rem;
-    color: var(--text-muted);
-    margin-top: 2rem;
-}
-
-/* التجاوب */
-@media (max-width: 768px) {
-    .lang-selector { flex-direction: column; }
-    .swap-btn { transform: rotate(90deg); }
-    .swap-btn:hover { transform: rotate(270deg); }
+function stopRecordingUI() {
+    startRecord.disabled = false;
+    stopRecord.disabled = true;
+    recordingIndicator.classList.remove('active');
 }
