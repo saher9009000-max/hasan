@@ -37,7 +37,8 @@ const state = {
 };
 
 /* ==================== عناصر DOM ==================== */
-const $ = (sel) => document.querySelector(sel); const $$ = (sel) => document.querySelectorAll(sel);
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
 
 const els = {
   themeToggle: $('#themeToggle'),
