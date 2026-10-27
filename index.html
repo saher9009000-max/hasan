@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <a href="#main" class="skip-link">تخطَّ إلى المحتوى الرئيسي</a>
@@ -97,4 +97,65 @@
         <select id="methodSelect" aria-label="طريقة حساب مواقيت الصلاة">
           <option value="MuslimWorldLeague">رابطة العالم الإسلامي</option>
           <option value="NorthAmerica">ISNA — أمريكا الشمالية</option>
-          <option value="Egyptian
+          <option value="Egyptian">الهيئة المصرية العامة للمساحة</option>
+          <option value="UmmAlQura">أم القرى — مكة المكرمة</option>
+          <option value="Karachi">جامعة العلوم الإسلامية — كراتشي</option>
+        </select>
+        <label for="madhabSelect">المذهب (وقت العصر)</label>
+        <select id="madhabSelect" aria-label="اختيار المذهب لحساب العصر">
+          <option value="shafi">الشافعي (قياسي)</option>
+          <option value="hanafi">الحنفي (متأخر)</option>
+        </select>
+        <label for="highLatSelect">خطوط العرض العالية</label>
+        <select id="highLatSelect" aria-label="قاعدة خطوط العرض العالية">
+          <option value="MiddleOfTheNight">منتصف الليل</option>
+          <option value="SeventhOfTheNight">سُبع الليل</option>
+          <option value="TwilightAngle">زاوية الشفق</option>
+        </select>
+      </div>
+      <div class="prayer-offsets">
+        <details>
+          <summary>ضبط إزاحات يدوية (دقائق)</summary>
+          <div class="offset-grid" id="offsetGrid">
+            <!-- تُملأ ديناميكيًا -->
+          </div>
+        </details>
+      </div>
+      <div class="prayer-table-wrapper">
+        <table class="prayer-table" aria-label="جدول مواقيت الصلاة">
+          <thead>
+            <tr><th>الصلاة</th><th>الوقت</th></tr>
+          </thead>
+          <tbody id="prayerTableBody">
+            <!-- تُملأ ديناميكيًا -->
+          </tbody>
+        </table>
+      </div>
+      <p class="prayer-source" id="prayerSource"></p>
+      <button id="refreshPrayerBtn" class="secondary-btn">تحديث المواقيت</button>
+    </section>
+
+    <!-- تذكير النوم -->
+    <section class="card sleep-card" aria-labelledby="sleepTitle">
+      <h2 id="sleepTitle">تذكير النوم</h2>
+      <div class="sleep-form">
+        <label for="sleepTime">وقت النوم</label>
+        <input type="time" id="sleepTime" value="22:30">
+        <label for="wakeTime">وقت الاستيقاظ</label>
+        <input type="time" id="wakeTime" value="06:00">
+        <button id="calcSleepBtn" class="primary-btn">احسب مدة النوم</button>
+      </div>
+      <p id="sleepResult" class="sleep-result" role="status" aria-live="polite"></p>
+      <p class="hint">سيتم تذكيرك قبل موعد النوم بـ 15 دقيقة (إذا منحت الإذن).</p>
+    </section>
+  </main>
+
+  <footer class="app-footer" role="contentinfo">
+    <p>بوصلة — نتائج دقيقة بفضل Adhan.js وتقويم أم القرى.</p>
+    <p class="small">جميع الحسابات تُجرى محليًا. الموقع لا يخزن بيانات شخصية.</p>
+  </footer>
+
+  <!-- مكتبات خارجية -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
