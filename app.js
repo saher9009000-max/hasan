@@ -37,8 +37,7 @@ const state = {
 };
 
 /* ==================== عناصر DOM ==================== */
-const $ = (sel) => document.querySelector(sel);
-const $$ = (sel) => document.querySelectorAll(sel);
+const $ = (sel) => document.querySelector(sel); const $$ = (sel) => document.querySelectorAll(sel);
 
 const els = {
   themeToggle: $('#themeToggle'),
@@ -109,7 +108,6 @@ function formatDateHijri(date) {
 }
 
 function getHijriParts(date) {
-  // استخدام Intl لاستخراج أجزاء التاريخ الهجري
   const fmt = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
     year: 'numeric', month: 'numeric', day: 'numeric',
   });
@@ -142,7 +140,6 @@ els.themeToggle.addEventListener('click', () => {
   applyTheme(themeIndex);
 });
 
-// استعادة السمة المحفوظة
 const savedTheme = localStorage.getItem('bousala-theme');
 if (savedTheme) {
   themeIndex = themes.indexOf(savedTheme);
@@ -169,9 +166,12 @@ function requestLocation() {
       els.compassStatus.textContent = 'تم تحديد الموقع. يمكنك تفعيل البوصلة.';
     },
     (err) => {
-      els.compassStatus.textContent = 'تعذر تحديد الموقع: ' + err.message;
-      // استخدام إحداثيات افتراضية (مكة) للاختبار
-      if (!state.coords) setLocation(21.4225, 39.8262);
+      if (!state.coords) {
+        setLocation(21.4225, 39.8262);
+        els.compassStatus.textContent = 'تعذر تحديد الموقع، تم استخدام الإحداثيات الافتراضية (مكة).';
+      } else {
+        els.compassStatus.textContent = 'تعذر تحديد الموقع: ' + err.message;
+      }
     },
     { enableHighAccuracy: true, timeout: 10000 }
   );
@@ -179,7 +179,6 @@ function requestLocation() {
 
 els.locateBtn.addEventListener('click', requestLocation);
 
-// استعادة الإحداثيات المحفوظة
 const savedCoords = localStorage.getItem('bousala-coords');
 if (savedCoords) {
   try { state.coords = JSON.parse(savedCoords); } catch (e) { /* ignore */ }
@@ -203,11 +202,11 @@ function handleOrientation(event) {
   let accuracy = null;
 
   if (event.webkitCompassHeading !== undefined) {
-    heading = event.webkitCompassHeading; // iOS
+    heading = event.webkitCompassHeading;
     accuracy = event.webkitCompassAccuracy;
   } else if (event.absolute && event.alpha !== null) {
     heading = (360 - event.alpha) % 360;
-    accuracy = event.alpha; // تقريبي
+    accuracy = event.alpha;
   }
 
   if (heading === null) return;
@@ -215,7 +214,6 @@ function handleOrientation(event) {
   state.smoothHeading = smoothAngle(state.smoothHeading, heading, 0.2);
   state.heading = state.smoothHeading;
 
-  // تحديث الواجهة
   els.headingValue.textContent = `${Math.round(state.heading)}°`;
   els.compassNeedle.style.transform = `rotate(${state.heading}deg)`;
 
@@ -275,7 +273,6 @@ function updateCalendar(date) {
   els.gregorianDate.textContent = formatDateGregorian(date);
   els.hijriDate.textContent = formatDateHijri(date);
   renderReminders(date);
-  // تحديث مواقيت الصلاة إذا كان الموقع متاحًا
   if (state.coords) renderPrayerTimes();
 }
 
@@ -283,11 +280,8 @@ function renderReminders(date) {
   const year = date.getFullYear();
   const reminders = [];
 
-  // عيد الفطر: 1 شوال
   const eidFitr = hijriToGregorian({ year: getHijriParts(date).year, month: 10, day: 1 });
-  // عيد الأضحى: 10 ذو الحجة
   const eidAdha = hijriToGregorian({ year: getHijriParts(date).year, month: 12, day: 10 });
-  // يوم عرفة: 9 ذو الحجة
   const arafah = hijriToGregorian({ year: getHijriParts(date).year, month: 12, day: 9 });
 
   const events = [
@@ -334,8 +328,7 @@ els.todayBtn.addEventListener('click', () => updateCalendar(new Date()));
 function calculateAge(birthDate, birthCalendar = 'gregorian') {
   let birth;
   if (birthCalendar === 'hijri') {
-    const parts = els.birthDate.value.split('-').map(Number);
-    // نفترض أن الإدخال الهجري بصيغة YYYY-MM-DD
+    const parts = birthDate.split('-').map(Number);
     const g = hijriToGregorian({ year: parts[0], month: parts[1], day: parts[2] });
     birth = new Date(g.year, g.month - 1, g.day);
   } else {
@@ -487,7 +480,7 @@ function calcSleepDuration() {
   const [wh, wm] = wake.split(':').map(Number);
   let sleepMinutes = sh * 60 + sm;
   let wakeMinutes = wh * 60 + wm;
-  if (wakeMinutes <= sleepMinutes) wakeMinutes += 24 * 60; // في اليوم التالي
+  if (wakeMinutes <= sleepMinutes) wakeMinutes += 24 * 60;
   const diff = wakeMinutes - sleepMinutes;
   const hours = Math.floor(diff / 60);
   const mins = diff % 60;
@@ -508,7 +501,6 @@ function init() {
   renderOffsetsInputs();
   updateAll();
 
-  // إذا لم تكن هناك إحداثيات محفوظة، اطلب الموقع تلقائيًا؟ (اختياري)
   if (!state.coords) {
     els.compassStatus.textContent = 'اضغط "تحديد الموقع" للبدء.';
   } else {
@@ -518,7 +510,6 @@ function init() {
 
 init();
 
-/* ==================== تصدير للاختبار (اختياري) ==================== */
 if (typeof window !== 'undefined') {
   window.__bousala = {
     calculateAge,
