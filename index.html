@@ -68,12 +68,15 @@
         <ul id="prayerList" class="prayer-list"></ul>
         <div class="btn-row">
           <select id="adhanSelect" class="input">
-            <option value="https://www.islamcan.com/audio/adhan/azan1.mp3">أذان 1</option>
-            <option value="https://www.islamcan.com/audio/adhan/azan2.mp3">أذان 2</option>
-            <option value="https://www.islamcan.com/audio/adhan/azan3.mp3">أذان 3</option>
+            <option value="https://www.islamcan.com/audio/adhan/azan1.mp3">أذان 1 (من الإنترنت)</option>
+            <option value="https://www.islamcan.com/audio/adhan/azan2.mp3">أذان 2 (من الإنترنت)</option>
+            <option value="https://www.islamcan.com/audio/adhan/azan3.mp3">أذان 3 (من الإنترنت)</option>
           </select>
           <button id="testAdhan" class="btn" data-i18n="testAdhan">تجربة الأذان</button>
         </div>
+        <label class="field"><span>رفع صوت أذان من الوسائط (ملف محلي)</span>
+          <input type="file" id="customAdhanFile" accept="audio/*" class="input" />
+        </label>
       </div>
     </section>
 
@@ -158,6 +161,18 @@
 
         <label class="field"><span data-i18n="declination">تعويض الانحراف المغناطيسي (درجات)</span>
           <input type="number" id="declination" class="input" min="-30" max="30" step="0.1" value="0" />
+        </label>
+
+        <label class="field"><span>تصميم البوصلة</span>
+          <select id="compassDesign" class="input">
+            <option value="classic">كلاسيكي (أزرق)</option>
+            <option value="gold">ذهبي ملكي</option>
+            <option value="neon">نيون عصري</option>
+          </select>
+        </label>
+
+        <label class="field"><span>لون الموقع الرئيسي</span>
+          <input type="color" id="primaryColorPicker" class="input" value="#0e7490" style="height:42px;padding:4px;" />
         </label>
 
         <div class="btn-row">
