@@ -77,6 +77,21 @@
         <label class="field"><span>رفع صوت أذان من الوسائط (ملف محلي)</span>
           <input type="file" id="customAdhanFile" accept="audio/*" class="input" />
         </label>
+        <div class="btn-row" style="margin-top: 10px;">
+          <button id="toggleManualPrayer" class="btn small">تعديل أوقات الصلاة يدوياً</button>
+        </div>
+        <div id="manualPrayerBox" class="hidden" style="margin-top: 10px; display: grid; gap: 8px;">
+          <div class="btn-row">
+            <input type="time" id="mFajr" class="input" placeholder="الفجر" />
+            <input type="time" id="mDhuhr" class="input" placeholder="الظهر" />
+            <input type="time" id="mAsr" class="input" placeholder="العصر" />
+          </div>
+          <div class="btn-row">
+            <input type="time" id="mMaghrib" class="input" placeholder="المغرب" />
+            <input type="time" id="mIsha" class="input" placeholder="العشاء" />
+            <button id="saveManualPrayer" class="btn primary small">حفظ المواقيت اليدوية</button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -105,17 +120,16 @@
       </div>
 
       <div class="card">
-        <h3 data-i18n="quran">القرآن</h3>
+        <h3 data-i18n="quran">القرآن الكريم (كامل السور 114)</h3>
         <div class="btn-row">
           <select id="surahSelect" class="input">
-            <option value="1">الفاتحة</option>
-            <option value="18">الكهف</option>
-            <option value="36">يس</option>
-            <option value="55">الرحمن</option>
-            <option value="67">الملك</option>
+            <!-- سيتم تعبئة السور كاملة برمجياً -->
           </select>
           <button id="playSurah" class="btn primary" data-i18n="play">تشغيل</button>
           <button id="favSurah" class="btn" data-i18n="favorite">مفضلة</button>
+        </div>
+        <div class="btn-row">
+          <button id="downloadSurahBtn" class="btn small">تنزيل السورة الحالية</button>
         </div>
         <audio id="quranAudio" controls class="audio"></audio>
         <div id="favList" class="muted"></div>
@@ -126,6 +140,10 @@
         <div class="btn-row">
           <input type="time" id="alarmTime" class="input" />
           <input type="text" id="alarmName" class="input" placeholder="اسم المنبه" data-i18n-ph="alarmName" />
+          <select id="alarmSoundSelect" class="input">
+            <option value="beep">صوت تنبيه قياسي (Beep)</option>
+            <option value="adhan">صوت أذان قصير</option>
+          </select>
           <button id="addAlarm" class="btn primary" data-i18n="add">إضافة</button>
         </div>
         <ul id="alarmList" class="alarm-list"></ul>
