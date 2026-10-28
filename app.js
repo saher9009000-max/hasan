@@ -9,6 +9,10 @@ const defaultState = {
   theme: "light",
   method: "3",
   adhanUrl: "https://www.islamcan.com/audio/adhan/azan1.mp3",
+  customAdhanData: null,
+  compassDesign: "classic",
+  primaryColor: "#0e7490",
+  manualPrayers: null,
   coords: { lat: 21.4225, lng: 39.8262 },
   hijriOffset: 0,
   declination: 0,
@@ -700,4 +704,71 @@ function init() {
   setInterval(renderCalendar, 60000);
 }
 
-init();
+init();function applyCompassDesign() {
+  const dial = $("#compassDial");
+  if (!dial) return;
+  dial.className = "compass-dial " + state.compassDesign;
+}
+
+function applyPrimaryColor() {
+  if (!state.primaryColor) return;
+  document.documentElement.style.setProperty("--teal", state.primaryColor);
+  document.documentElement.style.setProperty("--teal-2", state.primaryColor);
+}
+
+// معالجة ملف الأذان المحلي من الوسائط
+$("#customAdhanFile")?.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    state.customAdhanData = evt.target.result;
+    saveState();
+    toast("تم تحميل صوت الأذان من الوسائط بنجاح");
+  };
+  reader.readAsDataURL(file);
+});
+
+// تشغيل الأذان (سواء محلي أو من الإنترنت)
+function playAdhan() {
+  const audio = $("#adhanAudio");
+  if (state.customAdhanData) {
+    audio.src = state.customAdhanData;
+  } else {
+    audio.src = state.adhanUrl;
+  }
+  audio.play().catch(() => beep());
+}
+
+// حفظ المواقيت اليدوية
+$("#saveManualPrayer")?.addEventListener("click", () => {
+  const f = $("#mFajr").value;
+  const dh = $("#mDhuhr").value;
+  const a = $("#mAsr").value;
+  const mg = $("#mMaghrib").value;
+  const ish = $("#mIsha").value;
+  
+  if (f || dh || a || mg || ish) {
+    state.manualPrayers = {
+      Fajr: f || (prayerData && prayerData.Fajr),
+      Dhuhr: dh || (prayerData && prayerData.Dhuhr),
+      Asr: a || (prayerData && prayerData.Asr),
+      Maghrib: mg || (prayerData && prayerData.Maghrib),
+      Isha: ish || (prayerData && prayerData.Isha)
+    };
+    saveState();
+    renderPrayer();
+    toast("تم تحديث المواقيت يدوياً");
+  }
+});
+
+$("#compassDesign")?.addEventListener("change", (e) => {
+  state.compassDesign = e.target.value;
+  saveState();
+  applyCompassDesign();
+});
+
+$("#primaryColorPicker")?.addEventListener("input", (e) => {
+  state.primaryColor = e.target.value;
+  applyPrimaryColor();
+});
