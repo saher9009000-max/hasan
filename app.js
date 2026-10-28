@@ -176,6 +176,13 @@ function applyTheme() {
   $("#themeBtn").textContent = state.theme === "dark" ? "☀️" : "🌙";
 }
 
+function applyCompassDesign() {
+  const dial = $("#compassDial");
+  if (dial) {
+    dial.className = `compass-dial ${state.compassDesign || "classic"}`;
+  }
+}
+
 function toast(msg) {
   const el = $("#toast");
   el.textContent = msg;
@@ -342,6 +349,12 @@ const todayKey = (d = new Date()) => {
 };
 
 async function loadPrayerTimes() {
+  if (state.manualPrayers) {
+    prayerData = state.manualPrayers;
+    renderPrayer();
+    scheduleNextAdhan();
+    return;
+  }
   const { lat, lng } = state.coords;
   const cacheKey = `prayer_${todayKey()}_${lat.toFixed(3)}_${lng.toFixed(3)}_${state.method}`;
   const cached = localStorage.getItem(cacheKey);
@@ -645,6 +658,8 @@ function loadSettingsUI() {
   $("#hijriOffset").value = state.hijriOffset;
   $("#declination").value = state.declination;
   $("#adhanSelect").value = state.adhanUrl;
+  if ($("#compassDesign")) $("#compassDesign").value = state.compassDesign || "classic";
+  if ($("#alarmSoundSelect")) $("#alarmSoundSelect").value = state.alarmSound || "beep";
 }
 
 $("#saveSettings").addEventListener("click", () => {
@@ -653,9 +668,12 @@ $("#saveSettings").addEventListener("click", () => {
   state.hijriOffset = Number($("#hijriOffset").value || 0);
   state.declination = Number($("#declination").value || 0);
   state.adhanUrl = $("#adhanSelect").value;
+  if ($("#compassDesign")) state.compassDesign = $("#compassDesign").value;
+  if ($("#alarmSoundSelect")) state.alarmSound = $("#alarmSoundSelect.value" || "beep");
   saveState();
   applyLang();
   applyTheme();
+  applyCompassDesign();
   loadPrayerTimes();
   updateCompass();
   toast(t("saved"));
@@ -685,12 +703,58 @@ function updateFab() {
   $("#fabSleep").textContent = `${t("sleepReminder")}: ${state.sleep}`;
   $("#fabDhikr").textContent = `${t("dailyDhikr")}: ${state.lang === "ar" ? "سبحان الله وبحمده" : "Subhan Allah wa bihamdih"}`;
 }
+// زر تعديل أوقات الصلاة يدوياً
+const manualBtn = document.createElement("button");
+manualBtn.className = "btn small";
+manualBtn.textContent = "تعديل المواقيت يدوياً";
+document.querySelector("#tab-compass .card:nth-of-type(3) .card-head")?.appendChild(manualBtn);
+
+manualBtn.addEventListener("click", () => {
+  const f = prompt("أدخل وقت الفجر (HH:MM):", prayerData?.Fajr || "05:00");
+  const d = prompt("أدخل وقت الظهر (HH:MM):", prayerData?.Dhuhr || "12:00");
+  const a = prompt("أدخل وقت العصر (HH:MM):", prayerData?.Asr || "15:30");
+  const m = prompt("أدخل وقت المغرب (HH:MM):", prayerData?.Maghrib || "18:00");
+  const i = prompt("أدخل وقت العشاء (HH:MM):", prayerData?.Isha || "19:30");
+  if (f && d && a && m && i) {
+    state.manualPrayers = { Fajr: f, Dhuhr: d, Asr: a, Maghrib: m, Isha: i };
+    saveState();
+    loadPrayerTimes();
+    toast("تم تحديث المواقيت يدوياً");
+  }
+});
+
+// زر تنزيل القرآن الكريم (تخزين مؤقت للسورة الحالية)
+const downloadQuranBtn = document.createElement("button");
+downloadQuranBtn.className = "btn";
+downloadQuranBtn.textContent = "تنزيل السورة (ملف صوتي)";
+document.querySelector("#surahSelect")?.parentNode.appendChild(downloadQuranBtn);
+
+downloadQuranBtn.addEventListener("click", async () => {
+  const n = Number($("#surahSelect").value);
+  const url = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${n}.mp3`;
+  toast("جاري تجهيز وتنزيل السورة...");
+  try {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = `surah_${n}.mp3`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    toast("تم تنزيل السورة بنجاح");
+  } catch (e) {
+    toast("تعذر تنزيل السورة");
+  }
+});
 
 /* ========== Init ========== */
 function init() {
   applyTheme();
   loadSettingsUI();
   applyLang();
+  applyCompassDesign();
   $("#coords").textContent = `${state.coords.lat.toFixed(4)}, ${state.coords.lng.toFixed(4)}`;
   updateCompass();
   loadPrayerTimes();
@@ -771,4 +835,81 @@ $("#compassDesign")?.addEventListener("change", (e) => {
 $("#primaryColorPicker")?.addEventListener("input", (e) => {
   state.primaryColor = e.target.value;
   applyPrimaryColor();
+});
+// تعبئة قائمة السور الـ 114 للقرآن الكريم كاملاً
+const allSurahs = [
+  "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
+  "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه",
+  "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم",
+  "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص", "الزمر", "غافر",
+  "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد", "الفتح", "الحجرات", "ق",
+  "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "حديد", "المجادلة", "الحشر", "الممتحنة",
+  "الصف", "الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج",
+  "نوح", "الجن", "المزمل", "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس",
+  "التكوير", "الانفطار", "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد",
+  "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات",
+  "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر",
+  "المسد", "الإخلاص", "الفلق", "الناس"
+];
+
+function initSurahSelect() {
+  const select = $("#surahSelect");
+  if (!select) return;
+  select.innerHTML = "";
+  allSurahs.exports = allSurahs.forEach((name, index) => {
+    const opt = document.createElement("option");
+    opt.value = index + 1;
+    opt.textContent = `${index + 1}. ${name}`;
+    select.appendChild(opt);
+  });
+}
+
+// التحكم في عرض صندوق تعديل المواقيت يدوياً
+$("#toggleManualPrayer")?.addEventListener("click", () => {
+  $("#manualPrayerBox").classList.toggle("hidden");
+});
+
+// حفظ المواقيت اليدوية
+$("#saveManualPrayer")?.addEventListener("click", () => {
+  const f = $("#mFajr").value;
+  const dh = $("#mDhuhr").value;
+  const a = $("#mAsr").value;
+  const mg = $("#mMaghrib").value;
+  const ish = $("#mIsha").value;
+
+  if (f || dh || a || mg || ish) {
+    state.manualPrayers = {
+      Fajr: f || (prayerData && prayerData.Fajr),
+      Dhuhr: dh || (prayerData && prayerData.Dhuhr),
+      Asr: a || (prayerData && prayerData.Asr),
+      Maghrib: mg || (prayerData && prayerData.Maghrib),
+      Isha: ish || (prayerData && prayerData.Isha)
+    };
+    saveState();
+    renderPrayer();
+    toast("تم تحديث وحفظ المواقيت يدوياً");
+  } else {
+    toast("يرجى إدخال وقت واحد على الأقل");
+  }
+});
+
+// زر تنزيل السورة الحالية من القرآن الكريم
+$("#downloadSurahBtn")?.addEventListener("click", async () => {
+  const n = Number($("#surahSelect").value);
+  const url = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${n}.mp3`;
+  toast("جاري تجهيز وتنزيل السورة...");
+  try {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = `surah_${n}_${allSurahs[n - 1]}.mp3`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    toast("تم تنزيل السورة بنجاح");
+  } catch (e) {
+    toast("تعذر تنزيل السورة");
+  }
 });
