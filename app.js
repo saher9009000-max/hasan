@@ -178,9 +178,14 @@ function applyTheme() {
 
 function applyCompassDesign() {
   const dial = $("#compassDial");
-  if (dial) {
-    dial.className = `compass-dial ${state.compassDesign || "classic"}`;
-  }
+  if (!dial) return;
+  dial.className = "compass-dial " + (state.compassDesign || "classic");
+}
+
+function applyPrimaryColor() {
+  if (!state.primaryColor) return;
+  document.documentElement.style.setProperty("--teal", state.primaryColor);
+  document.documentElement.style.setProperty("--teal-2", state.primaryColor);
 }
 
 function toast(msg) {
@@ -453,7 +458,11 @@ function scheduleNextAdhan() {
 
 function playAdhan() {
   const audio = $("#adhanAudio");
-  audio.src = state.adhanUrl;
+  if (state.customAdhanData) {
+    audio.src = state.customAdhanData;
+  } else {
+    audio.src = state.adhanUrl;
+  }
   audio.play().catch(() => beep());
 }
 
@@ -574,6 +583,33 @@ $("#resetAthkar").addEventListener("click", () => {
 });
 
 /* ========== Quran ========== */
+const allSurahs = [
+  "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
+  "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه",
+  "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم",
+  "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص", "الزمر", "غافر",
+  "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد", "الفتح", "الحجرات", "ق",
+  "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "حديد", "المجادلة", "الحشر", "الممتحنة",
+  "الصف", "الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج",
+  "نوح", "الجن", "المزمل", "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس",
+  "التكوير", "الانفطار", "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد",
+  "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات",
+  "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر",
+  "المسد", "الإخلاص", "الفلق", "الناس"
+];
+
+function initSurahSelect() {
+  const select = $("#surahSelect");
+  if (!select) return;
+  select.innerHTML = "";
+  allSurahs.forEach((name, index) => {
+    const opt = document.createElement("option");
+    opt.value = index + 1;
+    opt.textContent = `${index + 1}. ${name}`;
+    select.appendChild(opt);
+  });
+}
+
 function renderFavorites() {
   const box = $("#favList");
   if (!box) return;
@@ -614,14 +650,27 @@ $("#readSurah").addEventListener("click", () => {
 });
 
 $("#playSurah").addEventListener("click", () => {
-  const n = Number($("#surahSelect.value"));
+  const n = Number($("#surahSelect").value);
   const audio = $("#quranAudio");
   audio.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${n}.mp3`;
   audio.play().catch(() => toast("تعذر تشغيل الصوت"));
 });
+
 $("#downloadQuranPdfBtn")?.addEventListener("click", () => {
   window.open("https://quran.com/download", "_blank");
   toast("جاري فتح صفحة تحميل المصحف الشريف PDF...");
+});
+
+$("#downloadSurahBtn")?.addEventListener("click", () => {
+  const n = Number($("#surahSelect").value);
+  const url = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${n}.mp3`;
+  window.open(url, "_blank");
+  toast("جاري فتح وتنزيل السورة الحالية...");
+});
+
+$("#downloadFullQuranBtn")?.addEventListener("click", () => {
+  window.open("https://www.mp3quran.net/afs", "_blank");
+  toast("جاري فتح صفحة المصحف المرتل كاملاً للتحميل...");
 });
 
 $("#favSurah").addEventListener("click", () => {
@@ -684,7 +733,7 @@ function checkAlarms() {
   if (changed) saveState();
 }
 
-/* ========== Settings ========== */
+/* ========== Settings & Manual Prayer ========== */
 function loadSettingsUI() {
   $("#langSelect").value = state.lang;
   $("#methodSelect").value = state.method;
@@ -693,6 +742,7 @@ function loadSettingsUI() {
   $("#adhanSelect").value = state.adhanUrl;
   if ($("#compassDesign")) $("#compassDesign").value = state.compassDesign || "classic";
   if ($("#alarmSoundSelect")) $("#alarmSoundSelect").value = state.alarmSound || "beep";
+  if ($("#primaryColorPicker")) $("#primaryColorPicker").value = state.primaryColor || "#0e7490";
 }
 
 $("#saveSettings").addEventListener("click", () => {
@@ -707,6 +757,7 @@ $("#saveSettings").addEventListener("click", () => {
   applyLang();
   applyTheme();
   applyCompassDesign();
+  applyPrimaryColor();
   loadPrayerTimes();
   updateCompass();
   toast(t("saved"));
@@ -718,172 +769,10 @@ $("#clearData").addEventListener("click", () => {
   location.reload();
 });
 
-/* ========== FAB ========== */
-$("#fab").addEventListener("click", () => {
-  $("#fabPanel").classList.toggle("hidden");
-});// زر تنزيل القرآن كاملاً (114 سورة)
-$("#downloadFullQuranBtn")?.addEventListener("click", () => {
-  window.open("https://www.mp3quran.net/afs", "_blank");
-  toast("جاري فتح صفحة المصحف المرتل كاملاً للتحميل...");
-});
-
-
-function updateFab() {
-  const panel = $("#fabPanel");
-  if (!panel) return;
-  if (nextPrayerObj) {
-    const diff = Math.max(0, nextPrayerObj.date - new Date());
-    const mins = Math.floor(diff / 60000);
-    $("#fabNext").textContent = `${t("next")}: ${pName(nextPrayerObj.key)} — ${mins} د`;
-  } else {
-    $("#fabNext").textContent = `${t("next")}: —`;
-  }
-  $("#fabSleep").textContent = `${t("sleepReminder")}: ${state.sleep}`;
-  $("#fabDhikr").textContent = `${t("dailyDhikr")}: ${state.lang === "ar" ? "سبحان الله وبحمده" : "Subhan Allah wa bihamdih"}`;
-}
-// زر تعديل أوقات الصلاة يدوياً
-const manualBtn = document.createElement("button");
-manualBtn.className = "btn small";
-manualBtn.textContent = "تعديل المواقيت يدوياً";
-document.querySelector("#tab-compass .card:nth-of-type(3) .card-head")?.appendChild(manualBtn);
-
-manualBtn.addEventListener("click", () => {
-  const f = prompt("أدخل وقت الفجر (HH:MM):", prayerData?.Fajr || "05:00");
-  const d = prompt("أدخل وقت الظهر (HH:MM):", prayerData?.Dhuhr || "12:00");
-  const a = prompt("أدخل وقت العصر (HH:MM):", prayerData?.Asr || "15:30");
-  const m = prompt("أدخل وقت المغرب (HH:MM):", prayerData?.Maghrib || "18:00");
-  const i = prompt("أدخل وقت العشاء (HH:MM):", prayerData?.Isha || "19:30");
-  if (f && d && a && m && i) {
-    state.manualPrayers = { Fajr: f, Dhuhr: d, Asr: a, Maghrib: m, Isha: i };
-    saveState();
-    loadPrayerTimes();
-    toast("تم تحديث المواقيت يدوياً");
-  }
-});
-
-
-/* ========== Init ========== */
-function init() {
-  applyTheme();
-  loadSettingsUI();
-  applyLang();
-  applyCompassDesign();
-  $("#coords").textContent = `${state.coords.lat.toFixed(4)}, ${state.coords.lng.toFixed(4)}`;
-  updateCompass();
-  loadPrayerTimes();
-  initSurahSelect();
-  renderAlarms();
-  renderFavorites();
-  updateFab();
-
-  setInterval(updateCountdown, 1000);
-  setInterval(updateFab, 30000);
-  setInterval(checkAlarms, 30000);
-  setInterval(renderCalendar, 60000);
-}
-
-init();function applyCompassDesign() {
-  const dial = $("#compassDial");
-  if (!dial) return;
-  dial.className = "compass-dial " + state.compassDesign;
-}
-
-function applyPrimaryColor() {
-  if (!state.primaryColor) return;
-  document.documentElement.style.setProperty("--teal", state.primaryColor);
-  document.documentElement.style.setProperty("--teal-2", state.primaryColor);
-}
-
-// معالجة ملف الأذان المحلي من الوسائط
-$("#customAdhanFile")?.addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(evt) {
-    state.customAdhanData = evt.target.result;
-    saveState();
-    toast("تم تحميل صوت الأذان من الوسائط بنجاح");
-  };
-  reader.readAsDataURL(file);
-});
-
-// تشغيل الأذان (سواء محلي أو من الإنترنت)
-function playAdhan() {
-  const audio = $("#adhanAudio");
-  if (state.customAdhanData) {
-    audio.src = state.customAdhanData;
-  } else {
-    audio.src = state.adhanUrl;
-  }
-  audio.play().catch(() => beep());
-}
-
-// حفظ المواقيت اليدوية
-$("#saveManualPrayer")?.addEventListener("click", () => {
-  const f = $("#mFajr").value;
-  const dh = $("#mDhuhr").value;
-  const a = $("#mAsr").value;
-  const mg = $("#mMaghrib").value;
-  const ish = $("#mIsha").value;
-  
-  if (f || dh || a || mg || ish) {
-    state.manualPrayers = {
-      Fajr: f || (prayerData && prayerData.Fajr),
-      Dhuhr: dh || (prayerData && prayerData.Dhuhr),
-      Asr: a || (prayerData && prayerData.Asr),
-      Maghrib: mg || (prayerData && prayerData.Maghrib),
-      Isha: ish || (prayerData && prayerData.Isha)
-    };
-    saveState();
-    renderPrayer();
-    toast("تم تحديث المواقيت يدوياً");
-  }
-});
-
-$("#compassDesign")?.addEventListener("change", (e) => {
-  state.compassDesign = e.target.value;
-  saveState();
-  applyCompassDesign();
-});
-
-$("#primaryColorPicker")?.addEventListener("input", (e) => {
-  state.primaryColor = e.target.value;
-  applyPrimaryColor();
-});
-// تعبئة قائمة السور الـ 114 للقرآن الكريم كاملاً
-const allSurahs = [
-  "الفاتحة", "البقرة", "آل عمران", "النساء", "المائدة", "الأنعام", "الأعراف", "الأنفال", "التوبة", "يونس",
-  "هود", "يوسف", "الرعد", "إبراهيم", "الحجر", "النحل", "الإسراء", "الكهف", "مريم", "طه",
-  "الأنبياء", "الحج", "المؤمنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنكبوت", "الروم",
-  "لقمان", "السجدة", "الأحزاب", "سبأ", "فاطر", "يس", "الصافات", "ص", "الزمر", "غافر",
-  "فصلت", "الشورى", "الزخرف", "الدخان", "الجاثية", "الأحقاف", "محمد", "الفتح", "الحجرات", "ق",
-  "الذاريات", "الطور", "النجم", "القمر", "الرحمن", "الواقعة", "حديد", "المجادلة", "الحشر", "الممتحنة",
-  "الصف", "الجمعة", "المنافقون", "التغابن", "الطلاق", "التحريم", "الملك", "القلم", "الحاقة", "المعارج",
-  "نوح", "الجن", "المزمل", "المدثر", "القيامة", "الإنسان", "المرسلات", "النبأ", "النازعات", "عبس",
-  "التكوير", "الانفطار", "المطففين", "الانشقاق", "البروج", "الطارق", "الأعلى", "الغاشية", "الفجر", "البلد",
-  "الشمس", "الليل", "الضحى", "الشرح", "التين", "العلق", "القدر", "البينة", "الزلزلة", "العاديات",
-  "القارعة", "التكاثر", "العصر", "الهمزة", "الفيل", "قريش", "الماعون", "الكوثر", "الكافرون", "النصر",
-  "المسد", "الإخلاص", "الفلق", "الناس"
-];
-
-function initSurahSelect() {
-  const select = $("#surahSelect");
-  if (!select) return;
-  select.innerHTML = "";
-  allSurahs.forEach((name, index) => {
-    const opt = document.createElement("option");
-    opt.value = index + 1;
-    opt.textContent = `${index + 1}. ${name}`;
-    select.appendChild(opt);
-  });
-}
-
-// التحكم في عرض صندوق تعديل المواقيت يدوياً
 $("#toggleManualPrayer")?.addEventListener("click", () => {
   $("#manualPrayerBox").classList.toggle("hidden");
 });
 
-// حفظ المواقيت اليدوية
 $("#saveManualPrayer")?.addEventListener("click", () => {
   const f = $("#mFajr").value;
   const dh = $("#mDhuhr").value;
@@ -907,43 +796,67 @@ $("#saveManualPrayer")?.addEventListener("click", () => {
   }
 });
 
-// تم حذف كود تنزيل السورة الصوتية بناءً على الطلب
-// تنزيل القرآن كاملاً (جميع السور الـ 114 تباعاً)
-$("#downloadFullQuranBtn")?.addEventListener("click", async () => {
-  if (!confirm("هل تريد تنزيل جميع سور القرآن الكريم (114 سورة)؟ قد يقوم المتصفح بحظر التحميلات المتعددة، يرجى السماح بها.")) return;
-  toast("جاري بدء تنزيل القرآن كاملاً...");
-  
-  for (let i = 1; i <= 114; i++) {
-    const url = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${i}.mp3`;
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `surah_${i}_${allSurahs[i - 1]}.mp3`;
-    a.target = "_blank";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    
-    await new Promise(r => setTimeout(r, 400));
+$("#customAdhanFile")?.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    state.customAdhanData = evt.target.result;
+    saveState();
+    toast("تم تحميل صوت الأذان من الوسائط بنجاح");
+  };
+  reader.readAsDataURL(file);
+});
+
+$("#compassDesign")?.addEventListener("change", (e) => {
+  state.compassDesign = e.target.value;
+  saveState();
+  applyCompassDesign();
+});
+
+$("#primaryColorPicker")?.addEventListener("input", (e) => {
+  state.primaryColor = e.target.value;
+  applyPrimaryColor();
+});
+
+/* ========== FAB ========== */
+$("#fab").addEventListener("click", () => {
+  $("#fabPanel").classList.toggle("hidden");
+});
+
+function updateFab() {
+  const panel = $("#fabPanel");
+  if (!panel) return;
+  if (nextPrayerObj) {
+    const diff = Math.max(0, nextPrayerObj.date - new Date());
+    const mins = Math.floor(diff / 60000);
+    $("#fabNext").textContent = `${t("next")}: ${pName(nextPrayerObj.key)} — ${mins} د`;
+  } else {
+    $("#fabNext").textContent = `${t("next")}: —`;
   }
-  
-  toast("تم إرسال طلبات تنزيل السور");
-});
-// تحديث أزرار التنزيل لتعمل بشكل مباشر
-$("#downloadSurahBtn")?.replaceWith($("#downloadSurahBtn").clone(true));
-$("#downloadFullQuranBtn")?.replaceWith($("#downloadFullQuranBtn").clone(true));
+  $("#fabSleep").textContent = `${t("sleepReminder")}: ${state.sleep}`;
+  $("#fabDhikr").textContent = `${t("dailyDhikr")}: ${state.lang === "ar" ? "سبحان الله وبحمده" : "Subhan Allah wa bihamdih"}`;
+}
 
-$("#downloadSurahBtn")?.addEventListener("click", () => {
-  const n = Number($("#surahSelect").value);
-  const url = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${n}.mp3`;
-  window.open(url, "_blank");
-  toast("جاري فتح السورة...");
-});
+/* ========== Init ========== */
+function init() {
+  applyTheme();
+  loadSettingsUI();
+  applyLang();
+  applyCompassDesign();
+  applyPrimaryColor();
+  $("#coords").textContent = `${state.coords.lat.toFixed(4)}, ${state.coords.lng.toFixed(4)}`;
+  updateCompass();
+  loadPrayerTimes();
+  initSurahSelect();
+  renderAlarms();
+  renderFavorites();
+  updateFab();
 
-$("#downloadFullQuranBtn")?.addEventListener("click", () => {
-  alert("عذراً، تمنع متصفحات الهواتف المحمولة تنزيل 114 ملفاً دفعة واحدة تلقائياً حمايةً للجهاز. يمكنك تنزيل كل سورة تحتاجها عبر زر (تنزيل السورة الحالية).");
-});
-// زر تنزيل القرآن كاملاً من مصدر موثوق يناسب المتصفحات والهواتف
-$("#downloadFullQuranBtn")?.addEventListener("click", () => {
-  window.open("https://www.mp3quran.net/afs", "_blank");
-  toast("جاري فتح صفحة المصحف المرتل كاملاً للتحميل...");
-});
+  setInterval(updateCountdown, 1000);
+  setInterval(updateFab, 30000);
+  setInterval(checkAlarms, 30000);
+  setInterval(renderCalendar, 60000);
+}
+
+init();
