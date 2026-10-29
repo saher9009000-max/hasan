@@ -669,7 +669,7 @@ $("#saveSettings").addEventListener("click", () => {
   state.declination = Number($("#declination").value || 0);
   state.adhanUrl = $("#adhanSelect").value;
   if ($("#compassDesign")) state.compassDesign = $("#compassDesign").value;
-  if ($("#alarmSoundSelect")) state.alarmSound = $("#alarmSoundSelect.value" || "beep");
+  if ($("#alarmSoundSelect")) state.alarmSound = $("#alarmSoundSelect").value || "beep";
   saveState();
   applyLang();
   applyTheme();
@@ -688,7 +688,12 @@ $("#clearData").addEventListener("click", () => {
 /* ========== FAB ========== */
 $("#fab").addEventListener("click", () => {
   $("#fabPanel").classList.toggle("hidden");
+});// زر تنزيل القرآن كاملاً (114 سورة)
+$("#downloadFullQuranBtn")?.addEventListener("click", () => {
+  window.open("https://www.mp3quran.net/afs", "_blank");
+  toast("جاري فتح صفحة المصحف المرتل كاملاً للتحميل...");
 });
+
 
 function updateFab() {
   const panel = $("#fabPanel");
