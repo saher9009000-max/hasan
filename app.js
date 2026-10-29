@@ -584,8 +584,37 @@ function renderFavorites() {
   box.textContent = `${t("favorites")}: ${state.favorites.join(", ")}`;
 }
 
-$("#playSurah").addEventListener("click", () => {
+async function loadSurahText(surahNum) {
+  const textView = $("#quranTextView");
+  if (!textView) return;
+  textView.textContent = "جاري تحميل الآيات للقراءة...";
+  try {
+    const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNum}`);
+    const data = await res.json();
+    if (data && data.data && data.data.ayahs) {
+      let html = `<div style="font-weight: bold; text-align: center; margin-bottom: 8px; color: var(--teal);">${data.data.name} - ${data.data.englishName} (${data.data.revelationType === 'Meccan' ? 'مكية' : 'مدنية'})</div>`;
+      if (surahNum !== 9 && surahNum !== 1) {
+        html += `<div style="text-align: center; margin-bottom: 10px; font-weight: bold;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>`;
+      }
+      data.data.ayahs.forEach((ayah) => {
+        html += `<span style="display:inline;">${ayah.text} ﴿${ayah.numberInSurah}﴾ </span>`;
+      });
+      textView.innerHTML = html;
+    } else {
+      textView.textContent = "تعذر تحميل نص السورة.";
+    }
+  } catch (e) {
+    textView.textContent = "حدث خطأ أثناء جلب النص.";
+  }
+}
+
+$("#readSurah").addEventListener("click", () => {
   const n = Number($("#surahSelect").value);
+  loadSurahText(n);
+});
+
+$("#playSurah").addEventListener("click", () => {
+  const n = Number($("#surahSelect.value") || $("#surahSelect").value);
   const audio = $("#quranAudio");
   audio.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${n}.mp3`;
   audio.play().catch(() => toast("تعذر تشغيل الصوت"));
