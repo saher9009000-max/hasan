@@ -178,3 +178,4 @@ main{max-width:760px;margin:0 auto;padding:12px}
 .compass-dial.neon .dir {
   color: #059669;
 }
+.hidden { display: none !important; }
