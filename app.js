@@ -614,10 +614,14 @@ $("#readSurah").addEventListener("click", () => {
 });
 
 $("#playSurah").addEventListener("click", () => {
-  const n = Number($("#surahSelect.value") || $("#surahSelect").value);
+  const n = Number($("#surahSelect.value"));
   const audio = $("#quranAudio");
   audio.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${n}.mp3`;
   audio.play().catch(() => toast("تعذر تشغيل الصوت"));
+});
+$("#downloadQuranPdfBtn")?.addEventListener("click", () => {
+  window.open("https://quran.com/download", "_blank");
+  toast("جاري فتح صفحة تحميل المصحف الشريف PDF...");
 });
 
 $("#favSurah").addEventListener("click", () => {
