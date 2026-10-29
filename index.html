@@ -130,19 +130,14 @@
           <button id="favSurah" class="btn" data-i18n="favorite">مفضلة</button>
         </div>
         <div class="btn-row">
-          <button id="downloadSurahBtn" class="btn small">📥 تنزيل السورة</button>
-                <div class="btn-row">
-          <button id="downloadSurahBtn" class="btn small">📥 تنزيل السورة</button>
-          <button id="downloadFullQuranBtn" class="btn small danger">📥 تنزيل المصحف كاملاً</button>
           <button id="downloadQuranPdfBtn" class="btn small primary">📥 تنزيل القرآن PDF</button>
-        </div>
-
+          <button id="downloadSurahBtn" class="btn small">📥 تنزيل السورة الحالية</button>
+          <button id="downloadFullQuranBtn" class="btn small">📥 تنزيل القرآن كاملاً</button>
         </div>
         <audio id="quranAudio" controls class="audio"></audio>
         <div id="quranTextView" class="quran-text-view" style="max-height: 300px; overflow-y: auto; margin-top: 12px; padding: 10px; background: var(--bg); border-radius: 12px; line-height: 2.2; font-size: 1.1rem; text-align: right;"></div>
         <div id="favList" class="muted" style="margin-top: 8px;"></div>
       </div>
-
 
       <div class="card">
         <h3 data-i18n="alarms">المنبهات</h3>
@@ -169,69 +164,4 @@
           <select id="langSelect" class="input">
             <option value="ar">العربية</option>
             <option value="en">English</option>
-          </select>
-        </label>
-
-        <label class="field"><span data-i18n="method">طريقة حساب المواقيت</span>
-          <select id="methodSelect" class="input">
-            <option value="3">رابطة العالم الإسلامي</option>
-            <option value="2">ISNA</option>
-            <option value="4">أم القرى</option>
-            <option value="5">الهيئة المصرية</option>
-            <option value="1">كراتشي</option>
-          </select>
-        </label>
-
-                <label class="field"><span data-i18n="hijriOffset">فارق التاريخ الهجري (أيام)</span>
-          <input type="number" id="hijriOffset" class="input" value="0" />
-        </label>
-
-        <label class="field"><span data-i18n="declination">تعويض الانحراف المغناطيسي (درجات)</span>
-          <input type="number" id="declination" class="input" value="0" />
-        </label>
-
-        <label class="field"><span>تصميم البوصلة</span>
-          <select id="compassDesign" class="input">
-            <option value="classic">كلاسيكي</option>
-            <option value="gold">ذهبي</option>
-            <option value="neon">نيون أخضر</option>
-          </select>
-        </label>
-
-        <label class="field"><span>لون التطبيق الأساسي</span>
-          <input type="color" id="primaryColorPicker" value="#0e7490" class="input" style="height: 42px; padding: 4px;" />
-        </label>
-
-        <div class="btn-row">
-          <button id="saveSettings" class="btn primary" data-i18n="save">حفظ</button>
-          <button id="clearData" class="btn danger" data-i18n="clear">حذف البيانات المحلية</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3 data-i18n="ux">تجربة المستخدم</h3>
-        <ul class="ux-list">
-          <li data-i18n="ux1">بوصلة حية مع معايرة تلقائية ومرشح تنعيم.</li>
-          <li data-i18n="ux2">مواقيت محسوبة عبر Aladhan مع تخزين مؤقت للعمل دون اتصال جزئي.</li>
-          <li data-i18n="ux3">تقويم هجري/ميلادي، أذكار، قرآن، منبهات، وحاسبة عمر.</li>
-          <li data-i18n="ux4">وضع ليلي، لغة عربي/إنجليزي، وزر عائم سريع.</li>
-        </ul>
-        <p class="muted" style="margin-top:10px" data-i18n="privacy">الخصوصية: تُعالج المستشعرات والموقع محليًا، ولا تُرسل إلا إحداثياتك إلى API المواقيت عند الحاجة.</p>
-      </div>
-    </section>
-  </main>
-
-  <audio id="adhanAudio" preload="auto"></audio>
-
-  <button id="fab" class="fab">🧭</button>
-  <div id="fabPanel" class="fab-panel hidden">
-    <div id="fabNext">الصلاة القادمة: —</div>
-    <div id="fabSleep">تذكير النوم: 22:30</div>
-    <div id="fabDhikr">ذكرك اليومي: سبحان الله وبحمده</div>
-  </div>
-
-  <div id="toast" class="toast hidden"></div>
-
-  <script src="app.js"></script>
-</body>
-</html>
+          </
