@@ -895,49 +895,35 @@ $("#saveManualPrayer")?.addEventListener("click", () => {
 });
 
 // زر تنزيل السورة الحالية من القرآن الكريم
-$("#downloadSurahBtn")?.addEventListener("click", async () => {
+$("#downloadSurahBtn")?.addEventListener("click", () => {
   const n = Number($("#surahSelect").value);
   const url = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${n}.mp3`;
-  toast("جاري تجهيز وتنزيل السورة...");
-  try {
-    const res = await fetch(url);
-    const blob = await res.blob();
-    const blobUrl = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = blobUrl;
-    a.download = `surah_${n}_${allSurahs[n - 1]}.mp3`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    toast("تم تنزيل السورة بنجاح");
-  } catch (e) {
-    toast("تعذر تنزيل السورة");
-  }
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `surah_${n}_${allSurahs[n - 1]}.mp3`;
+  a.target = "_blank";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  toast("جاري بدء تنزيل السورة...");
 });
 // تنزيل القرآن كاملاً (جميع السور الـ 114 تباعاً)
 $("#downloadFullQuranBtn")?.addEventListener("click", async () => {
-  if (!confirm("هل تريد تنزيل جميع سور القرآن الكريم (114 سورة)؟ قد يستغرق ذلك بعض الوقت ويعتمد على سرعة المتصفح.")) return;
+  if (!confirm("هل تريد تنزيل جميع سور القرآن الكريم (114 سورة)؟ قد يقوم المتصفح بحظر التحميلات المتعددة، يرجى السماح بها.")) return;
   toast("جاري بدء تنزيل القرآن كاملاً...");
   
   for (let i = 1; i <= 114; i++) {
-    try {
-      const url = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${i}.mp3`;
-      const res = await fetch(url);
-      const blob = await res.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = blobUrl;
-      a.download = `surah_${i}_${allSurahs[i - 1]}.mp3`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      
-      // مهلة زمنية قصيرة بين كل تحميل لتجنب حظر التحميلات المتعددة في المتصفح
-      await new Promise(r => setTimeout(r, 600));
-    } catch (e) {
-      console.error(`تعذر تنزيل السورة رقم ${i}`);
-    }
+    const url = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${i}.mp3`;
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `surah_${i}_${allSurahs[i - 1]}.mp3`;
+    a.target = "_blank";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    
+    await new Promise(r => setTimeout(r, 400));
   }
   
-  toast("تم الانتهاء من تنزيل السور المتاحة");
+  toast("تم إرسال طلبات تنزيل السور");
 });
