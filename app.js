@@ -914,3 +914,30 @@ $("#downloadSurahBtn")?.addEventListener("click", async () => {
     toast("تعذر تنزيل السورة");
   }
 });
+// تنزيل القرآن كاملاً (جميع السور الـ 114 تباعاً)
+$("#downloadFullQuranBtn")?.addEventListener("click", async () => {
+  if (!confirm("هل تريد تنزيل جميع سور القرآن الكريم (114 سورة)؟ قد يستغرق ذلك بعض الوقت ويعتمد على سرعة المتصفح.")) return;
+  toast("جاري بدء تنزيل القرآن كاملاً...");
+  
+  for (let i = 1; i <= 114; i++) {
+    try {
+      const url = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${i}.mp3`;
+      const res = await fetch(url);
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = `surah_${i}_${allSurahs[i - 1]}.mp3`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      
+      // مهلة زمنية قصيرة بين كل تحميل لتجنب حظر التحميلات المتعددة في المتصفح
+      await new Promise(r => setTimeout(r, 600));
+    } catch (e) {
+      console.error(`تعذر تنزيل السورة رقم ${i}`);
+    }
+  }
+  
+  toast("تم الانتهاء من تنزيل السور المتاحة");
+});
