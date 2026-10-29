@@ -758,6 +758,7 @@ function init() {
   $("#coords").textContent = `${state.coords.lat.toFixed(4)}, ${state.coords.lng.toFixed(4)}`;
   updateCompass();
   loadPrayerTimes();
+  initSurahSelect();
   renderAlarms();
   renderFavorites();
   updateFab();
@@ -856,7 +857,7 @@ function initSurahSelect() {
   const select = $("#surahSelect");
   if (!select) return;
   select.innerHTML = "";
-  allSurahs.exports = allSurahs.forEach((name, index) => {
+  allSurahs.forEach((name, index) => {
     const opt = document.createElement("option");
     opt.value = index + 1;
     opt.textContent = `${index + 1}. ${name}`;
