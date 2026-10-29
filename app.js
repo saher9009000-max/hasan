@@ -941,3 +941,8 @@ $("#downloadSurahBtn")?.addEventListener("click", () => {
 $("#downloadFullQuranBtn")?.addEventListener("click", () => {
   alert("عذراً، تمنع متصفحات الهواتف المحمولة تنزيل 114 ملفاً دفعة واحدة تلقائياً حمايةً للجهاز. يمكنك تنزيل كل سورة تحتاجها عبر زر (تنزيل السورة الحالية).");
 });
+// زر تنزيل القرآن كاملاً من مصدر موثوق يناسب المتصفحات والهواتف
+$("#downloadFullQuranBtn")?.addEventListener("click", () => {
+  window.open("https://www.mp3quran.net/afs", "_blank");
+  toast("جاري فتح صفحة المصحف المرتل كاملاً للتحميل...");
+});
