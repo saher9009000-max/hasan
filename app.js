@@ -927,3 +927,17 @@ $("#downloadFullQuranBtn")?.addEventListener("click", async () => {
   
   toast("تم إرسال طلبات تنزيل السور");
 });
+// تحديث أزرار التنزيل لتعمل بشكل مباشر
+$("#downloadSurahBtn")?.replaceWith($("#downloadSurahBtn").clone(true));
+$("#downloadFullQuranBtn")?.replaceWith($("#downloadFullQuranBtn").clone(true));
+
+$("#downloadSurahBtn")?.addEventListener("click", () => {
+  const n = Number($("#surahSelect").value);
+  const url = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${n}.mp3`;
+  window.open(url, "_blank");
+  toast("جاري فتح السورة...");
+});
+
+$("#downloadFullQuranBtn")?.addEventListener("click", () => {
+  alert("عذراً، تمنع متصفحات الهواتف المحمولة تنزيل 114 ملفاً دفعة واحدة تلقائياً حمايةً للجهاز. يمكنك تنزيل كل سورة تحتاجها عبر زر (تنزيل السورة الحالية).");
+});
