@@ -82,13 +82,13 @@
         </div>
         <div id="manualPrayerBox" class="hidden" style="margin-top: 10px; display: grid; gap: 8px;">
           <div class="btn-row">
-            <input type="time" id="mFajr" class="input" placeholder="الفجر" />
-            <input type="time" id="mDhuhr" class="input" placeholder="الظهر" />
-            <input type="time" id="mAsr" class="input" placeholder="العصر" />
+            <input type="time" id="mFajr" class="input" />
+            <input type="time" id="mDhuhr" class="input" />
+            <input type="time" id="mAsr" class="input" />
           </div>
           <div class="btn-row">
-            <input type="time" id="mMaghrib" class="input" placeholder="المغرب" />
-            <input type="time" id="mIsha" class="input" placeholder="العشاء" />
+            <input type="time" id="mMaghrib" class="input" />
+            <input type="time" id="mIsha" class="input" />
             <button id="saveManualPrayer" class="btn primary small">حفظ المواقيت اليدوية</button>
           </div>
         </div>
@@ -129,7 +129,7 @@
           <button id="favSurah" class="btn" data-i18n="favorite">مفضلة</button>
         </div>
         <div class="btn-row">
-          <button id="downloadSurahBtn" class="btn small">تنزيل السورة الحالية</button>
+          <button id="downloadSurahBtn" class="btn primary">📥 تنزيل السورة الحالية</button>
         </div>
         <audio id="quranAudio" controls class="audio"></audio>
         <div id="favList" class="muted"></div>
@@ -173,54 +173,4 @@
           </select>
         </label>
 
-        <label class="field"><span data-i18n="hijriOffset">فارق التاريخ الهجري (أيام)</span>
-          <input type="number" id="hijriOffset" class="input" min="-3" max="3" value="0" />
-        </label>
-
-        <label class="field"><span data-i18n="declination">تعويض الانحراف المغناطيسي (درجات)</span>
-          <input type="number" id="declination" class="input" min="-30" max="30" step="0.1" value="0" />
-        </label>
-
-        <label class="field"><span>تصميم البوصلة</span>
-          <select id="compassDesign" class="input">
-            <option value="classic">كلاسيكي (أزرق)</option>
-            <option value="gold">ذهبي ملكي</option>
-            <option value="neon">نيون عصري</option>
-          </select>
-        </label>
-
-        <label class="field"><span>لون الموقع الرئيسي</span>
-          <input type="color" id="primaryColorPicker" class="input" value="#0e7490" style="height:42px;padding:4px;" />
-        </label>
-
-        <div class="btn-row">
-          <button id="saveSettings" class="btn primary" data-i18n="save">حفظ</button>
-          <button id="clearData" class="btn danger" data-i18n="clear">حذف البيانات المحلية</button>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3 data-i18n="ux">تجربة المستخدم</h3>
-        <ul class="ux-list">
-          <li data-i18n="ux1">بوصلة حية مع معايرة تلقائية ومرشح تنعيم.</li>
-          <li data-i18n="ux2">مواقيت محسوبة عبر Aladhan مع تخزين مؤقت للعمل دون اتصال جزئي.</li>
-          <li data-i18n="ux3">تقويم هجري/ميلادي، أذكار، قرآن، منبهات، وحاسبة عمر.</li>
-          <li data-i18n="ux4">وضع ليلي، لغة عربي/إنجليزي، وزر عائم سريع.</li>
-        </ul>
-        <p class="muted" data-i18n="privacy">الخصوصية: تُعالج المستشعرات والموقع محليًا، ولا تُرسل إلا إحداثياتك إلى API المواقيت عند الحاجة.</p>
-      </div>
-    </section>
-  </main>
-
-  <button id="fab" class="fab" aria-label="Quick">💡</button>
-  <div id="fabPanel" class="fab-panel hidden">
-    <div id="fabNext">—</div>
-    <div id="fabSleep">—</div>
-    <div id="fabDhikr">—</div>
-  </div>
-
-  <div id="toast" class="toast hidden"></div>
-  <audio id="adhanAudio"></audio>
-  <script src="app.js"></script>
-</body>
-</html>
+        <label class="field"><span data-i18n="hijriOffset">ف
