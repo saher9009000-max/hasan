@@ -320,6 +320,10 @@ $("#calibrateBtn").addEventListener("click", () => {
 
 $("#locateBtn").addEventListener("click", () => {
   if (!navigator.geolocation) return toast(t("locationError"));
+  if (location.protocol !== "https:" && location.hostname !== "localhost" && location.hostname !== "127.0.0.1") {
+    toast("تحديد الموقع يتطلب رابط آمن HTTPS");
+    return;
+  }
   navigator.geolocation.getCurrentPosition(
     (pos) => {
       state.coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
@@ -329,7 +333,10 @@ $("#locateBtn").addEventListener("click", () => {
       loadPrayerTimes();
       toast(t("located"));
     },
-    () => toast(t("locationError")),
+    (err) => {
+      console.error(err);
+      toast(t("locationError"));
+    },
     { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
   );
 });
